@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Library.Web.Core.Constants;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Library.Web.Core.Models
 {
@@ -9,7 +10,7 @@ namespace Library.Web.Core.Models
         public DateTime DueAt { get; set; }
         public DateTime? ReturnedAt { get; set; }
         public decimal Amount { get; set; }
-        public string Status { get; set; } = null!;  // e.g. "Active", "Returned", "Overdue"
+        public RentalState Status { get; set; }  // e.g. "Active", "Returned", "Overdue"
 
         [ForeignKey(nameof(ApplicationUser))]
         public int ApplicationUserId { get; set; } 
