@@ -1,5 +1,7 @@
 using Library.Web.Core.Models;
 using Library.Web.Data;
+using Library.Web.Repository.IRepositories;
+using Library.Web.Repository.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,6 +22,7 @@ namespace Library.Web
 
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
+            builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             
             builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
                 options.SignIn.RequireConfirmedAccount = true)
