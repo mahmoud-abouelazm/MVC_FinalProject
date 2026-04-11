@@ -3,25 +3,50 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
-<ul class="navbar-nav">
-@if (SignInManager.IsSignedIn(User))
-{
-    <li class="nav-item">
-        <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
-    </li>
-    <li class="nav-item">
-        <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button  type="submit" class="nav-link btn btn-link text-dark">Logout</button>
-        </form>
-    </li>
-}
-else
-{
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
-    </li>
-}
-</ul>
+<div class="flex items-center gap-4">
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <!-- User Profile Dropdown -->
+        <div class="relative group">
+            <button class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-surface-container-low transition-colors duration-300">
+                <span class="material-symbols-outlined text-primary text-2xl">account_circle</span>
+                <span class="font-body text-sm font-bold text-on-surface hidden md:inline">
+                    @User.Identity?.Name
+                </span>
+                <span class="material-symbols-outlined text-xs text-on-surface-variant">expand_more</span>
+            </button>
+            
+            <!-- Dropdown Menu -->
+            <div class="absolute right-0 mt-2 w-48 bg-surface-container-lowest rounded-xl shadow-lg border border-outline-variant/15 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                <a asp-area="Identity" asp-page="/Account/Manage/Index"
+                       class="flex items-center gap-3 px-6 py-4 text-on-surface hover:bg-surface-container-low transition-colors duration-200 border-b border-outline-variant/15">
+                    <span class="material-symbols-outlined text-primary text-lg">settings</span>
+                    <span class="font-body text-sm font-bold">Manage Account</span>
+                </a>
+                
+                <form asp-area="Identity" asp-page="/Account/Logout"
+                      asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })"
+                      class="w-full">
+                    <button type="submit"
+                            class="w-full flex items-center gap-3 px-6 py-4 text-on-surface hover:bg-surface-container-low transition-colors duration-200 font-body text-sm font-bold border-none bg-transparent cursor-pointer">
+                        <span class="material-symbols-outlined text-error text-lg">logout</span>
+                        <span>Logout</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    }
+    else
+    {
+        <!-- Authentication Buttons -->
+        <a asp-area="Identity" asp-page="/Account/Register"
+               class="hidden md:inline-block px-6 py-2.5 rounded-lg font-body font-bold text-sm uppercase tracking-widest text-on-surface hover:bg-surface-container-low transition-all duration-300 border border-outline-variant/30">
+            Register
+        </a>
+        
+        <a asp-area="Identity" asp-page="/Account/Login"
+               class="px-6 py-2.5 rounded-lg font-body font-bold text-sm uppercase tracking-widest text-on-primary bg-primary hover:bg-primary-container transition-all duration-300 shadow-md active:scale-95">
+            Login
+        </a>
+    }
+</div>
