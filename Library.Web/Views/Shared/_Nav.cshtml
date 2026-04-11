@@ -1,0 +1,28 @@
+﻿<nav class="fixed top-0 w-full z-50 flex justify-between items-center px-12 py-4 w-full bg-[#f9faf6]/80 dark:bg-[#1a1c1a]/80 backdrop-blur-md shadow-[0px_12px_32px_rgba(26,28,26,0.06)]">
+    <div class="flex items-center gap-8">
+        <span class="font-noto-serif italic font-bold text-[#1a1c1a] dark:text-[#f9faf6] text-xl tracking-tight">The Editorial Archive</span>
+        <div class="hidden md:flex items-center gap-6 font-noto-serif text-lg tracking-tight">
+            <a class="text-[#004b23] font-bold border-b-2 border-[#004b23] pb-1 transition-colors duration-300" href="#">Catalog</a>
+            <a class="text-[#1a1c1a]/70 dark:text-[#f9faf6]/70 hover:text-[#004b23] transition-colors duration-300" href="#">Categories</a>
+            <a class="text-[#1a1c1a]/70 dark:text-[#f9faf6]/70 hover:text-[#004b23] transition-colors duration-300" href="#">Archives</a>
+        </div>
+    </div>
+    <div class="flex items-center gap-4">
+        <div class="bg-surface-container-highest rounded-full px-4 py-2 flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary text-lg">search</span>
+            <input class="bg-transparent border-none focus:ring-0 text-sm w-48 font-body" placeholder="Search archive..." type="text" />
+        </div>
+        
+        @if(User.Identity.IsAuthenticated)
+        {
+            <button class="text-[#00321a] dark:text-[#004b2a] scale-98 transition-transform">
+                <span class="material-symbols-outlined text-3xl">account_circle</span>
+            </button>
+        }
+        else
+        {
+            <partial name="_LoginPartial" />
+        }
+
+    </div>
+</nav>

@@ -1,0 +1,125 @@
+﻿@page
+@model Library.Web.Areas.Identity.Pages.Account.RegisterModel
+@using System.ComponentModel.DataAnnotations
+@using Library.Web.Core.Models
+@using Microsoft.AspNetCore.Identity
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<main class="min-h-screen flex items-center justify-center ">
+    <div class="w-full max-w-md">
+        <!-- Header -->
+        <header class="text-center mb-12 space-y-2">
+            <h1 class="font-headline text-5xl font-bold text-on-surface">Join Our Archive</h1>
+            <p class="font-body text-on-surface-variant text-lg">Create your account to explore literary collections</p>
+        </header>
+
+        <!-- Register Form -->
+        <form id="registerForm" asp-page-handler="" method="post" class="space-y-6">
+            <!-- Validation Summary -->
+            @if (!ModelState.IsValid && ModelState.Values.Any(x => x.Errors.Count > 0))
+            {
+                <div class="bg-error-container border-l-4 border-error text-on-error-container p-4 rounded-lg space-y-2" role="alert">
+                    <span class="font-body font-bold block">Please review the form for errors</span>
+                    <ul class="space-y-1">
+                        @foreach (var modelState in ViewData.ModelState.Values)
+                        {
+                            @foreach (var error in modelState.Errors)
+                            {
+                                <li class="font-body text-sm">• @error.ErrorMessage</li>
+                            }
+                        }
+                    </ul>
+                </div>
+            }
+
+            <!-- Email Input -->
+            <div class="space-y-2">
+                <label asp-for="Input.Email" class="block font-label text-sm font-bold uppercase tracking-widest text-on-surface">
+                    Email Address
+                </label>
+                <input asp-for="Input.Email" class="w-full px-4 py-3 rounded-lg border border-outline-variant/30 bg-surface-container-lowest text-on-surface font-body focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" placeholder="you@example.com" />
+                <span asp-validation-for="Input.Email" class="text-error font-body text-sm"></span>
+            </div>
+
+            <!-- Password Input -->
+            <div class="space-y-2">
+                <label asp-for="Input.Password" class="block font-label text-sm font-bold uppercase tracking-widest text-on-surface">
+                    Password
+                </label>
+                <input asp-for="Input.Password" type="password" class="w-full px-4 py-3 rounded-lg border border-outline-variant/30 bg-surface-container-lowest text-on-surface font-body focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" placeholder="••••••••" />
+                <span asp-validation-for="Input.Password" class="text-error font-body text-sm"></span>
+            </div>
+
+            <!-- Confirm Password Input -->
+            <div class="space-y-2">
+                <label asp-for="Input.ConfirmPassword" class="block font-label text-sm font-bold uppercase tracking-widest text-on-surface">
+                    Confirm Password
+                </label>
+                <input asp-for="Input.ConfirmPassword" type="password" class="w-full px-4 py-3 rounded-lg border border-outline-variant/30 bg-surface-container-lowest text-on-surface font-body focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" placeholder="••••••••" />
+                <span asp-validation-for="Input.ConfirmPassword" class="text-error font-body text-sm"></span>
+            </div>
+
+            <!-- Terms & Conditions -->
+            <label class="flex items-start gap-3 cursor-pointer">
+                <input type="checkbox" required class="w-4 h-4 mt-1 rounded border-outline-variant/30 text-primary focus:ring-primary cursor-pointer" />
+                <span class="font-body text-sm text-on-surface-variant">
+                    I agree to the <a href="#" class="text-primary hover:text-primary-container font-bold">Terms of Service</a> and <a href="#" class="text-primary hover:text-primary-container font-bold">Privacy Policy</a>
+                </span>
+            </label>
+
+            <!-- Register Button -->
+            <button type="submit" class="w-full bg-primary text-on-primary px-6 py-4 rounded-lg font-body font-bold text-lg hover:bg-primary-container transition-all duration-300 flex items-center justify-center gap-2 active:scale-95 shadow-md">
+                <span>Create Account</span>
+                <span class="material-symbols-outlined">person_add</span>
+            </button>
+
+            <!-- Divider -->
+            <div class="relative my-8">
+                <div class="absolute inset-0 flex items-center">
+                    <div class="w-full border-t border-outline-variant/30"></div>
+                </div>
+                <div class="relative flex justify-center text-sm">
+                    <span class="px-3 bg-surface text-on-surface-variant font-body">Or sign up with</span>
+                </div>
+            </div>
+
+            <!-- External Providers -->
+            @if (Model.ExternalLogins.Count == 0)
+            {
+                <div class="text-center">
+                    <p class="text-on-surface-variant font-body text-sm">TODO Social authentication not configured</p>
+                </div>
+            }
+            else
+            {
+                <div class="space-y-3">
+                    @foreach (var provider in Model.ExternalLogins)
+                    {
+                        <form id="external-account-@provider.Name" asp-page="./ExternalLogin" asp-route-provider="@provider.Name" asp-route-returnUrl="@Model.ReturnUrl" method="post" style="display:none">
+                        </form>
+                        <button type="submit" form="external-account-@provider.Name" class="w-full border-2 border-outline-variant/30 text-on-surface px-6 py-3 rounded-lg font-body font-bold hover:bg-surface-container-low transition-all">
+                            @provider.DisplayName
+                        </button>
+                    }
+                </div>
+            }
+        </form>
+
+        <!-- Login Link -->
+        <div class="text-center mt-8 pt-8 border-t border-outline-variant/15">
+            <p class="font-body text-on-surface-variant">
+                Already have an account?
+                <a asp-page="./Login" class="font-bold text-primary hover:text-primary-container transition-colors ml-1">
+                    Sign in here
+                </a>
+            </p>
+        </div>
+    </div>
+</main>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,111 @@
+﻿@page
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Identity
+
+@model Library.Web.Areas.Identity.Pages.Account.LoginModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<main class="min-h-screen flex items-center justify-center ">
+    <div class="w-full max-w-md">
+        <!-- Header -->
+        <header class="text-center mb-12 space-y-2">
+            <h1 class="font-headline text-5xl font-bold text-on-surface">Welcome Back</h1>
+            <p class="font-body text-on-surface-variant text-lg">Access your library collection</p>
+        </header>
+
+        <!-- Login Form -->
+        <form id="account" method="post" class="space-y-6">
+            <!-- Validation Summary -->
+            @if (!ModelState.IsValid && Model.Input != null)
+            {
+                <div class="bg-error-container border-l-4 border-error text-on-error-container p-4 rounded-lg" role="alert">
+                    <span class="font-body font-bold">Login failed. Please check your email and password.</span>
+                </div>
+            }
+
+            <!-- Email Input -->
+            <div class="space-y-2">
+                <label asp-for="Input.Email" class="block font-label text-sm font-bold uppercase tracking-widest text-on-surface">
+                    Email Address
+                </label>
+                <input asp-for="Input.Email" class="w-full px-4 py-3 rounded-lg border border-outline-variant/30 bg-surface-container-lowest text-on-surface font-body focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" placeholder="you@example.com" />
+                <span asp-validation-for="Input.Email" class="text-error font-body text-sm"></span>
+            </div>
+
+            <!-- Password Input -->
+            <div class="space-y-2">
+                <label asp-for="Input.Password" class="block font-label text-sm font-bold uppercase tracking-widest text-on-surface">
+                    Password
+                </label>
+                <input asp-for="Input.Password" type="password" class="w-full px-4 py-3 rounded-lg border border-outline-variant/30 bg-surface-container-lowest text-on-surface font-body focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" placeholder="••••••••" />
+                <span asp-validation-for="Input.Password" class="text-error font-body text-sm"></span>
+            </div>
+
+            <!-- Remember Me & Forgot Password -->
+            <div class="flex items-center justify-between">
+                <label class="flex items-center gap-2 cursor-pointer">
+                    <input asp-for="Input.RememberMe" type="checkbox" class="w-4 h-4 rounded border-outline-variant/30 text-primary focus:ring-primary cursor-pointer" />
+                    <span class="font-body text-sm text-on-surface">Remember me</span>
+                </label>
+                <a asp-page="./ForgotPassword" class="font-body text-sm font-bold text-primary hover:text-primary-container transition-colors">
+                    Forgot password?
+                </a>
+            </div>
+
+            <!-- Login Button -->
+            <button type="submit" class="w-full bg-primary text-on-primary px-6 py-4 rounded-lg font-body font-bold text-lg hover:bg-primary-container transition-all duration-300 flex items-center justify-center gap-2 active:scale-95 shadow-md">
+                <span>Sign In</span>
+                <span class="material-symbols-outlined">login</span>
+            </button>
+
+            <!-- Divider -->
+            <div class="relative my-8">
+                <div class="absolute inset-0 flex items-center">
+                    <div class="w-full border-t border-outline-variant/30"></div>
+                </div>
+                <div class="relative flex justify-center text-sm">
+                    <span class="px-3 bg-surface text-on-surface-variant font-body">Or continue with</span>
+                </div>
+            </div>
+
+            <!-- External Providers (if configured) -->
+            @if (Model.ExternalLogins.Count == 0)
+            {
+                <div class="text-center">
+                    <p class="text-on-surface-variant font-body text-sm"> TODO external authentication configured</p>
+                </div>
+            }
+            else
+            {
+                <div class="space-y-3">
+                    @foreach (var provider in Model.ExternalLogins)
+                    {
+                        <form id="external-account" asp-page="./ExternalLogin" asp-route-provider="@provider.Name" asp-route-returnUrl="@Model.ReturnUrl" method="post" style="display:none">
+                        </form>
+                        <button type="submit" form="external-account" class="w-full border-2 border-outline-variant/30 text-on-surface px-6 py-3 rounded-lg font-body font-bold hover:bg-surface-container-low transition-all">
+                            @provider.DisplayName
+                        </button>
+                    }
+                </div>
+            }
+        </form>
+
+        <!-- Register Link -->
+        <div class="text-center mt-8 pt-8 border-t border-outline-variant/15">
+            <p class="font-body text-on-surface-variant">
+                Don't have an account?
+                <a asp-page="./Register" class="font-bold text-primary hover:text-primary-container transition-colors ml-1">
+                    Create one now
+                </a>
+            </p>
+        </div>
+    </div>
+</main>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
