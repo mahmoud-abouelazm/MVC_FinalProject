@@ -1,0 +1,28 @@
+﻿@model List<Author>
+
+<br />
+
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Bio</th>
+            <td scope="col"></td>
+            
+
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var author in Model)
+        {
+            <tr>
+                <td >@author.Name</td>
+                <td> @author.Bio  </td>
+                <td><a asp-action="Details" asp-route-Id="@author.Id" >More..</a></td>
+                
+            </tr>
+        }
+ 
+    </tbody>
+</table>
