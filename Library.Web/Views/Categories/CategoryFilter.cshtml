@@ -1,0 +1,34 @@
+﻿@model List<Book>
+
+<br />
+
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">Book ID</th>
+            <th scope="col">Title</th>
+            <td scope="col"><b>Description</b></td>
+            <td scope="col"><b>Images</b></td>
+            <td sope="col"><b>Price</b></td>
+
+
+        </tr>
+    </thead>
+    <tbody>
+        
+
+        @foreach (var Book in Model)
+        {
+            <tr  >
+                
+                <td>@Book.Id</td>
+                <td><a asp-action="Book" asp-route-Id="@Book.Id"><b>@Book.Title</b> </a></td>
+                <td>@Book.Description</td>
+                <td><img width="50" height="50" src="/@Book.Img" alt=" @Book.Img" /></td>
+                <td>@Book.Price</td>
+ 
+            </tr>
+        }
+ 
+    </tbody>
+</table>

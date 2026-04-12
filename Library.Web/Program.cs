@@ -17,8 +17,12 @@ namespace Library.Web
                 .GetConnectionString("DefaultConnection")
                 ?? throw new InvalidOperationException("Connection string not found.");
 
+            var shadyConnection = builder.Configuration
+               .GetConnectionString("shadyConnection")
+               ?? throw new InvalidOperationException("Connection string not found.");
+
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(connectionString));
+                options.UseSqlServer(shadyConnection));
 
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
