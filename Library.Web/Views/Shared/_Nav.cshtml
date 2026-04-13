@@ -3,7 +3,9 @@
         <span class="font-noto-serif italic font-bold text-[#1a1c1a] dark:text-[#f9faf6] text-xl tracking-tight">The Editorial Archive</span>
         <div class="hidden md:flex items-center gap-6 font-noto-serif text-lg tracking-tight">
             <a class="text-[#004b23] font-bold border-b-2 border-[#004b23] pb-1 transition-colors duration-300" href="#">Catalog</a>
-            <a class="text-[#1a1c1a]/70 dark:text-[#f9faf6]/70 hover:text-[#004b23] transition-colors duration-300" href="#">Categories</a>
+            <a class="text-[#1a1c1a]/70 dark:text-[#f9faf6]/70 hover:text-[#004b23] transition-colors duration-300" asp-action="Index" asp-controller="Books">Books</a>
+            <a class="text-[#1a1c1a]/70 dark:text-[#f9faf6]/70 hover:text-[#004b23] transition-colors duration-300" asp-action ="Index" asp-controller="Categories">Categories</a>
+            <a class="text-[#1a1c1a]/70 dark:text-[#f9faf6]/70 hover:text-[#004b23] transition-colors duration-300" asp-action="Index" asp-controller="Authors">Authors</a>
             <a class="text-[#1a1c1a]/70 dark:text-[#f9faf6]/70 hover:text-[#004b23] transition-colors duration-300" href="#">Archives</a>
         </div>
     </div>
@@ -18,6 +20,15 @@
             <button class="text-[#00321a] dark:text-[#004b2a] scale-98 transition-transform">
                 <span class="material-symbols-outlined text-3xl">account_circle</span>
             </button>
+            <form asp-area="Identity" asp-page="/Account/Logout"
+                  asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })"
+                  class="w-full">
+                <button type="submit"
+                        class="w-full flex items-center gap-3 px-6 py-4 text-on-surface hover:bg-surface-container-low transition-colors duration-200 font-body text-sm font-bold border-none bg-transparent cursor-pointer">
+                    <span class="material-symbols-outlined text-error text-lg">logout</span>
+                    <span>Logout</span>
+                </button>
+            </form>
         }
         else
         {
