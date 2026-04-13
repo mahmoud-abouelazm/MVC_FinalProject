@@ -1,0 +1,72 @@
+﻿@model IEnumerable<Book>
+
+@* 
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col"></th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+            
+        </tr>
+    </thead>
+    <tbody>
+
+      
+            <tr>
+                <td></td>
+            </tr>
+        
+ 
+    </tbody>
+</table> *@
+
+
+
+
+
+@* <div class="card-deck" style="width: 18rem;" >
+    @foreach (var book in Model)
+    {
+        <div class="card">
+            <img class="card-img-top" src="@book.Img" alt="@book.Title" />
+            <div class="card-body">
+                <h5 class="card-title">@book.Title</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Category: @book.CategoryId</h6>
+                <p class="card-text">@book.Description</p>
+            </div>
+            <div class="card-footer">
+                <small class="text-muted">@book.Price</small>
+            </div>
+        </div>
+    }
+</div> *@
+
+
+
+
+<div class="row">
+    @foreach (var book in Model)
+    {
+        <div class="col-md-4 mb-3">
+            <div class="card h-100">
+                <img class="card-img-top" src="/@book.Img" alt="@book.Title"
+                     style="height: 500px; object-fit: cover;">
+                <div class="card-body p-2">
+                    <h6 class="card-title"><b>@book.Title</b></h6>
+                    <p class="card-text small">@book.Description</p>
+                </div>
+                <ul class="list-group list-group-flush small">
+                    <li class="list-group-item p-1">Author:</li>
+                    <li class="list-group-item p-1">Category: @book.Category</li>
+                    <li class="list-group-item p-1">Price: @book.Price $</li>
+                </ul>
+                <div class="card-body p-2">
+                    <a class="card-link  align-content-lg-start small" asp-action="CategoryId" asp-controller="Author" asp-route-Id="">About Author</a>
+                    <a class="card-link  align-content-end small" asp-action="CategoryFilter" asp-controller="Categories" asp-route-CategoryId="@book.CategoryId">About Category</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
