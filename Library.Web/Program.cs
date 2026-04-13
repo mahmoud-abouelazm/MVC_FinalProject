@@ -30,8 +30,9 @@ namespace Library.Web
 
 
             builder.Services.AddControllersWithViews();
+			builder.Services.AddRazorPages();
 
-            var app = builder.Build();
+			var app = builder.Build();
 
             if (app.Environment.IsDevelopment())
             {

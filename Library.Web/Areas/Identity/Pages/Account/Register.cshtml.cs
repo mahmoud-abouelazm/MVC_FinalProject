@@ -51,23 +51,26 @@ namespace Library.Web.Areas.Identity.Pages.Account
         public class InputModel
         {
 
+			[MaxLength(50, ErrorMessage = "Maximum Length is 50 characters")]
+			[Required(ErrorMessage = "Full Name is required")]
+            [Display(Name="Full Name")]
+			public string FullName { get; set; } = null!;
 
-
-            [Required(ErrorMessage = "Email is required")]
+			[Required(ErrorMessage = "Email is required")]
             [EmailAddress(ErrorMessage = "Invalid email address")]
             [Display(Name = "Email")]
-            public string Email { get; set; }
+            public required string Email { get; set; }
 
-            [Required(ErrorMessage = "Password is required")]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [Required(ErrorMessage = "Password is required")]            
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
-            public string Password { get; set; }
+			[RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$", ErrorMessage = "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character.")]
+			public required string Password { get; set; }
 
             [DataType(DataType.Password)]
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
-            public string ConfirmPassword { get; set; }
+            public required string ConfirmPassword { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -88,8 +91,10 @@ namespace Library.Web.Areas.Identity.Pages.Account
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
+
                 if (result.Succeeded)
                 {
+                    await _userManager.AddToRoleAsync(user, "Admin");  // 
                     _logger.LogInformation("User created a new account with password.");
 
                     var userId = await _userManager.GetUserIdAsync(user);
@@ -128,7 +133,15 @@ namespace Library.Web.Areas.Identity.Pages.Account
         {
             try
             {
-                return Activator.CreateInstance<ApplicationUser>();
+                var newUser = new ApplicationUser()
+                {
+                    Email = Input.Email,
+                    FullName =Input.FullName,                    
+                };
+                //var res=_userManager.CreateAsync(newUser,Input.Password);
+
+
+                return newUser;
             }
             catch
             {
