@@ -1,0 +1,158 @@
+
+@model Library.Web.Core.ViewModel.Book.BookVM
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Books";
+    ViewData["ActiveNav"] = "Books";
+}
+
+<main class="ml-64 min-h-screen p-12">
+
+    <header class="mb-10 flex justify-between items-end">
+        <div>
+            <h2 class="font-noto-serif text-4xl font-bold text-on-surface tracking-tight">Books</h2>
+            <p class="text-on-surface-variant mt-2 font-manrope text-sm">Manage the full catalog of archival titles.</p>
+        </div>
+        <a asp-controller="Admin" asp-action="Create"
+               class="bg-primary text-on-primary px-6 py-2.5 rounded-md font-manrope text-sm font-bold uppercase tracking-wider flex items-center gap-2 shadow-sm hover:bg-primary-container transition-all">
+            <span class="material-symbols-outlined text-lg">add</span>
+            Add New Book
+        </a>
+    </header>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="mb-6 px-6 py-4 bg-primary-container text-on-primary-container rounded-lg font-manrope text-sm flex items-center gap-3">
+            <span class="material-symbols-outlined text-lg">check_circle</span>
+            @TempData["Success"]
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="mb-6 px-6 py-4 bg-error-container text-on-error-container rounded-lg font-manrope text-sm flex items-center gap-3">
+            <span class="material-symbols-outlined text-lg">error</span>
+            @TempData["Error"]
+        </div>
+    }
+
+    <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0px_12px_32px_rgba(26,28,26,0.06)] border border-outline-variant/10">
+
+        <div class="bg-tertiary text-on-tertiary px-6 py-4 flex justify-between items-center">
+            <span class="font-manrope text-[0.6875rem] uppercase tracking-[0.1em] font-bold">Catalog Data Grid</span>
+            <span class="text-[0.6875rem] font-manrope">@Model.TotalBooks total titles</span>
+        </div>
+
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="bg-surface-container-low border-b border-outline-variant/10">
+                    <th class="px-6 py-4 font-manrope text-[0.6875rem] uppercase tracking-wider text-on-surface-variant font-bold">Title &amp; Author</th>
+                    <th class="px-6 py-4 font-manrope text-[0.6875rem] uppercase tracking-wider text-on-surface-variant font-bold">Category</th>
+                    <th class="px-6 py-4 font-manrope text-[0.6875rem] uppercase tracking-wider text-on-surface-variant font-bold text-right">Price</th>
+                    <th class="px-6 py-4 font-manrope text-[0.6875rem] uppercase tracking-wider text-on-surface-variant font-bold text-center">Status</th>
+                    <th class="px-6 py-4 font-manrope text-[0.6875rem] uppercase tracking-wider text-on-surface-variant font-bold text-right">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-outline-variant/10">
+                @foreach (var book in Model.Books)
+                {
+                    <tr class="bg-surface hover:bg-surface-container-low transition-colors group">
+                        <td class="px-6 py-5">
+                            <div class="flex items-center gap-4">
+                                <div class="w-10 h-14 bg-surface-container-high rounded-sm flex-shrink-0 overflow-hidden shadow-sm">
+                                    @if (!string.IsNullOrEmpty(book.Img))
+                                    {
+                                        <img alt="Cover" class="w-full h-full object-cover" src="@book.Img" />
+                                    }
+                                    else
+                                    {
+                                        <div class="w-full h-full flex items-center justify-center">
+                                            <span class="material-symbols-outlined text-on-surface-variant" style="font-size:1.1rem;">menu_book</span>
+                                        </div>
+                                    }
+                                </div>
+                                <div>
+                                    <p class="font-noto-serif text-sm font-bold text-on-surface">@book.Title</p>
+                                    <p class="font-manrope text-xs text-on-surface-variant italic">@book.AuthorNames</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-5">
+                            <span class="px-3 py-1 bg-secondary-container text-on-secondary-container text-[10px] font-bold uppercase tracking-tighter rounded-full">
+                                @book.CategoryName
+                            </span>
+                        </td>
+                        <td class="px-6 py-5 text-right font-manrope font-semibold text-sm">$@book.Price.ToString("0.00")</td>
+                        <td class="px-6 py-5 text-center">
+                            @if (book.IsDeleted)
+                            {
+                                <span class="inline-block w-2 h-2 rounded-full bg-error mr-1"></span>
+                                <span class="text-xs font-medium text-on-surface-variant">Out of Stock</span>
+                            }
+                            else
+                            {
+                                <span class="inline-block w-2 h-2 rounded-full bg-primary mr-1"></span>
+                                <span class="text-xs font-medium text-on-surface-variant">Active</span>
+                            }
+                        </td>
+                        <td class="px-6 py-5 text-right">
+                            <div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <a asp-controller="Admin" asp-action="Edit" asp-route-id="@book.Id"
+                                       class="text-primary p-1.5 hover:bg-primary-fixed/20 rounded transition-colors inline-flex" title="Edit">
+                                    <span class="material-symbols-outlined text-lg">edit</span>
+                                </a>
+                                <form asp-controller="Admin" asp-action="Delete" method="post" class="inline">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@book.Id" />
+                                    <button type="submit"
+                                            class="text-error p-1.5 hover:bg-error-container/20 rounded transition-colors"
+                                            title="Delete"
+                                            onclick="return confirm('Delete «@book.Title»?')">
+                                        <span class="material-symbols-outlined text-lg">delete</span>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                }
+                @if (!Model.Books.Any())
+                {
+                    <tr>
+                        <td colspan="5" class="px-6 py-16 text-center font-manrope text-sm text-on-surface-variant">
+                            No books found. <a asp-controller="Books" asp-action="Create" class="text-primary underline">Add the first one.</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="px-6 py-4 flex items-center justify-between bg-surface-container-low/50">
+            <p class="text-xs font-manrope text-on-surface-variant">
+                @if (Model.TotalBooks > 0)
+                {
+                    @($"Showing {(Model.CurrentPage - 1) * Model.PageSize + 1}–{Math.Min(Model.CurrentPage * Model.PageSize, Model.TotalBooks)} of {Model.TotalBooks} titles")
+                }
+                else
+                {
+                    @("No titles")
+                }
+            </p>
+            <div class="flex gap-2">
+                @if (Model.CurrentPage > 1)
+                {
+                    <a asp-controller="Admin" asp-action="Index" asp-route-page="@(Model.CurrentPage - 1)"
+                           class="p-2 border border-outline-variant/20 rounded-md hover:bg-white transition-colors">
+                        <span class="material-symbols-outlined text-sm">chevron_left</span>
+                    </a>
+                }
+                @if (Model.CurrentPage < Model.TotalPages)
+                {
+                    <a asp-controller="Admin" asp-action="Index" asp-route-page="@(Model.CurrentPage + 1)"
+                           class="p-2 border border-outline-variant/20 rounded-md hover:bg-white transition-colors">
+                        <span class="material-symbols-outlined text-sm">chevron_right</span>
+                    </a>
+                }
+            </div>
+        </div>
+
+    </div>
+</main>

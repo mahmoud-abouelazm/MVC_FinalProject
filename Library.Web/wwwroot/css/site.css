@@ -18,7 +18,10 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    font-family: 'Manrope', sans-serif;
+    background-color: #f9faf6;
+    color: #1a1c1a;
 }
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
@@ -33,12 +36,6 @@ body {
 
 
 
-
-
-
-
-
-
 /* for tailwind */
 .material-symbols-outlined {
     font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
@@ -47,4 +44,13 @@ body {
 .glass-panel {
     background: rgba(249, 250, 246, 0.8);
     backdrop-filter: blur(20px);
+}
+
+
+.font-noto-serif {
+    font-family: 'Noto Serif', serif;
+}
+
+.font-manrope {
+    font-family: 'Manrope', sans-serif;
 }

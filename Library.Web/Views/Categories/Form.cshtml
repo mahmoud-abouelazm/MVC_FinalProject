@@ -1,0 +1,54 @@
+﻿@model Library.Web.Core.ViewModel.Category.CategoryFormVM
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    bool isEdit = Model.Id != 0;
+    ViewData["Title"] = isEdit ? "Edit Category" : "Add New Category";
+    ViewData["ActiveNav"] = "Categories";
+}
+
+
+
+<main class="ml-64 min-h-screen p-12">
+
+    <header class="mb-10">
+        <a asp-controller="Categories" asp-action="Index"
+           class="inline-flex items-center gap-1 font-manrope text-xs text-on-surface-variant hover:text-primary transition-colors mb-4 uppercase tracking-wider font-semibold">
+            <span class="material-symbols-outlined text-base">arrow_back</span>
+            Back to Categories
+        </a>
+        <h2 class="font-noto-serif text-4xl font-bold text-on-surface tracking-tight">
+            @(isEdit ? "Edit Category" : "Add New Category")
+        </h2>
+        <p class="text-on-surface-variant mt-2 font-manrope text-sm">
+            @(isEdit ? "Rename this classification." : "Define a new classification for the catalog.")
+        </p>
+    </header>
+
+    <div class="max-w-md">
+        <form asp-controller="Categories" asp-action="@(isEdit ? "Edit" : "Create")" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Id" />
+
+            <div class="form-card p-8">
+                <div>
+                    <label class="field-label" for="Name">Category Name</label>
+                    <input class="field-input" id="Name" asp-for="Name"
+                           placeholder="e.g. Art History" />
+                    <span class="field-validation-error" asp-validation-for="Name"></span>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-4 mt-6">
+                <button type="submit" class="btn-primary">
+                    @(isEdit ? "Save Changes" : "Add Category")
+                </button>
+                <a asp-controller="Categories" asp-action="Index" class="btn-secondary">Cancel</a>
+            </div>
+
+        </form>
+    </div>
+</main>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
