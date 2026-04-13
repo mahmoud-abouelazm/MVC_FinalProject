@@ -16,12 +16,14 @@ namespace Library.Web.Areas.Identity.Pages.Account
     public class LoginModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly ILogger<LoginModel> _logger;
+		private readonly UserManager<ApplicationUser> _usermanager;
+		private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<ApplicationUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<ApplicationUser> signInManager,UserManager<ApplicationUser> usermanager, ILogger<LoginModel> logger)
         {
             _signInManager = signInManager;
-            _logger = logger;
+			_usermanager = usermanager;
+			_logger = logger;
         }
 
         [BindProperty]
@@ -38,11 +40,12 @@ namespace Library.Web.Areas.Identity.Pages.Account
         {
             [Required(ErrorMessage = "Email is required")]
             [EmailAddress(ErrorMessage = "Invalid email address")]
-            public string Email { get; set; }
+            public required string Email { get; set; }
 
             [Required(ErrorMessage = "Password is required")]
-            [DataType(DataType.Password)]
-            public string Password { get; set; }
+			[RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$", ErrorMessage = "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character.")]
+			[DataType(DataType.Password)]
+            public required string Password { get; set; }
 
             [Display(Name = "Remember me?")]
             public bool RememberMe { get; set; }
@@ -79,7 +82,15 @@ namespace Library.Web.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
-                    return LocalRedirect(returnUrl);
+                    //return LocalRedirect(returnUrl);
+                    if (User.IsInRole("Admin"))
+                    {
+                        return RedirectToAction("Index", "Admin");
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
                 }
                 if (result.IsLockedOut)
                 {

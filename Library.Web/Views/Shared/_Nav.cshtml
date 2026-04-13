@@ -20,6 +20,15 @@
             <button class="text-[#00321a] dark:text-[#004b2a] scale-98 transition-transform">
                 <span class="material-symbols-outlined text-3xl">account_circle</span>
             </button>
+            <form asp-area="Identity" asp-page="/Account/Logout"
+                  asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })"
+                  class="w-full">
+                <button type="submit"
+                        class="w-full flex items-center gap-3 px-6 py-4 text-on-surface hover:bg-surface-container-low transition-colors duration-200 font-body text-sm font-bold border-none bg-transparent cursor-pointer">
+                    <span class="material-symbols-outlined text-error text-lg">logout</span>
+                    <span>Logout</span>
+                </button>
+            </form>
         }
         else
         {
