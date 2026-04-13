@@ -1,0 +1,104 @@
+﻿@model Library.Web.Core.ViewModel.Author.AuthorFormVM
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    bool isEdit = Model.Id != 0;
+    ViewData["Title"] = isEdit ? "Edit Author" : "Add New Author";
+    ViewData["ActiveNav"] = "Authors";
+}
+
+<style>
+    /* .form-card {
+        background: #fff;
+        border: 1px solid rgba(192,201,190,.2);
+        border-radius: .5rem;
+        box-shadow: 0 8px 32px rgba(26,28,26,.06);
+    }
+    .field-label {
+        display: block;
+        font-family: 'Manrope', sans-serif;
+        font-size: .6875rem; font-weight: 700;
+        letter-spacing: .1em; text-transform: uppercase;
+        color: #404941; margin-bottom: .5rem;
+    }
+    .field-input {
+        width: 100%; background: #f3f4f0; border: 1px solid transparent;
+        border-radius: .25rem; padding: .75rem 1rem;
+        font-family: 'Manrope', sans-serif; font-size: .875rem;
+        color: #1a1c1a; outline: none; transition: border-color .2s, box-shadow .2s;
+    }
+    .field-input:focus { border-color: rgba(0,50,26,.3); box-shadow: 0 0 0 3px rgba(0,50,26,.08); }
+    .input-validation-error { border-color: #ba1a1a !important; box-shadow: 0 0 0 3px rgba(186,26,26,.08) !important; }
+    textarea.field-input { resize: vertical; min-height: 140px; }
+    .field-validation-error { color: #ba1a1a; font-size: .75rem; margin-top: .35rem; font-family: 'Manrope', sans-serif; display: block; }
+    .btn-primary {
+        background: #00321a; color: #fff; border: none;
+        border-radius: .25rem; padding: .875rem 2rem;
+        font-family: 'Manrope', sans-serif; font-size: .75rem;
+        font-weight: 700; letter-spacing: .18em; text-transform: uppercase;
+        cursor: pointer; transition: background .2s;
+    }
+    .btn-primary:hover { background: #004b2a; }
+    .btn-secondary {
+        background: transparent; color: #404941;
+        border: 1px solid rgba(192,201,190,.5);
+        border-radius: .25rem; padding: .875rem 2rem;
+        font-family: 'Manrope', sans-serif; font-size: .75rem;
+        font-weight: 700; letter-spacing: .18em; text-transform: uppercase;
+        text-decoration: none; display: inline-block; transition: background .2s;
+    }
+    .btn-secondary:hover { background: #f3f4f0; } */
+</style>
+
+<main class="ml-64 min-h-screen p-12">
+
+    <header class="mb-10">
+        <a asp-controller="Authors" asp-action="Index"
+           class="inline-flex items-center gap-1 font-manrope text-xs text-on-surface-variant hover:text-primary transition-colors mb-4 uppercase tracking-wider font-semibold">
+            <span class="material-symbols-outlined text-base">arrow_back</span>
+            Back to Authors
+        </a>
+        <h2 class="font-noto-serif text-4xl font-bold text-on-surface tracking-tight">
+            @(isEdit ? "Edit Author" : "Add New Author")
+        </h2>
+        <p class="text-on-surface-variant mt-2 font-manrope text-sm">
+            @(isEdit ? "Update this author's details." : "Register a new author in the archive.")
+        </p>
+    </header>
+
+    <div class="max-w-2xl">
+        <form asp-controller="Authors" asp-action="@(isEdit ? "Edit" : "Create")" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Id" />
+
+            <div class="form-card p-8 space-y-7">
+
+                <div>
+                    <label class="field-label" for="Name">Full Name</label>
+                    <input class="field-input" id="Name" asp-for="Name"
+                           placeholder="e.g. Julianne V. Stone" />
+                    <span class="field-validation-error" asp-validation-for="Name"></span>
+                </div>
+
+                <div>
+                    <label class="field-label" for="Bio">Biography</label>
+                    <textarea class="field-input" id="Bio" asp-for="Bio"
+                              placeholder="A short biography about the author..." rows="6"></textarea>
+                    <span class="field-validation-error" asp-validation-for="Bio"></span>
+                </div>
+
+            </div>
+
+            <div class="flex items-center gap-4 mt-6">
+                <button type="submit" class="btn-primary">
+                    @(isEdit ? "Save Changes" : "Add Author")
+                </button>
+                <a asp-controller="Authors" asp-action="Index" class="btn-secondary">Cancel</a>
+            </div>
+
+        </form>
+    </div>
+</main>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

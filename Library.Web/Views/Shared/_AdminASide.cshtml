@@ -1,0 +1,104 @@
+﻿   <style>
+       
+        .nav-tab {
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+            padding: .75rem 1.5rem;
+            margin: 0 .5rem;
+            border-radius: .375rem;
+            font-family: 'Manrope', sans-serif;
+            font-size: .75rem;
+            font-weight: 700;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: rgba(26,28,26,.55);
+            text-decoration: none;
+            transition: background .18s, color .18s;
+        }
+        .nav-tab:hover {
+            background: rgba(0,50,26,.07);
+            color: #00321a;
+        }
+        .nav-tab.active {
+            background: #00321a;
+            color: #fff;
+        }
+        .nav-tab.active .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .nav-section-label {
+            font-family: 'Manrope', sans-serif;
+            font-size: .6rem;
+            font-weight: 800;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            color: rgba(26,28,26,.35);
+            padding: 0 2rem;
+            margin-bottom: .25rem;
+            margin-top: 1.5rem;
+        }
+    </style>
+
+@{
+    var activeNav = ViewData["ActiveNav"]?.ToString() ?? "";
+}
+
+<aside class="h-screen w-64 fixed left-0 top-0 bg-[#f2f3ee] flex flex-col py-6 z-40">
+
+    <div class="px-6 mb-8">
+        <h1 class="font-noto-serif text-xl text-[#1a1c1a] tracking-tight font-bold">Admin Console</h1>
+        <p class="font-manrope text-[.6rem] font-semibold tracking-[.1em] uppercase text-[#1a1c1a]/40 mt-0.5">The Editorial Archive</p>
+    </div>
+
+    <nav class="flex-1 flex flex-col gap-1">
+
+        <p class="nav-section-label">Catalog</p>
+
+        <a asp-controller="Admin" asp-action="Index"
+               class="nav-tab @(activeNav == "Books" ? "active" : "")">
+            <span class="material-symbols-outlined text-lg">menu_book</span>
+            Books
+        </a>
+
+        <a asp-controller="Authors" asp-action="Index"
+               class="nav-tab @(activeNav == "Authors" ? "active" : "")">
+            <span class="material-symbols-outlined text-lg">history_edu</span>
+            Authors
+        </a>
+
+        <a asp-controller="Categories" asp-action="Index"
+               class="nav-tab @(activeNav == "Categories" ? "active" : "")">
+            <span class="material-symbols-outlined text-lg">category</span>
+            Categories
+        </a>
+
+        <p class="nav-section-label">System</p>
+
+
+        <a asp-controller="Users" asp-action="Index"
+               class="nav-tab @(activeNav == "Users" ? "active" : "")">
+            <span class="material-symbols-outlined text-lg">group</span>
+            Users
+        </a>
+
+        <a asp-controller="Reports" asp-action="Index"
+               class="nav-tab @(activeNav == "Reports" ? "active" : "")">
+            <span class="material-symbols-outlined text-lg">analytics</span>
+            Reports
+        </a>
+
+    </nav>
+
+    <div class="border-t border-[#1a1c1a]/10 pt-4 flex flex-col gap-1">
+        <a asp-controller="Settings" asp-action="Index" class="nav-tab">
+            <span class="material-symbols-outlined text-lg">settings</span>
+            Settings
+        </a>
+        <a asp-controller="Account" asp-action="Logout" class="nav-tab" style="color:#ba1a1a;">
+            <span class="material-symbols-outlined text-lg">logout</span>
+            Logout
+        </a>
+    </div>
+
+</aside>
