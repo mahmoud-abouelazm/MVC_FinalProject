@@ -59,7 +59,12 @@
                 <label asp-for="Input.Password" class="block font-label text-sm font-bold uppercase tracking-widest text-on-surface">
                     Password
                 </label>
-                <input asp-for="Input.Password" type="password" class="w-full px-4 py-3 rounded-lg border border-outline-variant/30 bg-surface-container-lowest text-on-surface font-body focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" placeholder="••••••••" />
+                <div class="relative">
+                    <input asp-for="Input.Password" type="password" class="w-full px-4 py-3 pr-12 rounded-lg border border-outline-variant/30 bg-surface-container-lowest text-on-surface font-body focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" placeholder="••••••••" />
+                    <button type="button" class="absolute inset-y-0 right-0 px-3 flex items-center text-on-surface-variant hover:text-on-surface" aria-label="Toggle password visibility" onclick="togglePassword('Input_Password', 'registerPasswordEye')">
+                        <span id="registerPasswordEye" class="material-symbols-outlined">visibility</span>
+                    </button>
+                </div>
                 <span asp-validation-for="Input.Password" class="text-error font-body text-sm"></span>
             </div>
 
@@ -68,7 +73,12 @@
                 <label asp-for="Input.ConfirmPassword" class="block font-label text-sm font-bold uppercase tracking-widest text-on-surface">
                     Confirm Password
                 </label>
-                <input asp-for="Input.ConfirmPassword" type="password" class="w-full px-4 py-3 rounded-lg border border-outline-variant/30 bg-surface-container-lowest text-on-surface font-body focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" placeholder="••••••••" />
+                <div class="relative">
+                    <input asp-for="Input.ConfirmPassword" type="password" class="w-full px-4 py-3 pr-12 rounded-lg border border-outline-variant/30 bg-surface-container-lowest text-on-surface font-body focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" placeholder="••••••••" />
+                    <button type="button" class="absolute inset-y-0 right-0 px-3 flex items-center text-on-surface-variant hover:text-on-surface" aria-label="Toggle confirm password visibility" onclick="togglePassword('Input_ConfirmPassword', 'registerConfirmPasswordEye')">
+                        <span id="registerConfirmPasswordEye" class="material-symbols-outlined">visibility</span>
+                    </button>
+                </div>
                 <span asp-validation-for="Input.ConfirmPassword" class="text-error font-body text-sm"></span>
             </div>
 
@@ -132,4 +142,15 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        function togglePassword(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            if (!input || !icon) return;
+
+            const isPassword = input.type === 'password';
+            input.type = isPassword ? 'text' : 'password';
+            icon.textContent = isPassword ? 'visibility_off' : 'visibility';
+        }
+    </script>
 }
