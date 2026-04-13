@@ -1,0 +1,72 @@
+﻿@model Author
+
+<br />
+
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Bio</th>
+            <td scope="col">Number of Books</td>
+            <td scope="col">Books</td>
+            
+
+        </tr>
+    </thead>
+    <tbody>
+            <tr>
+                <td>@Model.Name</td>
+                <td> @Model.Bio  </td>
+                <td>@Model.BookAuthors.Count</td>
+                <td>@string.Join(", ", Model.BookAuthors.Select(i => i.Book.Title))</td>
+                
+            </tr>
+ 
+    </tbody>
+</table>
+
+<h1>@Model.Name</h1>
+<p>@Model.Bio</p>
+
+<p>@string.Join(", ", Model.BookAuthors.Select(i => i.Book.Title))</p>
+
+<div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    </div>
+    <div class="carousel-inner">
+
+        <div class="carousel-item">
+
+
+
+
+                @* @foreach (var ba in Model.BookAuthors)
+                {
+                    <div>
+                        <img src="/@ba.Book.Img" class="d-block w-100" alt="@ba.Book.Title" />
+                        <h4>@ba.Book.Title</h4>
+                        <p>@ba.Book.Description</p>
+                    </div>
+                } *@
+
+
+
+
+        </div>
+
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+
+
