@@ -1,0 +1,97 @@
+﻿@using Library.Web.Core.ViewModel.BookVMs
+@model BookDetailsVM
+
+<main class="pt-32 pb-20 px-6 md:px-12 max-w-7xl mx-auto">
+    <!-- Back Action -->
+    <div class="mb-10 flex items-center">
+        <a asp-action="index" asp-controller="books" class="group flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors" >
+            <span class="material-symbols-outlined text-sm">arrow_back</span>
+            <span class="font-label text-xs font-bold uppercase tracking-widest">Return to Collection</span>
+        </a>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+        <!-- Book Cover Section (Asymmetric Column) -->
+        <div class="lg:col-span-5 relative">
+            <div class="aspect-[3/4] rounded-lg overflow-hidden shadow-2xl bg-surface-container-low group">
+                <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="A thick hardbound literary novel titled The Silent Architecture with a minimalist cream and emerald cover, soft studio lighting" src="@Model.Img">
+                <!-- Floating Metadata Tag -->
+                <div class="absolute top-6 left-6">
+                    <span class="bg-primary px-4 py-1.5 rounded-full text-on-primary font-label text-[0.625rem] font-bold uppercase tracking-widest shadow-lg">
+                        Archival Grade A
+                    </span>
+                </div>
+            </div>
+            <!-- Ambient Glow Behind Cover -->
+            <div class="absolute -z-10 inset-0 blur-[100px] opacity-20 bg-primary-container rounded-full scale-75 translate-y-12"></div>
+        </div>
+        <!-- Book Information Section -->
+        <div class="lg:col-span-7 flex flex-col gap-10">
+            <!-- Title & Header -->
+            <header class="space-y-4">
+                
+                <h1 class="font-headline text-5xl md:text-6xl text-on-surface leading-tight font-bold">@Model.Title</h1>
+            </header>
+            <!-- Status Bento Grid Row -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-surface-container-low p-6 rounded-xl flex flex-col gap-1 border-b-2 border-primary-fixed">
+                    <span class="font-label text-[0.625rem] font-bold uppercase tracking-widest text-on-surface-variant">Availability</span>
+                    <div class="flex items-baseline gap-1">
+                        <span class="text-3xl font-headline text-primary font-bold">@Model.copiesNumber</span>
+                        <span class="text-xs font-body text-on-surface-variant">copies left</span>
+                    </div>
+                </div>
+                <div class="bg-surface-container-low p-6 rounded-xl flex flex-col gap-1">
+                    <span class="font-label text-[0.625rem] font-bold uppercase tracking-widest text-on-surface-variant">Rental Price</span>
+                    <span class="text-lg font-body font-bold text-on-surface">@Model.Price $</span>
+                </div>
+                
+            </div>
+            <!-- Main Syn
+            <!-- Main Synopsis -->
+            <div class="space-y-4">
+                <h3 class="font-headline text-2xl font-bold border-l-4 border-primary pl-4">Description</h3>
+                <p class="font-body text-on-surface-variant leading-relaxed text-lg">
+                    @Model.Description
+                </p>
+            </div>
+            <!-- Author Bio Section -->
+            @foreach(var author in Model.Authors)
+            {
+                
+            <div class="bg-surface-container-lowest p-8 rounded-xl flex flex-col md:flex-row gap-8 items-center md:items-start shadow-sm border border-outline-variant/15">
+                <div class="w-24 h-24 rounded-full overflow-hidden shrink-0">
+                </div>
+                <div class="space-y-3">
+                    <div class="flex flex-col">
+                        <span class="font-label text-[0.625rem] font-bold uppercase tracking-widest text-primary">About the Author</span>
+                        <h4 class="font-headline text-xl font-bold">@author.Name</h4>
+                    </div>
+                    <p class="font-body text-sm text-on-surface-variant leading-relaxed">
+                        @author.Bio
+                    </p>
+                </div>
+            </div>
+            }
+            <!-- CTA Action Row -->
+            <div class="flex flex-col sm:flex-row items-center gap-6 mt-4">
+                <div class="flex items-stretch w-full sm:w-auto shadow-xl rounded-md overflow-hidden">
+                    <button class="flex-1 sm:w-auto bg-primary text-on-primary px-8 py-5 font-body font-bold text-lg hover:bg-primary-container transition-all duration-300 flex items-center justify-center gap-3 active:scale-95 border-r border-on-primary/10">
+                        <span>Rent Now</span>
+                        <span class="material-symbols-outlined">auto_stories</span>
+                    </button>
+                    <div class="relative bg-primary px-2 flex items-center border-l border-white/10">
+                        <select class="bg-transparent text-on-primary font-body font-bold text-lg border-none focus:ring-0 appearance-none pr-8 py-5 cursor-pointer">
+                            <option class="text-on-surface" value="1">1</option>
+                            <option class="text-on-surface" value="2">2</option>
+                            <option class="text-on-surface" value="3">3</option>
+                            <option class="text-on-surface" value="4">4</option>
+                            <option class="text-on-surface" value="5">5</option>
+                        </select>
+                        <span class="material-symbols-outlined absolute right-2 pointer-events-none text-on-primary">expand_more</span>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</main>
