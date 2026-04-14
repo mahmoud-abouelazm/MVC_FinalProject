@@ -3,6 +3,7 @@ using Library.Web.Core.ViewModel.BookVMs;
 using Library.Web.Data;
 using Library.Web.Repository.IRepositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 namespace Library.Web.Repository.Repositories
 {
@@ -31,7 +32,7 @@ namespace Library.Web.Repository.Repositories
             {
                 Id = sourceBook.Id,
                 Category = sourceBook.Category.Name,
-                copiesNumber = sourceBook.Copies.Count(),
+                copiesNumber = sourceBook.Copies.Count(c=>c.AllowToRental),
                 Description = sourceBook.Description,
                 Img = sourceBook.Img,
                 Price = sourceBook.Price,
@@ -40,6 +41,13 @@ namespace Library.Web.Repository.Repositories
             };
         }
 
-
+        public List<Copy> GetNBookCopies(int Id ,int n)
+        {
+            return context.Copies
+                .Where(c => c.BookId == Id && c.AllowToRental)
+                .OrderBy(c => c.Id)
+                .Take(n)
+                .ToList();
+        }
     }
 }
