@@ -36,7 +36,7 @@ namespace Library.Web.Controllers
             return View(Books);
         }
 
-        public async Task<IActionResult> Details(int Id)
+        public IActionResult Details(int Id)
         {
             var book = bookRepository.GetBookDetails(Id);
             if (book is not null)
