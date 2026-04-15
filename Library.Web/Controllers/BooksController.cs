@@ -53,7 +53,7 @@ namespace Library.Web.Controllers
 
             if (!copies.Any())
             {
-                return RedirectToAction("BookDetails", "Books", new { Id });
+                return RedirectToAction(nameof(Details), "Books", new { Id });
             }
 
             Rental rental = new()
