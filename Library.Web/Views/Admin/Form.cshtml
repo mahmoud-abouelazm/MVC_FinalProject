@@ -6,60 +6,7 @@
     ViewData["ActiveNav"] = "Books";
 }
 
-<style>
-    /* .form-card {
-        background: #fff;
-        border: 1px solid rgba(192,201,190,.2);
-        border-radius: .5rem;
-        box-shadow: 0 8px 32px rgba(26,28,26,.06);
-    }
-    .field-label {
-        display: block;
-        font-family: 'Manrope', sans-serif;
-        font-size: .6875rem; font-weight: 700;
-        letter-spacing: .1em; text-transform: uppercase;
-        color: #404941; margin-bottom: .5rem;
-    }
-    .field-input {
-        width: 100%; background: #f3f4f0; border: 1px solid transparent;
-        border-radius: .25rem; padding: .75rem 1rem;
-        font-family: 'Manrope', sans-serif; font-size: .875rem;
-        color: #1a1c1a; outline: none; transition: border-color .2s, box-shadow .2s;
-    }
-    .field-input:focus { border-color: rgba(0,50,26,.3); box-shadow: 0 0 0 3px rgba(0,50,26,.08); }
-    .input-validation-error { border-color: #ba1a1a !important; box-shadow: 0 0 0 3px rgba(186,26,26,.08) !important; }
-    textarea.field-input { resize: vertical; min-height: 110px; }
-    select.field-input { appearance: none; cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24'%3E%3Cpath fill='%23404941' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right .75rem center; padding-right: 2.5rem; }
-    .field-validation-error { color: #ba1a1a; font-size: .75rem; margin-top: .35rem; font-family: 'Manrope', sans-serif; display: block; }
-    .btn-primary {
-        background: #00321a; color: #fff; border: none;
-        border-radius: .25rem; padding: .875rem 2rem;
-        font-family: 'Manrope', sans-serif; font-size: .75rem;
-        font-weight: 700; letter-spacing: .18em; text-transform: uppercase;
-        cursor: pointer; transition: background .2s;
-    }
-    .btn-primary:hover { background: #004b2a; }
-    .btn-secondary {
-        background: transparent; color: #404941;
-        border: 1px solid rgba(192,201,190,.5);
-        border-radius: .25rem; padding: .875rem 2rem;
-        font-family: 'Manrope', sans-serif; font-size: .75rem;
-        font-weight: 700; letter-spacing: .18em; text-transform: uppercase;
-        text-decoration: none; display: inline-block; transition: background .2s;
-    }
-    .btn-secondary:hover { background: #f3f4f0; }
-    .checkbox-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: .5rem; }
-    .checkbox-item {
-        display: flex; align-items: center; gap: .5rem;
-        padding: .5rem .75rem; border-radius: .25rem;
-        background: #f3f4f0; cursor: pointer;
-        font-family: 'Manrope', sans-serif; font-size: .8rem; color: #1a1c1a;
-        transition: background .15s;
-    }
-    .checkbox-item:has(input:checked) { background: rgba(0,50,26,.1); }
-    .checkbox-item input[type="checkbox"] { accent-color: #00321a; width: 15px; height: 15px; }
-    .img-preview { width: 80px; height: 110px; object-fit: cover; border-radius: .25rem; border: 1px solid rgba(192,201,190,.3); } */
-</style>
+
 
 
 <main class="ml-64 min-h-screen p-12">
@@ -143,7 +90,7 @@
                             <img src="@Model.Img" alt="Current cover" class="img-preview" />
                         }
                         <div class="flex-1">
-                            <input type="file" name="CoverImage" id="CoverImage"
+                            <input type="file" name="CoverImage" id="CoverImage" 
                                    accept="image/jpeg,image/png"
                                    class="field-input" style="padding:.5rem;" />
                             @if (!string.IsNullOrEmpty(Model.Img))

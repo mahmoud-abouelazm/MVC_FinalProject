@@ -2,6 +2,8 @@ using Library.Web.Core.Models;
 using Library.Web.Data;
 using Library.Web.Repository.IRepositories;
 using Library.Web.Repository.Repositories;
+using Library.Web.Services;
+using Library.Web.Services.HelperServices;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,8 +24,16 @@ namespace Library.Web
 
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
+            builder.Services.AddScoped<IImageService, ImageService>();
             builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             builder.Services.AddScoped<IBookRepository , BooksRepository>();
+            builder.Services.AddScoped<IAdminService, AdminService>();
+            builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
+            builder.Services.AddScoped<IAuthorService, AuthorService>();
+            builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+            builder.Services.AddScoped<ICategoryService, CategoryService>();
+
+
 
 
             //builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
