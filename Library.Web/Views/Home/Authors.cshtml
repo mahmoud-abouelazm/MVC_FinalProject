@@ -110,7 +110,7 @@
 
                                 @* @book.Title - @book.Price *@
                                 <a asp-controller="Books" asp-action="Details" asp-route-id="@book.Id">
-                                     <img src="/@book.Img" />
+                                <img src="/@book.Img" title="@book.Title - @book.CategoryName - $@book.Price" />
                                 </a>
                             </div>
                         }
