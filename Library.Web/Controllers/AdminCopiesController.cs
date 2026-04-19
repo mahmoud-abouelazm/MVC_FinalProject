@@ -7,19 +7,18 @@ namespace Library.Web.Controllers
     public class AdminCopiesController(ICopyService copyService) : Controller
     {
         private const int PageSize = 15;
+        private readonly ICopyService _copyService = copyService;
 
-        
-        public async Task<IActionResult> Index(int? bookId, int page = 1)
+        public async Task<IActionResult> Index(int? bookId, string search = "", int page = 1)
         {
             var vm = bookId.HasValue
-                ? await copyService.GetIndexVmByBookAsync(bookId.Value, page, PageSize)
-                : await copyService.GetIndexVmAsync(page, PageSize);
-
+                ? await _copyService.GetIndexVmByBookAsync(bookId.Value, page, PageSize, search)
+                : await _copyService.GetIndexVmAsync(page, PageSize, search);
             return View(vm);
         }
 
         public async Task<IActionResult> Create(int? bookId)
-            => View("Form", await copyService.GetCreateVmAsync(bookId));
+            => View("Form", await _copyService.GetCreateVmAsync(bookId));
 
 
         [HttpPost, ValidateAntiForgeryToken]
@@ -27,16 +26,15 @@ namespace Library.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                vm.Books = (await copyService.GetCreateVmAsync(vm.BookId)).Books;
+                vm.Books = (await _copyService.GetCreateVmAsync(vm.BookId)).Books;
                 return View("Form", vm);
             }
 
-            var result = await copyService.CreateAsync(vm);
-
+            var result = await _copyService.CreateAsync(vm);
             if (!result.Success)
             {
                 ModelState.AddModelError("", result.Message);
-                vm.Books = (await copyService.GetCreateVmAsync(vm.BookId)).Books;
+                vm.Books = (await _copyService.GetCreateVmAsync(vm.BookId)).Books;
                 return View("Form", vm);
             }
 
@@ -47,7 +45,7 @@ namespace Library.Web.Controllers
 
         public async Task<IActionResult> Edit(int id)
         {
-            var vm = await copyService.GetEditVmAsync(id);
+            var vm = await _copyService.GetEditVmAsync(id);
             if (vm is null) return NotFound();
             return View("Form", vm);
         }
@@ -58,16 +56,15 @@ namespace Library.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                vm.Books = (await copyService.GetCreateVmAsync(vm.BookId)).Books;
+                vm.Books = (await _copyService.GetCreateVmAsync(vm.BookId)).Books;
                 return View("Form", vm);
             }
 
-            var result = await copyService.UpdateAsync(vm);
-
+            var result = await _copyService.UpdateAsync(vm);
             if (!result.Success)
             {
                 ModelState.AddModelError("", result.Message);
-                vm.Books = (await copyService.GetCreateVmAsync(vm.BookId)).Books;
+                vm.Books = (await _copyService.GetCreateVmAsync(vm.BookId)).Books;
                 return View("Form", vm);
             }
 
@@ -79,7 +76,7 @@ namespace Library.Web.Controllers
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id, int? bookId)
         {
-            var result = await copyService.DeleteAsync(id);
+            var result = await _copyService.DeleteAsync(id);
 
             if (result.Success) TempData["Success"] = result.Message;
             else TempData["Error"] = result.Message;
@@ -91,7 +88,7 @@ namespace Library.Web.Controllers
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> ToggleRental(int id, int? bookId)
         {
-            var result = await copyService.ToggleRentalAsync(id);
+            var result = await _copyService.ToggleRentalAsync(id);
 
             if (result.Success) TempData["Success"] = result.Message;
             else TempData["Error"] = result.Message;

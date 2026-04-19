@@ -11,12 +11,11 @@ namespace Library.Web.Repository.Repositories
     {
         private readonly ApplicationDbContext _context = context;
 
-        public async Task<IEnumerable<CopyRowVM>> GetAllRowsAsync(int page, int pageSize)
-            => await BuildQuery()
+       public async Task<IEnumerable<CopyRowVM>> GetAllRowsAsync(int page, int pageSize, string search)
+            => await ApplySearch(BuildQuery(), search)
                 .OrderBy(c => c.Book.Title).ThenBy(c => c.Name)
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .Select(c=> new CopyRowVM
+                .Skip((page - 1) * pageSize).Take(pageSize)
+                .Select(c => new CopyRowVM
                 {
                     Id = c.Id,
                     Name = c.Name,
@@ -25,16 +24,16 @@ namespace Library.Web.Repository.Repositories
                     AllowToRental = c.AllowToRental,
                     HasRentals = c.CopyRentals.Any(),
                     RentalCount = c.CopyRentals.Count
-                })
-                .ToListAsync();
+                }).ToListAsync();
 
-        public async Task<IEnumerable<CopyRowVM>> GetRowsByBookIdAsync(int bookId, int page, int pageSize)
-            => await BuildQuery()
-                .Where(c => c.BookId == bookId)
+        
+
+        public async Task<IEnumerable<CopyRowVM>> GetRowsByBookIdAsync(
+            int bookId, int page, int pageSize, string search)
+            => await ApplySearch(BuildQuery().Where(c => c.BookId == bookId), search)
                 .OrderBy(c => c.Name)
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .Select(c=> new CopyRowVM
+                .Skip((page - 1) * pageSize).Take(pageSize)
+                .Select(c => new CopyRowVM
                 {
                     Id = c.Id,
                     Name = c.Name,
@@ -43,14 +42,16 @@ namespace Library.Web.Repository.Repositories
                     AllowToRental = c.AllowToRental,
                     HasRentals = c.CopyRentals.Any(),
                     RentalCount = c.CopyRentals.Count
-                })
-                .ToListAsync();
+                }).ToListAsync();
 
-        public async Task<int> CountAsync()
-            => await _context.Copies.CountAsync();
 
-        public async Task<int> CountByBookIdAsync(int bookId)
-            => await _context.Copies.CountAsync(c => c.BookId == bookId);
+
+
+        public async Task<int> CountAsync(string search)
+            => await ApplySearch(BuildQuery(), search).CountAsync();
+
+        public async Task<int> CountByBookIdAsync(int bookId, string search)
+            => await ApplySearch(BuildQuery().Where(c => c.BookId == bookId), search).CountAsync();
 
         public async Task<Copy?> GetByIdWithRentalsAsync(int id)
             => await _context.Copies
@@ -72,6 +73,14 @@ namespace Library.Web.Repository.Repositories
                 .Include(c => c.Book)
                 .Include(c => c.CopyRentals);
 
-        
+
+        private static IQueryable<Copy> ApplySearch(IQueryable<Copy> query, string search)
+        {
+            if (string.IsNullOrWhiteSpace(search)) return query;
+            var q = search.Trim().ToLower();
+            return query.Where(c =>
+                c.Name.ToLower().Contains(q) ||
+                c.Book.Title.ToLower().Contains(q));
+        }
     }
 }

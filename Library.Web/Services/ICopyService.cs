@@ -4,8 +4,8 @@ namespace Library.Web.Services
 {
     public interface ICopyService
     {
-        Task<CopyVM> GetIndexVmAsync(int page, int pageSize);
-        Task<CopyVM> GetIndexVmByBookAsync(int bookId, int page, int pageSize);
+        Task<CopyVM> GetIndexVmAsync(int page, int pageSize, string search);
+        Task<CopyVM> GetIndexVmByBookAsync(int bookId, int page, int pageSize, string search);
         Task<CopyFormVM> GetCreateVmAsync(int? bookId);
         Task<CopyFormVM?> GetEditVmAsync(int id);
         Task<ServiceResult> CreateAsync(CopyFormVM vm);

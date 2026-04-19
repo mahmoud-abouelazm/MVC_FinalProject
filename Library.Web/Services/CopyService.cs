@@ -9,33 +9,36 @@ namespace Library.Web.Services
 {
     public class CopyService(ICopyRepository repo, ApplicationDbContext context) : ICopyService
     {
-
-        public async Task<CopyVM> GetIndexVmAsync(int page, int pageSize)
+        public async Task<CopyVM> GetIndexVmAsync(int page, int pageSize, string search)
         {
-            int total = await repo.CountAsync();
-            var rows = await repo.GetAllRowsAsync(page, pageSize);
-
-            return new CopyVM
-            {
-                Copies = rows,
-                TotalCopies = total,
-                CurrentPage = page,
-                PageSize = pageSize
-            };
-        }
-
-        public async Task<CopyVM> GetIndexVmByBookAsync(int bookId, int page, int pageSize)
-        {
-            var book = await context.Books.FindAsync(bookId);
-            int total = await repo.CountByBookIdAsync(bookId);
-            var rows = await repo.GetRowsByBookIdAsync(bookId, page, pageSize);
-
+            int total = await repo.CountAsync(search);
+            var rows = await repo.GetAllRowsAsync(page, pageSize, search);
             return new CopyVM
             {
                 Copies = rows,
                 TotalCopies = total,
                 CurrentPage = page,
                 PageSize = pageSize,
+                Search = search
+            };
+        }
+
+    
+
+
+        public async Task<CopyVM> GetIndexVmByBookAsync(
+           int bookId, int page, int pageSize, string search)
+        {
+            var book = await context.Books.FindAsync(bookId);
+            int total = await repo.CountByBookIdAsync(bookId, search);
+            var rows = await repo.GetRowsByBookIdAsync(bookId, page, pageSize, search);
+            return new CopyVM
+            {
+                Copies = rows,
+                TotalCopies = total,
+                CurrentPage = page,
+                PageSize = pageSize,
+                Search = search,
                 FilterBookId = bookId,
                 FilterBookTitle = book?.Title ?? ""
             };
@@ -146,5 +149,7 @@ namespace Library.Web.Services
                 .OrderBy(b => b.Title)
                 .Select(b => new SelectListItem(b.Title, b.Id.ToString()))
                 .ToListAsync();
+
+        
     }
 }

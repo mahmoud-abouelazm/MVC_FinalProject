@@ -6,6 +6,7 @@
 
         public int? FilterBookId { get; set; }
         public string FilterBookTitle { get; set; } = "";
+        public string Search { get; set; } = "";
 
         public int TotalCopies { get; set; }
         public int CurrentPage { get; set; } = 1;

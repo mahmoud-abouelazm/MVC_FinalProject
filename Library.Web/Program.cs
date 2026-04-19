@@ -34,7 +34,8 @@ namespace Library.Web
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<ICopyRepository, CopyRepository>();
             builder.Services.AddScoped<ICopyService, CopyService>();
-
+            builder.Services.AddScoped<IRentalRepository, RentalRepository>();
+            builder.Services.AddScoped<IRentalService, RentalService>();
 
 
 
