@@ -135,12 +135,19 @@ namespace Library.Web.Repository.Repositories
 
         //public async Task<Book?> GetAllWithAuthorsAsync()
         //{
-         
+
 
         //}
 
 
-
+        public async Task<List<Book>> GetNewBooks()
+        {
+            return await _context.Books
+                .AsNoTracking()
+                .OrderByDescending(x => x.Id)
+                .Take(4)
+                .ToListAsync(); ;
+        }
 
 
 
