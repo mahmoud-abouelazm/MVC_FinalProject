@@ -11,7 +11,7 @@ namespace Library.Web.Core.Constants
     public class PaginationParams
     {
         public int Page { get; set; } = 1;
-        public int PageSize { get; set; } = 10;
+        public int PageSize { get; set; } = 8;
     }
     public class PagedResult<T> where T : class
     {

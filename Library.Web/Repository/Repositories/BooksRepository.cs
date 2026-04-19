@@ -87,12 +87,19 @@ namespace Library.Web.Repository.Repositories
 
 
 
-        public async Task<PagedResult<BookRowVM>> GetAllBooksAsync(PaginationParams param)
+        public async Task<PagedResult<BookRowVM>> GetAllBooksAsync(PaginationParams param , int? categoryId= null)
         {
             var query = _context.Books
                 .Include(b => b.Category)
                 .Include(b => b.BookAuthors)
-                    .ThenInclude(ba => ba.Author);
+                    .ThenInclude(ba => ba.Author)
+                    .AsQueryable();
+
+            if (categoryId.HasValue)
+            {
+                query = query.Where(b => b.CategoryId == categoryId.Value);
+            }
+
 
             int total = await query.CountAsync();
 
@@ -125,6 +132,13 @@ namespace Library.Web.Repository.Repositories
                 .Include(b => b.BookAuthors)
                 .FirstOrDefaultAsync(b => b.Id == id);
         }
+
+        //public async Task<Book?> GetAllWithAuthorsAsync()
+        //{
+         
+
+        //}
+
 
 
 

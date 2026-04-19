@@ -17,6 +17,23 @@ namespace Library.Web.Repository.Repositories
             return Task.CompletedTask;
         }
 
+        public async Task<List<CategoryRowVM>> GetAllAsync()
+        {
+            var query = _context.Categories
+                .Include(c => c.Books);
+
+                var  data = await query
+                            .Select(c => new CategoryRowVM
+                             {
+                              Id = c.Id,
+                              Name = c.Name,
+                              BookCount = c.Books.Count
+                            })
+                  .ToListAsync();
+
+            return data;
+        }
+
         public async Task<PagedResult<CategoryRowVM>> GetAllAsync(PaginationParams param)
         {
             var query = _context.Categories

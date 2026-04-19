@@ -5,7 +5,7 @@ namespace Library.Web.Services
 {
     public interface IAuthorService
     {
-        Task<PagedResult<AuthorRowVM>> GetAllAsync(PaginationParams param);
+        Task<PagedResult<AuthorRowVM>> GetAllAsync(PaginationParams param, string? sortBy ="");
         Task CreateAsync(AuthorFormVM vm);
         Task<AuthorFormVM?> GetVmForEditAsync(int id); 
         Task UpdateAsync(AuthorFormVM vm);

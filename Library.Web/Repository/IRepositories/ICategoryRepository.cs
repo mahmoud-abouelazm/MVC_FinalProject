@@ -8,6 +8,7 @@ namespace Library.Web.Repository.IRepositories
     {
 
         Task<PagedResult<CategoryRowVM>> GetAllAsync(PaginationParams param);
+        Task<List<CategoryRowVM>> GetAllAsync();
         Task<Category?> GetByIdAsync(int id);
         Task DeleteAsync(Category category);
     }
