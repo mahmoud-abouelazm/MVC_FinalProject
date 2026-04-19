@@ -7,13 +7,6 @@
 
 @{
     int totalPages = (int)Math.Ceiling((double)Model.TotalCount / 8);
-
-    for (int i = 1; i <= totalPages; i++)
-    {
-        <a href="/Books/Index?page=@i">@i</a>
-
-    }
-
     
     List<CategoryRowVM>? categories = ViewBag.Categories;
     var selectedCategory = ViewBag.SelectedCategory as int?;
@@ -21,7 +14,6 @@
     var selectedName = categories
         ?.FirstOrDefault(c => c.Id == selectedCategory)?.Name ?? "All Categories";
 }
-
 
 
 
@@ -37,12 +29,11 @@
                 <h1 class="text-4xl md:text-5xl font-noto-serif text-primary">Public Catalog </h1>
             </div>
 
-
             <!-- Categories Dropdown/Filter -->
 
             <div class="flex gap-4">
                 <div class="relative group">
-        
+    
                     <form method="get" asp-action="Index">
     
                         <select name="categoryId"

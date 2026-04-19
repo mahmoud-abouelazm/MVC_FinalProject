@@ -1,0 +1,169 @@
+﻿@using Library.Web.Core.Constants
+@using Library.Web.Core.ViewModel.Book
+
+@using Library.Web.Core.ViewModel.Author
+
+
+@model PagedResult<AuthorRowVM>
+@{
+
+    int totalPages = (int)Math.Ceiling((double)Model.TotalCount / 6);
+}
+
+@* <p>Sort: @ViewBag.SortBy</p> *@
+
+<main class="flex-grow max-w-7xl mx-auto w-full px-8 py-12">
+    <!-- Hero Section -->
+    <header class="mb-16">
+
+        <span class="font-label text-xs uppercase tracking-[0.2em] text-on-surface-variant mb-4 block">
+            Archive
+            Directory
+        </span>
+        <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
+            <div class="max-w-2xl">
+                <h1 class="text-4xl lg:text-5xl text-primary mb-4 font-bold leading-tight">
+                    Contributors &amp;
+                    Scholars
+                </h1>
+                <p class="text-on-surface-variant font-body font-light leading-relaxed">
+                    A comprehensive index of the minds behind our collection. Browse our extensive registry of
+                    authors, researchers, and archival specialists.
+                    </br>Count of Authors now :@Model.TotalCount
+                </p>
+            </div>
+
+            @* ///////////////////////////////// sort *@
+        <form method="get" asp-action="Authors">
+            <div class="flex items-center gap-4 border-b border-outline-variant pb-2">
+        
+                <span class="font-label text-xs font-bold text-primary">SORT BY:</span>
+
+                <select name="sortBy"
+                        onchange="this.form.submit()"
+                        class="bg-transparent border-none focus:ring-0 text-sm font-label cursor-pointer text-on-surface-variant">
+
+                    <option value="name_asc"
+                            selected="@(ViewBag.SortBy == "name_asc")">
+                        Alphabetical (A-Z)
+                    </option>
+
+
+
+                    <option value="name_desc"
+                            selected="@(ViewBag.SortBy == "name_desc")">
+                        Alphabetical (Z-A)
+                    </option>
+
+                    <option value="books"
+                            selected="@(ViewBag.SortBy == "books")">
+                        More Books
+                    </option>
+
+                </select>
+
+            </div>
+        </form>
+
+
+
+
+        </div>
+    </header>
+
+    <!-- Detailed Author Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+
+        @foreach(var author in Model.Data)
+        {
+
+         
+            <!-- Author Card 1 -->
+            <div class="group bg-surface-container-lowest border border-outline-variant/20 rounded-lg p-6 flex flex-col hover:shadow-lg transition-all duration-300">
+                <div class="flex justify-between items-start mb-4">
+                    <div>
+                        <h3 class="font-headline text-xl text-primary leading-tight">@author.Name</h3>
+                        <p class="font-label text-[11px] uppercase tracking-wider text-primary font-bold mt-1">
+                            Works in
+                            Archive: @author.BookCount
+                        </p>
+                    </div>
+                </div>
+                <p class="text-sm text-on-surface-variant font-body leading-relaxed mb-6">
+                    @author.Bio
+                </p>
+
+
+                <div class="mt-auto">
+
+                    <span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant/70 mb-3 block">
+                        Book
+                        Preview
+                    </span>
+
+                    <div class="grid grid-cols-4 gap-2">
+
+                    @foreach (var book in author.BooksOfTheAuthor?.Take(4) ?? Enumerable.Empty<BookRowVM>())
+                        {
+                            <div class="book-thumbnail rounded-sm border border-outline-variant/30 hover:border-primary/40 transition-colors cursor-help">
+
+                                @* @book.Title - @book.Price *@
+                                <a asp-controller="Books" asp-action="Details" asp-route-id="@book.Id">
+                                     <img src="/@book.Img" />
+                                </a>
+                            </div>
+                        }
+                        
+
+
+                    </div>
+                </div>
+            </div>
+
+            
+        }
+
+            
+
+        
+
+
+
+
+
+
+       
+    <!-- Pagination -->
+    <div class="mt-16 flex items-center justify-center gap-2">
+
+       
+            <button class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-surface-container-low transition-colors text-primary">
+                <span class="material-symbols-outlined">chevron_left</span>
+            </button>
+
+            @for (int i = 1; i < totalPages; i++)
+            {
+               
+                <a class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-surface-container-low transition-colors font-semibold"
+                       asp-action="Authors" asp-route-page="@i">
+                        @i
+                    </a>
+            }
+
+
+        <span class="text-on-surface-variant px-2">...</span>
+
+            <a class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-surface-container-low transition-colors font-semibold"
+                   asp-action="Authors" asp-route-page="@totalPages">
+                        @totalPages
+             </a>
+        
+            <button class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-surface-container-low transition-colors text-primary">
+                <span class="material-symbols-outlined">chevron_right</span>
+            </button>
+
+    </div>
+
+   
+</main>
