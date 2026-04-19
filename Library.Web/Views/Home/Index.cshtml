@@ -1,8 +1,168 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+<style>
+    main{
+        padding : 0 !important;
+        max-width : 100vw !important;
+    }
+</style>
+    <!-- Hero Section -->
+    <section class="relative h-[795px] flex items-center overflow-hidden bg-surface-container-low">
+        <div class="absolute inset-0 z-0 opacity-40">
+            <img alt="Grand library" class="w-full h-full object-cover" data-alt="Atmospheric wide shot of an ancient grand library with towering wooden bookshelves, rolling ladders, and soft dust motes dancing in sunlight" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD28So_-SwTab5pP6XHbvFGP7r2c487OEr-TNaHX_5DSXBhh824pVaCQLvLtr4eozD_rQqR0hoJUIO_aS7vBRvkAJ3Bb6LfppZYUsNnv3rtIuiLgC5YM7O2JNuNcJBSiFuRFGypLSR8oQkgN9Q_lReTLL1wPPj3C8zJOah61LNih0D8I8xCizWNXAffcWC4Rv5WvK8G3eiFvgeUdQnqLCNgE6BOU0uhVot1FMMUKB4Sx4Cdae9WjLrtHMXloRZniCNPIsZ8W6WQTEU9" />
+        </div>
+        <div class="relative z-10 max-w-screen-2xl mx-auto px-6 md:px-12 w-full">
+            <div class="max-w-3xl">
+                <span class="font-label text-sm uppercase tracking-[0.2em] text-on-surface-variant mb-6 block">Established 1924</span>
+                <h1 class="font-headline text-5xl md:text-7xl lg:text-8xl text-primary leading-[1.1] mb-8">
+                    Preserving the <br /><i class="font-light">Narrative of History</i>
+                </h1>
+                <div class="flex flex-col sm:flex-row gap-6 items-start sm:items-center">
+                    <a asp-action="index" asp-controller="books">
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+                    <button class="bg-primary text-on-primary px-10 py-4 rounded-md font-body font-bold text-lg hover:bg-primary-container transition-all shadow-lg">
+                        Browse the Collection
+                    </button>
+                    </a>
+                    <button class="group flex items-center gap-3 font-body font-semibold text-primary">
+                        <span class="w-12 h-[1px] bg-primary group-hover:w-16 transition-all"></span>
+                        Explore the Vault
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="absolute bottom-12 right-12 hidden lg:block">
+            <div class="flex items-center gap-4 text-primary/40">
+                <span class="font-label text-[0.6875rem] uppercase tracking-widest">Scroll to curate</span>
+                <span class="material-symbols-outlined animate-bounce">arrow_downward</span>
+            </div>
+        </div>
+    </section>
+    <!-- Mission Section -->
+    <section class="py-32 px-6 md:px-12 bg-surface">
+        <div class="max-w-screen-xl mx-auto grid md:grid-cols-2 gap-16 items-center">
+            <div class="relative">
+                <div class="aspect-[4/5] bg-surface-container-low rounded-xl overflow-hidden shadow-2xl rotate-[-2deg]">
+                    <img alt="Archival study" class="w-full h-full object-cover" data-alt="Minimalist top-down view of a scholar's wooden desk with an open antique book, a fountain pen, and a cup of black coffee" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBdg7EpjRHfanPy9x16LKM0uXcs0toKjA1pRUp-wIoA37tgy2Dvt7LCegmhxwmoim8FUhaKhH8nFLB_nMgXWapFtyn5xrZfvRWDzdc_LkywBgJTXY28YBM2AiT3J6tAtnFv0Xy7OCTyqYf3LUgZ9vBhsUvrw9XLCHz6dMrMbQhitThrx84atG8kTvpqvhfdwjm5Zt2zJfKD5rOcst8Xrvq68SN4RVgP1jIiuocvDc-zQ0FAtRBJWeHz2G2f6InWKQHRoG7TZSZKINc-" />
+                </div>
+                <div class="absolute -bottom-8 -right-8 w-48 h-48 bg-primary-fixed rounded-xl -z-10 opacity-20"></div>
+            </div>
+            <div class="flex flex-col justify-center">
+                <h2 class="font-headline text-3xl md:text-4xl text-primary mb-8 leading-tight">
+                    A Sanctuary for the Written Word.
+                </h2>
+                <p class="font-headline text-xl text-on-surface-variant leading-relaxed mb-10 italic">
+                    The Editorial Archive serves as a living repository for the world's most significant typographic and literary artifacts. We are a haven for researchers, bibliophiles, and those who believe that history's pulse is felt most clearly through the ink of its creators.
+                </p>
+                <div class="space-y-4">
+                    <div class="flex items-center gap-4 p-4 rounded-xl hover:bg-surface-container-low transition-colors group">
+                        <span class="material-symbols-outlined text-primary text-3xl" data-weight="fill">verified</span>
+                        <div>
+                            <h4 class="font-body font-bold text-primary">Certified Provenance</h4>
+                            <p class="text-sm text-on-surface-variant">Every fragment meticulously verified by global scholars.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 p-4 rounded-xl hover:bg-surface-container-low transition-colors group">
+                        <span class="material-symbols-outlined text-primary text-3xl">public</span>
+                        <div>
+                            <h4 class="font-body font-bold text-primary">Global Access</h4>
+                            <p class="text-sm text-on-surface-variant">Bridging the gap between physical vaults and digital exploration.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Featured Collections (Asymmetric Bento Grid) -->
+    <section class="py-32 bg-surface-container-low">
+        <div class="max-w-screen-2xl mx-auto px-6 md:px-12">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+                <div class="max-w-xl">
+                    <h2 class="font-headline text-4xl md:text-5xl text-primary mb-4">Curated Collections</h2>
+                    <p class="font-body text-on-surface-variant">Hand-selected exhibitions focusing on specific eras of human thought.</p>
+                </div>
+                <a class="font-label text-[0.6875rem] uppercase tracking-widest text-primary font-bold border-b border-primary/20 pb-1 hover:border-primary transition-all" href="#">View all archives</a>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+                <!-- Collection 1 -->
+                <div class="md:col-span-8 group relative aspect-[16/9] overflow-hidden rounded-xl bg-surface-container-highest">
+                    <img alt="Modernist Archive" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="Editorial layout of modernist graphic design posters with bold typography and geometric shapes, museum exhibition style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQeCw6QdOy6iI85Qcb5d6qpvaixNiD4pg3F8eP7tIl4CIvV2MTJspoofoTxyVNgoJMl6IOGHXXPPF1Wsgr6fXWTy3dZAZPAw53r176ZXgsRobT3vEPIQjs0fpmLCAxYhL_PtUuOxE3XLXrJtQKtk9OKnZwXj64rfCCM7eQ5G5jyVxZr-OFhG9kctqV1qzLmJ_OgYVdq9fp5BqFu-mtyVyy-FxUgwJhHQtRYURhDVEZnws5RYsH_8ubyHEv_s9e8m5WLZ-ZnPALUhBz" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 p-10 text-on-primary">
+                        <span class="font-label text-xs uppercase tracking-widest mb-2 block opacity-80">1920 — 1960</span>
+                        <h3 class="font-headline text-3xl md:text-4xl mb-4">The Modernist Archive</h3>
+                        <p class="max-w-md font-body text-sm opacity-90 line-clamp-2">Exploring the seismic shift from ornate decoration to functionalist clarity in mid-century literature.</p>
+                    </div>
+                </div>
+                <!-- Collection 2 -->
+                <div class="md:col-span-4 group relative aspect-[4/5] overflow-hidden rounded-xl bg-surface-container-highest">
+                    <img alt="Classical Typologies" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="Close up of ornate gold-leaf illuminated manuscript letters from the medieval era on aged vellum" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrwdkUSiAKxWCRWzWFbkb7x9pCxHaKuDc4WlB_sjnA3ayhbrQoztNKNoz1IKE_dMDuSSUekg3RdDrm7hr0tYdH-Md9BqHKRFzzgXIvotx_oV_dUrpMS2XtfYw5rAPmpGKmC61_bPf_h18M7nlsERoJ0M4bJoZSgapsgUs_RyzDa7zI65G7uDsQPrOEXfCGGMyK6UQFbWIveWJjFRnbgGi8xxsgHh1FSXniJ6FYSkVJ-iNvDLfSv7x4DVNYwCuL7DbX0vQy_M1rWCeq" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-tertiary/80 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 p-8 text-on-primary">
+                        <span class="font-label text-xs uppercase tracking-widest mb-2 block opacity-80">Medieval — Renaissance</span>
+                        <h3 class="font-headline text-2xl mb-2">Classical Typologies</h3>
+                        <button class="material-symbols-outlined mt-4 bg-white/20 p-2 rounded-full hover:bg-white/40 transition-colors">arrow_forward</button>
+                    </div>
+                </div>
+                <!-- Collection 3 -->
+                <div class="md:col-span-4 group relative aspect-[4/5] overflow-hidden rounded-xl bg-surface-container-highest">
+                    <img alt="The Romantic Epistles" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="Stack of hand-written letters with wax seals and dried flowers resting on a velvet cloth, soft romantic lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhlOWW9mTD91fx5jEYnvWGvuZsgEQhdJBXLETLPvGFs-FmImxOcT3seK-alqnkhCLLuVN7mZ67LtwpZZQilmByQM1HeP5qWOVsdmcoOiyK_dh7-CllDiHS3Y2iSAt5ZDgCPmnMbK71YrVI7wFAXjazzp72sPBYyfoM0Zgi_xnS2mbrbTw6irq33rizR5UwvohhK6N2Rt5tu-NbMV8POOIwGlRHUhsdYJu51DTQdjhSrdhxtRNXaBzwoHFkutHqUgo7L7f7CgjbuS15" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-primary-container/80 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 p-8 text-on-primary">
+                        <span class="font-label text-xs uppercase tracking-widest mb-2 block opacity-80">18th Century</span>
+                        <h3 class="font-headline text-2xl mb-2">Romantic Epistles</h3>
+                        <button class="material-symbols-outlined mt-4 bg-white/20 p-2 rounded-full hover:bg-white/40 transition-colors">arrow_forward</button>
+                    </div>
+                </div>
+                <!-- Collection 4 -->
+                <div class="md:col-span-8 group relative overflow-hidden rounded-xl bg-surface-container-highest">
+                    <img alt="Scientific Observation" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="Botanical illustrations and sketches of birds in a leather-bound journal with pressed leaves, Victorian explorer style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJdb8fHUvTlbK4FXJLYUmE7UejZxPMeEVnSpEeH4Wenwa1Omq9DhAGUtAZPpcgxZxb9qzL03YdEA3PSDkpaTCvvmj4_Fb5JgoAQforny9yiMt9MCJjcJsJxPaHQqreO7t9CylTOJr16mrhL7q0rShMvKRW6ZtdOLgcwIUYXp_pmzwsex_YYrNyyNlKtYMNY7PDAyHMIrISIECA844_sBgzewuoN2QkJIXZanpmKbfWQwNNwz5M6B0_SVNjC6x3tsiL1rUmCrBP7UaT" />
+                    <div class="absolute inset-0 bg-primary/20 transition-opacity group-hover:opacity-0"></div>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <div class="bg-surface/90 backdrop-blur-md p-10 rounded-xl shadow-2xl max-w-lg text-center transform translate-y-4 group-hover:translate-y-0 transition-transform">
+                            <span class="font-label text-xs uppercase tracking-widest text-primary mb-4 block">New Exhibition</span>
+                            <h3 class="font-headline text-3xl text-primary mb-4">Scientific Observation</h3>
+                            <p class="font-body text-on-surface-variant mb-6">The intersection of art and empirical discovery in the 19th-century field notes.</p>
+                            <button class="px-8 py-3 bg-primary text-on-primary rounded-md font-bold text-sm">Explore Plates</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Scholar Program -->
+    <section class="py-32 relative overflow-hidden bg-primary text-on-primary">
+        <div class="absolute top-0 right-0 w-1/3 h-full bg-primary-container/30 skew-x-12 translate-x-20"></div>
+        <div class="max-w-screen-xl mx-auto px-6 md:px-12 relative z-10 flex flex-col md:flex-row items-center gap-20">
+            <div class="md:w-1/2">
+                <h2 class="font-headline text-4xl md:text-6xl mb-8 leading-tight">Join the Archival Circle</h2>
+                <p class="font-body text-lg opacity-80 mb-10 leading-relaxed">
+                    Become a patron of the literary arts. Your membership provides exclusive access to high-resolution metadata, first-rights for institutional borrowing, and entry into our quarterly symposia.
+                </p>
+                <div class="grid grid-cols-2 gap-8 mb-12">
+                    <div>
+                        <span class="font-headline text-3xl block mb-1">12k+</span>
+                        <span class="font-label text-[0.6875rem] uppercase tracking-widest opacity-60">High-Res Plates</span>
+                    </div>
+                    <div>
+                        <span class="font-headline text-3xl block mb-1">450</span>
+                        <span class="font-label text-[0.6875rem] uppercase tracking-widest opacity-60">Global Institutions</span>
+                    </div>
+                </div>
+                <button class="bg-primary-fixed text-primary px-12 py-5 rounded-md font-body font-extrabold text-lg hover:bg-white transition-all">
+                    Apply for Access
+                </button>
+            </div>
+            <div class="md:w-1/2 grid grid-cols-2 gap-4">
+                <div class="space-y-4 pt-12">
+                    <img alt="Scholar research" class="rounded-lg shadow-xl" data-alt="Black and white aesthetic photo of a scholar examining a document with a magnifying glass" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBGhprvtRNghfnARFrh4OD7egT0hXQfNBoseCZ1kmWfYrEXOxudKstfvnq1SNqtrkTGjzULv0tzhiwok1WdpW2GIX_8tNfj1g-OOvdGnpbA-r0ymCQPbZhuzTwdvPovJIELl-BC5ElR0CWHPY5ppCwQJP5khckeUEbUwRB1Q83DzWqk-uEtkt1_QmIaEIjbQfWC2YheNdyKGrKSddJxpc9CPGc2SUqP_1oqeOKpAJOsQ3x_N1r0HGV4Hk5N-IrM51pFXgZSDA6UqTlG" />
+                    <img alt="Book binding" class="rounded-lg shadow-xl" data-alt="Close up of leather book binding techniques with metallic stamps and thread" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOIJrXNUTYf2vlG0ovc77QfbKFhOw1aH5QOfw2pI0Jv6KBRLR3ttnrg14axF4iEq1kK2I4GW4oRTTuugbI2P6s2FZ1chTS0hcH7aEShIedKb4A24W-ZKkri1F0ENy1xaKcR4uYjyEH9FLeFot1HlnpjS4fbSKzLKe6I5-w3R2e1SQoLKpq0k8fFK1v20ji0qyo5xzlmEcOQhlwPAcuxzlB3wWYOcLDcKwqmaW3QN_xlVUIkjFeBs7vbzRsCaTbHRue4kj61c0OyRg-" />
+                </div>
+                <div class="space-y-4">
+                    <img alt="Archive stacks" class="rounded-lg shadow-xl" data-alt="Endless rows of archival gray boxes in a climate-controlled vault, futuristic academic style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFVG2pK0SkjxAKwOMyxmAEFIAiVXgQR5HoFpCsdgCbh2YycuVjMdWbYoPKeJYGQ0uysaXXWFePgYDgZoM_GHhRsT8jnjHuPDozdqKZViLLbE15s_01GhS1V1LMIxG-4kvqGPIlhIezPMIdjRQkrkejVsVXG0DNx7ia2s68UEf1-4zEOZOGC6vHoIM2-zrYS8kY134SGMWkZN7QnIT1FJCFEuHyl4MHf-mmgcxj-ZobtOHDr7Cz6DBk2_kcIrT8P0hQkNiwLiWiNRJe" />
+                    <img alt="Old paper texture" class="rounded-lg shadow-xl" data-alt="Macro texture of handmade deckle-edge paper with visible fibers and slight aging" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCyxzZM-hWvW1aQswnAMm1MKYRVtR2WY1QUuNGMySpodTmiPPHyYwCoNxORGEc5hUA_tpns4nirokBU-3DpPjP4s6OVchYlFFANP5F4LX6hpVbXPsJ3yQ9djZqTKgYFAAAzkkKm4bN33-mGqt3gBMVyRss4Sbmt4jaUWi2a7pZW35wL2uPRSQGmXCOuUgEbDTUpDDnU_cPlexB0wyp_rrn-RZ4cEEE4vZ-Z-VG8gZlbky5Qtq6lcBCJGseLJfaVV5sUP_ocosR2Wvso" />
+                </div>
+            </div>
+        </div>
+    </section>

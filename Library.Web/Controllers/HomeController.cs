@@ -5,7 +5,7 @@ using System.Diagnostics;
 
 namespace Library.Web.Controllers
 {
-    [Authorize]
+    
     public class HomeController : Controller
     {
         public IActionResult Index()
