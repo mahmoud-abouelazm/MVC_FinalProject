@@ -9,9 +9,9 @@ namespace Library.Web.Services
     {
         private readonly IAuthorRepository _repo = repo;
 
-        public async Task<PagedResult<AuthorRowVM>> GetAllAsync(PaginationParams param)
+        public async Task<PagedResult<AuthorRowVM>> GetAllAsync(PaginationParams param , string? sortBy = "")
         {
-            return await _repo.GetAllAsync(param);
+            return await _repo.GetAllAsync(param, sortBy);
         }
 
         public async Task CreateAsync(AuthorFormVM vm)

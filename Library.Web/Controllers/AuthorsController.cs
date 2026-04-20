@@ -19,7 +19,7 @@ namespace Library.Web.Controllers
             {
                 Page = page,
                 PageSize = 10
-            });
+            } ,"");
 
             return View(new AuthorVM
             {
