@@ -60,6 +60,15 @@
             <span class="material-symbols-outlined text-lg">menu_book</span>
             Books
         </a>
+        <a asp-controller="AdminCopies" asp-action="Index" class="nav-tab @(activeNav == "Copies" ? "active" : "")">
+                 <span class="material-symbols-outlined text-lg">content_copy</span>
+                 Copies
+        </a>
+
+        <a asp-controller="AdminRentals" asp-action="Index" class="nav-tab @(activeNav == "Rentals" ? "active" : "")">
+                 <span class="material-symbols-outlined text-lg">assignment</span>
+                 Rentals
+        </a>
 
         <a asp-controller="Authors" asp-action="Index"
                class="nav-tab @(activeNav == "Authors" ? "active" : "")">
