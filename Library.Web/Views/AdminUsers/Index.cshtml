@@ -1,0 +1,233 @@
+﻿@model UserVM
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+}
+    <style>
+        .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Manrope', sans-serif; }
+        h1, h2, h3 { font-family: 'Noto Serif', serif; }
+        /* Custom table styles for consistency with Archive Catalog */
+        .catalog-table th {
+        text-align: left;
+        padding: 1rem 1.5rem;
+        font-size: 0.65rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        font-weight: 700;
+        color: #404941;
+        border-bottom: 1px solid #e2e3df;
+        }
+        .catalog-table td {
+        padding: 1rem 1.5rem;
+        font-size: 0.875rem;
+        vertical-align: middle;
+        border-bottom: 1px solid #f3f4f0;
+        }
+    </style>
+
+    <!-- Main Content -->
+    <main class="md:ml-64 pt-24 pb-12 px-8 min-h-screen">
+
+        <!-- Header Section -->
+        <section class="mb-12">
+            <h2 class="text-3xl font-headline font-bold text-primary mb-2">User Community Management</h2>
+            <p class="font-body text-on-surface-variant max-w-2xl">Oversee the scholarly community, manage member access tiers, and monitor engagement across the global archival network.</p>
+        </section>
+
+
+         <section class="grid grid-cols-4 gap-6 mb-10">
+
+     <div class="bg-surface-container-lowest rounded-xl p-6 border border-outline-variant/10 shadow-sm flex flex-col justify-between relative overflow-hidden group">
+         <div class="relative z-10">
+             <p class="font-manrope text-[0.6875rem] uppercase tracking-[0.1em] font-bold text-on-surface-variant mb-2">Total Members</p>
+             <h4 class="font-noto-serif text-3xl font-bold text-on-surface">@Model.TotalUsers</h4>
+         </div>
+         <div class="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity duration-500">
+             <span class="material-symbols-outlined" style="font-size:7rem;">autorenew</span>
+         </div>
+     </div>
+
+     <div class="bg-error-container/30 rounded-xl p-6 border border-error/10 shadow-sm flex flex-col justify-between relative overflow-hidden group">
+         <div class="relative z-10">
+             <p class="font-manrope text-[0.6875rem] uppercase tracking-[0.1em] font-bold text-on-error-container mb-2">Not Verified</p>
+             <h4 class="font-noto-serif text-3xl font-bold text-error">@Model.NotActiveUsers</h4>
+         </div>
+         <div class="absolute -right-4 -bottom-4 opacity-10 group-hover:opacity-20 transition-opacity duration-500">
+             <span class="material-symbols-outlined text-error" style="font-size:7rem;">warning</span>
+         </div>
+     </div>
+
+     <div class="bg-primary-container/10 rounded-xl p-6 border border-primary/10 shadow-sm flex flex-col justify-between relative overflow-hidden group">
+         <div class="relative z-10">
+             <p class="font-manrope text-[0.6875rem] uppercase tracking-[0.1em] font-bold text-on-primary-container mb-2">Verified Users</p>
+             <h4 class="font-noto-serif text-3xl font-bold text-primary">@Model.ActiveUsers</h4>
+         </div>
+         <div class="absolute -right-4 -bottom-4 opacity-10 group-hover:opacity-20 transition-opacity duration-500">
+             <span class="material-symbols-outlined text-primary" style="font-size:7rem;">task_alt</span>
+         </div>
+     </div>
+
+     <div class="bg-tertiary text-on-tertiary rounded-xl p-6 shadow-sm flex flex-col justify-between relative overflow-hidden group">
+         <div class="relative z-10">
+             <p class="font-manrope text-[0.6875rem] uppercase tracking-[0.1em] font-bold opacity-70 mb-2">New Registrations</p>
+             <h4 class="font-noto-serif text-3xl font-bold">780</h4>
+         </div>
+         <div class="absolute -right-4 -bottom-4 opacity-10 group-hover:opacity-20 transition-opacity duration-500">
+             <span class="material-symbols-outlined" style="font-size:7rem;">payments</span>
+         </div>
+     </div>
+
+ </section>
+
+
+
+        <section class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden border border-outline-variant/30 mb-12">
+            <div class="p-6 border-b border-surface-container flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <h3 class="text-xl font-headline font-bold text-primary">Active Directory</h3>
+               
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full catalog-table">
+                    <thead>
+                        <tr>
+                            <th>User Name</th>
+                            <th>Email</th>
+                            <th>Join Date</th>
+                            <th class="text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-surface-container">
+                        
+                    @foreach (var user in Model.Users)
+                    {
+                        <tr class="hover:bg-surface-container-low transition-colors @(user.IsActive ? "":"opacity-60")">
+                            <td>
+                                <div class="flex items-center gap-3">
+                                    <img alt="User profile" class="w-8 h-8 object-cover rounded-full shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDEXAmFkn-KDN50sxG6EZLudlCYro4sZZc4LAcm-zch2aCuJzzhxYIprsv257CoBnQlfqVdPUVR_MRvvL_s5hpUH1IcDiuSRo8CMDwi465GYJqfLuP0vKeM0SVIaozrvuvIZBOGBcTEK8eNROqDD0JIhEBsJCmX1rwn7VXuTdevvXJA6oZll5pIhgRz-sQzWkgawnpLWKxHFy8ykn3jWA8M0-ojgO0d2x_9JqaqSsDMRvQg1jf0SREQ2BjKO5wzEi6ngEUp4Pw4Egn-" />
+                                    <div>
+                                        <p class="font-bold text-on-surface">@user.Name</p>
+                                        <p class="text-[0.65rem] font-bold text-primary-fixed-dim uppercase tracking-wider">@user.Role</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="text-on-surface-variant">@user.Email</td>
+                            <td class="text-on-surface-variant">@user.Email</td>
+                            <td class="text-right">
+                                <div class="flex items-center justify-end gap-3">
+                                    <a class="text-primary hover:underline text-xs font-bold" href="#">See Details</a>
+                                    @if (user.IsActive)
+                                    {
+                                      <a asp-controller="AdminUsers" asp-action="DeactiveEmail" asp-route-userId="@user.Id" class="px-3 py-1 bg-error-container text-error text-[0.65rem] font-bold uppercase rounded-full hover:bg-error hover:text-on-error transition-all">Deactivate</a>
+
+                                    }
+                                    else
+                                    {
+                                      <a asp-controller="AdminUsers" asp-action="ConfirmEmail" asp-route-userId="@user.Id" class="px-3 py-1 bg-primary-container text-on-primary-container text-[0.65rem] font-bold uppercase rounded-full hover:bg-primary hover:text-on-primary transition-all">Activate</a>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+
+                        @* <tr class="hover:bg-surface-container-low transition-colors">
+                            <td>
+                                <div class="flex items-center gap-3">
+                                    <img alt="User profile" class="w-8 h-8 object-cover rounded-full shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjosTxng7qrWwLrg7hu8hj_EvWctkwzpPWdJ2Ntgfyl5UYolkJjiTvzSmqInmJZXM6T0fDZw0nGmr81W4aLDjsaPZfakPQRKy6s9lbEYH5xvgQ-tXORxgKK6VY2ALhoyGdaeloPG98pW4gQnDOXnMATLmwTXIGKsSCiBhPCm-NNwaqaDOTeWcckiTNns9XAxfYnbSpeAdYIcwFpl0EgEULBcqCRriJB6Shyd0aIjhzk--wfReLrBQhkPO63AB2j0X329uWLV1GcLf-" />
+                                    <div>
+                                        <p class="font-bold text-on-surface">Miriam Sterling</p>
+                                        <p class="text-[0.65rem] font-bold text-secondary-fixed-dim uppercase tracking-wider">Scholar</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="text-on-surface-variant">m.sterling@historians.org</td>
+                            <td class="text-on-surface-variant">Nov 05, 2023</td>
+                            <td class="text-right">
+                                <div class="flex items-center justify-end gap-3">
+                                    <a class="text-primary hover:underline text-xs font-bold" href="#">See Details</a>
+                                    <button class="px-3 py-1 bg-error-container text-error text-[0.65rem] font-bold uppercase rounded-full hover:bg-error hover:text-on-error transition-all">Deactivate</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-surface-container-low transition-colors opacity-60">
+                            <td>
+                                <div class="flex items-center gap-3">
+                                    <img alt="User profile" class="w-8 h-8 object-cover rounded-full shadow-sm grayscale" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZyPCGq239lPU4g00p8AOAxooEAmAmoHsRmbC9n9KzuffADfX-Tr2s3lTYBPV5Pa8n5-0o81He1xjCevP5mQ_iMNDJXv2VChXNmsus835o9WqfMCqTGsw4yzMNyPSS2B63XuF7vCVGTwT9trOKjQjjjou_NZQXlVFJ7CjcITbcKWgTQu4kmVWtIIA2tbM95HPEhCr7BMVRUgtFMzHQanIaWDANtJoZpfyKPfsd7-8QPKRE4z0cjA143eG6180hHhdHZyNSJlrp-8dc" />
+                                    <div>
+                                        <p class="font-bold text-on-surface">Julian Thorne</p>
+                                        <p class="text-[0.65rem] font-bold text-outline uppercase tracking-wider">Associate</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="text-on-surface-variant">thorne.j@freelance.com</td>
+                            <td class="text-on-surface-variant">Jan 18, 2024</td>
+                            <td class="text-right">
+                                <div class="flex items-center justify-end gap-3">
+                                    <a class="text-primary hover:underline text-xs font-bold" href="#">See Details</a>
+                                    <button class="px-3 py-1 bg-primary-container text-on-primary-container text-[0.65rem] font-bold uppercase rounded-full hover:bg-primary hover:text-on-primary transition-all">Activate</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-surface-container-low transition-colors">
+                            <td>
+                                <div class="flex items-center gap-3">
+                                    <img alt="User profile" class="w-8 h-8 object-cover rounded-full shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB_LAHI-qv7xnCQdSsfRMk0Xe8OCU5XQkHNrnkZbcoI0gVcD-RvGlTVdDdCCMQOH7dpV4zQKCJ5buzBLnvxV0OfzEDpbeSSZUR0m7mgOk7l-0Z3r25eqYpJuAk7KVgBDSZqAJ8IoAzx1xSrBOM9K-azoH87C8Nsf7fotYC6zQTIdFj9b4VEocwUPs63s7CSHyrhigoruDs9eNvz_jG6F7j1dS9bME_IJ6albMiEa5qpZeCW2Q-mvGVppMb-fd2-zLINsMjL0-jJA_jo" />
+                                    <div>
+                                        <p class="font-bold text-on-surface">Elena Ross</p>
+                                        <p class="text-[0.65rem] font-bold text-primary-fixed-dim uppercase tracking-wider">Fellow</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="text-on-surface-variant">e.ross@vam.ac.uk</td>
+                            <td class="text-on-surface-variant">Dec 22, 2023</td>
+                            <td class="text-right">
+                                <div class="flex items-center justify-end gap-3">
+                                    <a class="text-primary hover:underline text-xs font-bold" href="#">See Details</a>
+                                    <button class="px-3 py-1 bg-error-container text-error text-[0.65rem] font-bold uppercase rounded-full hover:bg-error hover:text-on-error transition-all">Deactivate</button>
+                                </div>
+                            </td>
+                        </tr> *@
+                    </tbody>
+                </table>
+            </div>
+            <div class="p-4 border-t border-surface-container flex justify-center">
+                <nav class="flex gap-1">
+                    @if (Model.CurrentPage > 1)
+                    {
+                        <a asp-route-pageNumber="1" class="w-8 h-8 rounded flex items-center justify-center hover:bg-surface-container-low text-xs font-bold">«</a>
+                    }
+                    
+                    @for (int i = 1; i <= Model.TotalPages; i++)
+                    {
+                        @if (i == 1 || i == Model.TotalPages || (i >= Model.CurrentPage - 1 && i <= Model.CurrentPage + 1))
+                        {
+                            @if (i == Model.CurrentPage)
+                            {
+                                <button class="w-8 h-8 rounded flex items-center justify-center bg-surface-container-high text-xs font-bold" disabled>@i</button>
+                            }
+                            else
+                            {
+                                <a asp-route-pageNumber="@i" class="w-8 h-8 rounded flex items-center justify-center hover:bg-surface-container-low text-xs font-bold">@i</a>
+                            }
+                        }
+                        else if (i == 2 && Model.CurrentPage > 3)
+                        {
+                            <span class="px-2 self-center opacity-30">...</span>
+                        }
+                        else if (i == Model.TotalPages - 1 && Model.CurrentPage < Model.TotalPages - 2)
+                        {
+                            <span class="px-2 self-center opacity-30">...</span>
+                        }
+                    }
+                    
+                    @if (Model.CurrentPage < Model.TotalPages)
+                    {
+                        <a asp-route-pageNumber="@(Model.CurrentPage + 1)" class="w-8 h-8 rounded flex items-center justify-center hover:bg-surface-container-low text-xs font-bold">»</a>
+                    }
+                </nav>
+            </div>
+        </section>
+       
+    </main>
