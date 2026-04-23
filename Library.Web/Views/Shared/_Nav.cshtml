@@ -41,6 +41,9 @@
                                 <p class="font-body text-sm font-bold text-on-surface truncate">Hi , @userName</p>
                                 <p class="font-body text-xs text-on-surface-variant truncate">@userEmail</p>
                             </div>
+                            <a asp-area="Identity" asp-page="/Manage/Profile" class="mb-3 w-full inline-flex items-center justify-center px-4 py-2.5 rounded-lg font-body font-bold text-sm uppercase tracking-widest text-on-surface border border-outline-variant/30 hover:bg-surface-container-low transition-all duration-300">
+                                Profile
+                            </a>
                             <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
                                 <button type="submit" class="w-full text-center px-4 py-2.5 rounded-lg font-body font-bold text-sm uppercase tracking-widest text-on-primary bg-primary hover:bg-primary-container transition-all duration-300 shadow-md active:scale-95">
                                     Logout
@@ -85,8 +88,11 @@
                     <div class="space-y-3">
                         <div>
                             <p class="font-body text-sm font-bold text-on-surface truncate">@userName</p>
-                            <p class="font-body text-xs text-on-surface-variant truncate">@userEmail</p>
+                            <p class="font-body text-xs text-on-surface-variant break-all">@userEmail</p>
                         </div>
+                        <a asp-area="Identity" asp-page="/Manage/Profile" class="block w-full text-center px-4 py-2.5 rounded-lg font-body font-bold text-sm uppercase tracking-widest text-on-surface hover:bg-surface-container-low transition-all duration-300 border border-outline-variant/30">
+                            Profile
+                        </a>
                         <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
                             <button type="submit" class="w-full text-center px-4 py-2.5 rounded-lg font-body font-bold text-sm uppercase tracking-widest text-on-primary bg-primary hover:bg-primary-container transition-all duration-300 shadow-md active:scale-95">
                                 Logout
