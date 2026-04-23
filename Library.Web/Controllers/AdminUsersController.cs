@@ -5,7 +5,7 @@ namespace Library.Web.Controllers
 {
     public class AdminUsersController(IUserService userService) : Controller
     {
-        private const int PageSize = 15;
+        private const int PageSize = 5;
         private readonly IUserService _userService = userService;
 
         public async Task<IActionResult> Index(string search = "", int page = 1)
@@ -18,6 +18,7 @@ namespace Library.Web.Controllers
         {
             var result = await _userService.ConfirmEmailAsync(userId);
             if (!result) return NotFound();
+            TempData["Success"] = "Activated successfully.";
             return RedirectToAction(nameof(Index));
         }
 
@@ -26,6 +27,9 @@ namespace Library.Web.Controllers
         {
             var result = await _userService.DeactiveEmailAsync(userId);
             if (!result) return NotFound();
+
+            TempData["Success"] = "Deactivated successfully.";
+
             return RedirectToAction(nameof(Index));
 
 

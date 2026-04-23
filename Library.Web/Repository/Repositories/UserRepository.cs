@@ -15,20 +15,33 @@ namespace Library.Web.Repository.Repositories
 
         public async Task<IEnumerable<UserRowVM>> GetAllUsersAsync(int page, int pageSize, string search)
         {
-            var users = await _userManager.Users
-                .Where(u => u.FullName != null && u.FullName.Contains(search) && u.Email.Contains(search))
+         
+            var query = _context.Users
+          .Where(u => u.FullName != null &&
+                     (string.IsNullOrEmpty(search) ||
+                      u.FullName.Contains(search) ||
+                      u.Email.Contains(search)))
+          .Select(u => new UserRowVM
+          {
+              Id = u.Id,
+              Name = u.FullName,
+              Email = u.Email,
+              IsActive = u.EmailConfirmed,
+
+              Role = (from ur in _context.UserRoles
+                      join r in _context.Roles on ur.RoleId equals r.Id
+                      where ur.UserId == u.Id
+                      select r.Name).FirstOrDefault() ?? "No Role"
+          });
+
+            var users = await query
+                .AsNoTracking()
+                .OrderBy(u => u.Name)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
-                .Select(u => new UserRowVM
-                {
-                    Id = u.Id,
-                    Name = u.FullName,
-                    Email = u.Email,
-                    Role = _userManager.GetRolesAsync(u).Result.FirstOrDefault() ?? "No Role",
-                    IsActive = u.EmailConfirmed
-                }).ToListAsync();
+                .ToListAsync();
 
-            return users ;
+            return users;
         }
 
         public Task ConfirmEmailAsync(ApplicationUser user)
