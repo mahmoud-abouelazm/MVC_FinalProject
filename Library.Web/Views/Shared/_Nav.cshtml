@@ -17,9 +17,12 @@
         
         @if(User.Identity.IsAuthenticated)
         {
-            <button class="text-[#00321a] dark:text-[#004b2a] scale-98 transition-transform">
+            
+
+            <a asp-area="Identity" asp-page="/Manage/Profile" class="text-[#00321a] dark:text-[#004b2a] scale-98 transition-transform">
                 <span class="material-symbols-outlined text-3xl">account_circle</span>
-            </button>
+            </a>
+
             <form asp-area="Identity" asp-page="/Account/Logout"
                   asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })"
                   class="w-full">

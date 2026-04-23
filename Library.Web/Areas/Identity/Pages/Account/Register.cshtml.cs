@@ -54,6 +54,12 @@ namespace Library.Web.Areas.Identity.Pages.Account
             [Display(Name = "Email")]
             public required string Email { get; set; }
 
+            [Phone(ErrorMessage = "Invalid phone number")]
+            [Display(Name = "Phone Number")]
+            [Required(ErrorMessage = "Phone Number is required")]
+			public required string PhoneNumber { get; set; }
+
+
             [Required(ErrorMessage = "Password is required")]            
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
@@ -124,7 +130,8 @@ namespace Library.Web.Areas.Identity.Pages.Account
                 var newUser = new ApplicationUser()
                 {
                     Email = Input.Email,
-                    FullName =Input.FullName,                    
+                    PhoneNumber = Input.PhoneNumber,
+                    FullName = Input.FullName,
                 };
                 //var res=_userManager.CreateAsync(newUser,Input.Password);
 

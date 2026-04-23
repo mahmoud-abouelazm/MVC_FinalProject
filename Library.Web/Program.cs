@@ -32,6 +32,8 @@ namespace Library.Web
             builder.Services.AddScoped<IAuthorService, AuthorService>();
             builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
+            builder.Services.AddScoped<IRentalRepository, RentalRepository>();
+
 
 
 

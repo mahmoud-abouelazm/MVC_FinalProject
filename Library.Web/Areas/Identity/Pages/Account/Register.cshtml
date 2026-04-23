@@ -54,6 +54,15 @@
                 <span asp-validation-for="Input.Email" class="text-error font-body text-sm"></span>
             </div>
 
+            <!-- phone Input -->
+            <div class="space-y-2">
+                <label asp-for="Input.PhoneNumber" class="block font-label text-sm font-bold uppercase tracking-widest text-on-surface">
+                    
+                </label>
+                <input asp-for="Input.PhoneNumber" class="w-full px-4 py-3 rounded-lg border border-outline-variant/30 bg-surface-container-lowest text-on-surface font-body focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" placeholder="01234567890" />
+                <span asp-validation-for="Input.PhoneNumber" class="text-error font-body text-sm"></span>
+            </div>
+
             <!-- Password Input -->
             <div class="space-y-2">
                 <label asp-for="Input.Password" class="block font-label text-sm font-bold uppercase tracking-widest text-on-surface">
