@@ -12,12 +12,12 @@ namespace Library.Web.Repository.Repositories
             private readonly ApplicationDbContext _context = context;
             public async Task<IEnumerable<Rental>> GetAllAsync()
 		{
-			return await dbcontext.Rentals.Include(r => r.CopyRentals).ThenInclude(cr => cr.Copy).ThenInclude(c => c.Book).ToListAsync();
+			return await _context.Rentals.Include(r => r.CopyRentals).ThenInclude(cr => cr.Copy).ThenInclude(c => c.Book).ToListAsync();
 		}
 
 		public async Task<IEnumerable<Rental>> GetAllRentalsForSpecificUserAsync(int userId)
 		{
-			return await  dbcontext.Rentals.Where(r=>r.ApplicationUserId==userId).Include(r=>r.CopyRentals).ThenInclude(cr=>cr.Copy).ThenInclude(c=>c.Book).ToListAsync();
+			return await _context.Rentals.Where(r=>r.ApplicationUserId==userId).Include(r=>r.CopyRentals).ThenInclude(cr=>cr.Copy).ThenInclude(c=>c.Book).ToListAsync();
 		}
 
 
@@ -152,4 +152,3 @@ namespace Library.Web.Repository.Repositories
                         r.Status != RentalState.Returned);
         }
     }
- }
