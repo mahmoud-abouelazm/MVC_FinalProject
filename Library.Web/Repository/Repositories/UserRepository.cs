@@ -44,17 +44,15 @@ namespace Library.Web.Repository.Repositories
             return users;
         }
 
-        public Task ConfirmEmailAsync(ApplicationUser user)
+        public async Task ConfirmEmailAsync(ApplicationUser user)
         {
             user.EmailConfirmed = true;
-            _context.SaveChanges();
-            return Task.CompletedTask;
+            await _context.SaveChangesAsync();
         }
-        public Task DeactiveEmailAsync(ApplicationUser user)
+        public async Task DeactiveEmailAsync(ApplicationUser user)
         {
             user.EmailConfirmed = false;
-            _context.SaveChanges();
-            return Task.CompletedTask;
+            await _context.SaveChangesAsync();
         }
 
         public async Task<int> CountOfActiveUsersAsync()
@@ -69,7 +67,12 @@ namespace Library.Web.Repository.Repositories
 
         public async Task<int> CountOfUsersAsync(string search)
         {
-            return await _userManager.Users.Where(u => u.FullName != null && u.FullName.Contains(search) && u.Email.Contains(search)).CountAsync();
+            return await _userManager.Users
+                .Where(u => u.FullName != null &&
+                            (string.IsNullOrEmpty(search) ||
+                             u.FullName.Contains(search) ||
+                             u.Email.Contains(search)))
+                .CountAsync();
         }
 
         public async Task<ApplicationUser?> FindByIdAsync(int id)
