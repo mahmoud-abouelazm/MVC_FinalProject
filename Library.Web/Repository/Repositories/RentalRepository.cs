@@ -1,4 +1,4 @@
-﻿using Library.Web.Core.Constants;
+using Library.Web.Core.Constants;
 using Library.Web.Core.Models;
 using Library.Web.Core.ViewModel.Rentals;
 using Library.Web.Data;
@@ -10,6 +10,15 @@ namespace Library.Web.Repository.Repositories
         public class RentalRepository(ApplicationDbContext context): Repository<Rental>(context), IRentalRepository
         {
             private readonly ApplicationDbContext _context = context;
+            public async Task<IEnumerable<Rental>> GetAllAsync()
+		{
+			return await _context.Rentals.Include(r => r.CopyRentals).ThenInclude(cr => cr.Copy).ThenInclude(c => c.Book).ToListAsync();
+		}
+
+		public async Task<IEnumerable<Rental>> GetAllRentalsForSpecificUserAsync(int userId)
+		{
+			return await _context.Rentals.Where(r=>r.ApplicationUserId==userId).Include(r=>r.CopyRentals).ThenInclude(cr=>cr.Copy).ThenInclude(c=>c.Book).ToListAsync();
+		}
 
 
             public async Task<(IEnumerable<RentalRowVM> Rows, int Total)> GetPagedAsync(int page, int pageSize, string search, string statusFilter)
@@ -143,4 +152,3 @@ namespace Library.Web.Repository.Repositories
                         r.Status != RentalState.Returned);
         }
     }
- 

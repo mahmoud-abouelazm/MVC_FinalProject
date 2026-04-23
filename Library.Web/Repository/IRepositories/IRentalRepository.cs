@@ -1,6 +1,5 @@
-﻿using Library.Web.Core.Models;
+using Library.Web.Core.Models;
 using Library.Web.Core.ViewModel.Rentals;
-
 namespace Library.Web.Repository.IRepositories
 {
     public interface IRentalRepository : IRepository<Rental>
@@ -16,5 +15,7 @@ namespace Library.Web.Repository.IRepositories
         Task<(int Active, int Overdue, int Returned, decimal Revenue)> GetSummaryAsync();
 
         Task<Rental?> GetActiveRentalByCopyIdAsync(int copyId);
+        Task<IEnumerable<Rental>> GetAllAsync();
+		    Task<IEnumerable<Rental>> GetAllRentalsForSpecificUserAsync(int userId);
     }
 }

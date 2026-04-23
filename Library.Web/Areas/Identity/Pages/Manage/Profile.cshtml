@@ -1,0 +1,198 @@
+@page
+@using Library.Web.Core.Constants
+@model Library.Web.Areas.Identity.Pages.Manage.ProfileModel
+@{
+}
+
+
+<main class="pt-8 sm:pt-20 md:pt-28 pb-12 sm:pb-16 px-4 sm:px-8 md:px-12 max-w-7xl mx-auto flex flex-col md:flex-row gap-6 sm:gap-8 md:gap-12">
+    <!-- User Profile Sidebar (Asymmetric Layout) -->
+    <aside class="w-full md:w-1/3 flex flex-col gap-6 sm:gap-8">
+        <div class="bg-surface-container-lowest p-6 sm:p-8 rounded-xl shadow-[0px_12px_32px_rgba(26,28,26,0.04)] border border-outline-variant/15">
+            <div class="flex flex-col items-center text-center">
+                <div class="w-24 sm:w-28 md:w-32 h-24 sm:h-28 md:h-32 rounded-full mb-4 sm:mb-6 overflow-hidden ring-4 ring-primary-fixed-dim">
+                    <img alt="User Profile" class="w-full h-full object-cover" data-alt="Close-up portrait of a thoughtful man in a library setting with soft natural window lighting and books in background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5v-8dO4aUpE3_ycLaOmU2AetKHERRJW6ffeKdSqaYSxyiB7qu0ZUVWsJBzKJfzmdb7NRU8fpVkL1naFJcNO1GpCTMYdZ9eJSg7bo2vNG1ZHjM37RYmcaWhE85syG-B_CxxKAttRC1Z9pG64gh_MVoOrA0xw8CKeFKr0ERNKeXanF1sSl5UeCzl1AXfD9bZjG-JuuEP22Qqiobz5gioJyR_fseFc9JPaWDOXvT1dMSzqYZDpZLVDrvpisSi6P1zsnBK9jwaQIx_CMX" />
+                </div>
+                <h2 class="font-headline text-xl sm:text-2xl md:text-2xl font-bold text-on-surface">@Model.Name</h2>
+                @* <p class="font-label text-sm uppercase tracking-widest text-on-surface-variant mb-6">Archival Contributor</p> *@
+                <div class="w-full text-left space-y-3 sm:space-y-4 pt-4 sm:pt-6 border-t border-outline-variant/15">
+                    <div>
+                        <label class="font-label text-[0.6875rem] uppercase tracking-[0.05em] text-on-surface-variant">Email Address</label>
+                        <p class="font-body font-semibold text-primary break-all">@Model.Email</p>
+                    </div>
+                   
+                    <div>
+                        <label class="font-label text-[0.6875rem] uppercase tracking-[0.05em] text-on-surface-variant">Phone Number</label>
+                        <p class="font-body font-semibold">@Model.PhoneNumber</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Profile Actions -->
+        <div class="flex flex-col gap-2 sm:gap-3">
+            <a asp-page="/Manage/EditProfile"  class="w-full py-2 sm:py-3 px-4 sm:px-6 bg-primary text-on-primary rounded-md font-manrope font-bold text-xs sm:text-sm flex items-center justify-center gap-2 hover:bg-primary-container transition-all">
+                <span class="material-symbols-outlined text-sm" data-icon="edit">edit</span>
+                <span class="hidden sm:inline">Edit Profile</span>
+                <span class="sm:hidden">Edit</span>
+            </a>
+            <button class="w-full py-2 sm:py-3 px-4 sm:px-6 bg-surface-container-high text-on-surface rounded-md font-manrope font-bold text-xs sm:text-sm flex items-center justify-center gap-2 hover:bg-surface-variant transition-all">
+                <span class="material-symbols-outlined text-sm" data-icon="settings">settings</span>
+                <span class="hidden sm:inline">Account Settings</span>
+                <span class="sm:hidden">Settings</span>
+            </button>
+        </div>
+    </aside>
+    <!-- Rentals Section -->
+    <section class="w-full md:w-2/3">
+        <div class="mb-6 sm:mb-8 md:mb-10">
+            <h1 class="font-headline text-2xl sm:text-3xl md:text-3xl font-bold mb-2">My Collection Circulation</h1>
+            <p class="text-sm sm:text-base text-on-surface-variant max-w-xl">Manage your active rentals and archival history. Items highlighted in red require immediate attention or return.</p>
+        </div>
+        <!-- Active Rentals Bento Grid style summary -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-8 sm:mb-10">
+            <div class="p-4 sm:p-6 bg-primary-fixed-dim/20 rounded-xl border border-primary-fixed-dim/30 flex flex-col justify-between min-h-32 sm:h-40">
+                <span class="material-symbols-outlined text-primary text-2xl sm:text-3xl" data-icon="auto_stories">auto_stories</span>
+                <div>
+                    <p class="text-2xl sm:text-4xl font-bold text-primary">@Model.NumOfActiveRentals</p>
+                    <p class="font-label text-[0.6875rem] uppercase tracking-widest text-on-primary-fixed-variant">Active Rentals</p>
+                </div>
+            </div>
+            <div class="p-4 sm:p-6 bg-error-container/30 rounded-xl border border-error-container/50 flex flex-col justify-between min-h-32 sm:h-40">
+                <span class="material-symbols-outlined text-error text-2xl sm:text-3xl" data-icon="warning">warning</span>
+                <div>
+                    <p class="text-2xl sm:text-4xl font-bold text-error">@Model.NumOfOverDueRentals</p>
+                    <p class="font-label text-[0.6875rem] uppercase tracking-widest text-on-error-container">Overdue Collection</p>
+                </div>
+            </div>
+        </div>
+        <!-- Data Table Section -->
+        @* Returned Books Table *@
+
+        @if(Model.ReturnedRentals.Any()){
+        <div class="mb-6 sm:mb-8">
+            <h3 class="font-headline text-lg sm:text-xl font-bold mb-3 sm:mb-4 text-on-surface">Returned Items</h3>
+            <div class="overflow-x-auto rounded-xl bg-surface-container-low shadow-sm">
+                <table class="w-full text-left border-collapse min-w-max sm:min-w-full">
+                    <thead class="bg-tertiary text-on-tertiary sticky top-0">
+                        <tr>
+                            <th class="px-3 sm:px-6 py-3 sm:py-4 font-label text-[0.6875rem] uppercase tracking-wider whitespace-nowrap">Catalogue Title</th>
+                            <th class="px-3 sm:px-6 py-3 sm:py-4 font-label text-[0.6875rem] uppercase tracking-wider whitespace-nowrap">Amount</th>
+                            <th class="px-3 sm:px-6 py-3 sm:py-4 font-label text-[0.6875rem] uppercase tracking-wider whitespace-nowrap">Copies</th>
+                            <th class="px-3 sm:px-6 py-3 sm:py-4 font-label text-[0.6875rem] uppercase tracking-wider whitespace-nowrap">Returned At</th>
+                            <th class="px-3 sm:px-6 py-3 sm:py-4 font-label text-[0.6875rem] uppercase tracking-wider whitespace-nowrap text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-outline-variant/15">
+
+                    @for (int i = 0; i < Model.ReturnedRentals?.Count(); i++)
+                    {
+                        <tr class="bg-surface hover:bg-surface-container-high transition-colors">
+                            <td class="px-3 sm:px-6 py-3 sm:py-5 whitespace-nowrap">
+                                <div class="flex items-center gap-2 sm:gap-4">
+                                    <div class="w-8 h-12 sm:w-10 sm:h-14 bg-surface-variant rounded-sm flex-shrink-0 grayscale">
+                                        <img alt="Book Cover" class="w-full h-full object-cover rounded-sm" data-alt="@Model.ReturnedRentals[i]?.CopyRentals?.FirstOrDefault()?.Copy.Book.Description" src="@Model.ReturnedRentals[i]?.CopyRentals?.FirstOrDefault()?.Copy.Book.Img" />
+                                    </div>
+                                    <div class="min-w-0">
+                                        <p class="font-headline text-xs sm:text-base font-bold leading-tight truncate">@Model.ReturnedRentals[i]?.CopyRentals?.FirstOrDefault()?.Copy.Book.Title</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-3 sm:px-6 py-3 sm:py-5 whitespace-nowrap">
+                                <span class="font-body text-xs sm:text-sm text-on-surface-variant">@{
+                                        var rental = Model.ReturnedRentals[i];
+                                        var price = rental.CopyRentals.FirstOrDefault()?.Copy?.Book?.Price ?? 0;
+                                        var count = rental.CopyRentals.Count();                                       
+                                    }
+                                    @(price*count)
+                                    </span>
+                            </td>
+                                <td class="px-3 sm:px-6 py-3 sm:py-5 whitespace-nowrap">
+                                    <span class="font-body text-xs sm:text-sm text-on-surface-variant">
+                                        @Model.ReturnedRentals[i].CopyRentals.Count()
+                                    </span>
+                                </td>
+                            <td class="px-3 sm:px-6 py-3 sm:py-5 whitespace-nowrap">
+                                <span class="font-body text-xs sm:text-sm text-on-surface-variant">@Model.ReturnedRentals[i]?.CopyRentals?.FirstOrDefault()?.Rental.ReturnedAt?.ToString("M/d/yyyy")</span>
+                            </td>
+                            <td class="px-3 sm:px-6 py-3 sm:py-5 whitespace-nowrap text-right">
+                                <a asp-controller="Book" asp-action="Details" asp-route-id="@Model.ReturnedRentals[i]?.CopyRentals?.FirstOrDefault()?.Copy.Book.Id"
+                                class="inline-block px-2 sm:px-4 py-1.5 sm:py-2 bg-transparent border border-outline-variant text-on-surface-variant rounded-md font-manrope font-bold text-[0.65rem] sm:text-xs hover:bg-surface-container-highest transition-all">
+                                    Re-Rent                                
+                                </a>
+                            </td>
+                        </tr>
+                    }                 
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        }
+
+
+        @* Active Books Table *@      
+          
+        @if (Model.ActiveRentals.Any())
+        {
+            <div class="mb-6 sm:mb-8">
+                <h3 class="font-headline text-lg sm:text-xl font-bold mb-3 sm:mb-4 text-on-surface">Active Rentals</h3>
+                <div class="overflow-x-auto rounded-xl bg-surface-container-low shadow-sm">
+                    <table class="w-full text-left border-collapse min-w-max sm:min-w-full">
+                        <thead class="bg-tertiary text-on-tertiary sticky top-0">
+                            <tr>
+                                <th class="px-3 sm:px-6 py-3 sm:py-4 font-label text-[0.6875rem] uppercase tracking-wider whitespace-nowrap">Catalogue Title</th>
+                                <th class="px-3 sm:px-6 py-3 sm:py-4 font-label text-[0.6875rem] uppercase tracking-wider whitespace-nowrap">Status</th>
+                                <th class="px-3 sm:px-6 py-3 sm:py-4 font-label text-[0.6875rem] uppercase tracking-wider whitespace-nowrap">Copies</th>
+                                <th class="px-3 sm:px-6 py-3 sm:py-4 font-label text-[0.6875rem] uppercase tracking-wider whitespace-nowrap">Due At</th>
+                                <th class="px-3 sm:px-6 py-3 sm:py-4 font-label text-[0.6875rem] uppercase tracking-wider whitespace-nowrap text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-outline-variant/15">
+
+                            @for (int i = 0; i < Model.ActiveRentals.Count(); i++)
+                            {
+                                <tr class="bg-surface hover:bg-surface-container-high transition-colors">
+                                    <td class="px-3 sm:px-6 py-3 sm:py-5 whitespace-nowrap">
+                                        <div class="flex items-center gap-2 sm:gap-4">
+                                            <div class="w-8 h-12 sm:w-10 sm:h-14 bg-surface-variant rounded-sm flex-shrink-0 grayscale">
+                                                <img alt="Book Cover" class="w-full h-full object-cover rounded-sm" data-alt="@Model.ActiveRentals[i]?.CopyRentals?.FirstOrDefault()?.Copy.Book.Description" src="@Model.ActiveRentals[i]?.CopyRentals?.FirstOrDefault()?.Copy.Book.Img" />
+                                            </div>
+                                            <div class="min-w-0">
+                                                <p class="font-headline text-xs sm:text-base font-bold leading-tight truncate">@Model.ActiveRentals[i]?.CopyRentals?.FirstOrDefault()?.Copy.Book.Title</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-3 sm:px-6 py-3 sm:py-5 whitespace-nowrap">
+                                        <div class="inline-flex items-center px-2 sm:px-2.5 py-1 sm:py-0.5 rounded-full text-[0.65rem] sm:text-xs font-semibold
+                                            @(Model.ActiveRentals[i].DueAt >= DateTime.UtcNow ? "bg-secondary-container text-on-secondary-container" : "bg-error-container text-on-error-container")">
+                                            @(Model.ActiveRentals[i].DueAt >= DateTime.UtcNow ? "Active" : "Overdue")
+                                        </div>
+                                    </td>
+                                    <td class="px-3 sm:px-6 py-3 sm:py-5 whitespace-nowrap">
+                                        <span class="font-body text-xs sm:text-sm text-on-surface-variant">@Model.ActiveRentals[i].CopyRentals.Count()                                        
+                                        </span>
+                                    </td>
+                                    <td class="px-3 sm:px-6 py-3 sm:py-5 whitespace-nowrap">
+                                        <span class="font-body text-xs sm:text-sm @(Model.ActiveRentals[i].DueAt >= DateTime.UtcNow ? "font-semibold" : "font-bold text-error")">
+                                            @Model.ActiveRentals[i]?.CopyRentals?.FirstOrDefault()?.Rental.DueAt.ToString("M/d/yyyy")
+                                        </span>
+                                    </td>
+                                    <td class="px-3 sm:px-6 py-3 sm:py-5 whitespace-nowrap text-right">
+                                        <a asp-controller="Books" asp-action="Details" asp-route-id="@Model.ActiveRentals[i]?.CopyRentals?.FirstOrDefault()?.Copy.Book.Id"
+                                               class="inline-block px-2 sm:px-4 py-1.5 sm:py-2 bg-transparent border border-outline-variant text-on-surface-variant rounded-md font-manrope font-bold text-[0.65rem] sm:text-xs hover:bg-surface-container-highest transition-all">
+                                            Re-Rent
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+
+
+
+    </section>
+</main>
