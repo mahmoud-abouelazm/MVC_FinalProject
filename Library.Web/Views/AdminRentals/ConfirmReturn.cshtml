@@ -1,0 +1,197 @@
+﻿@model Library.Web.Core.ViewModel.Rentals.ReturnConfirmVM
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Confirm Return";
+    ViewData["ActiveNav"] = "Rentals";
+}
+
+<style>
+    .receipt-card {
+        background: #fff;
+        border: 1px solid rgba(192,201,190,.2);
+        border-radius: .75rem;
+        box-shadow: 0 12px 48px rgba(26,28,26,.08);
+        max-width: 560px;
+    }
+    .receipt-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        padding: .6rem 0;
+        border-bottom: 1px dashed rgba(192,201,190,.4);
+        font-family: 'Manrope', sans-serif;
+        font-size: .875rem;
+    }
+    .receipt-row:last-child { border-bottom: none; }
+    .receipt-label { color: #404941; font-size: .8rem; }
+    .receipt-value { font-weight: 700; color: #1a1c1a; }
+    .receipt-total-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        padding: 1rem 0 0;
+        margin-top: .5rem;
+        border-top: 2px solid #1a1c1a;
+    }
+    .btn-confirm {
+        width: 100%;
+        background: #00321a; color: #fff; border: none;
+        border-radius: .375rem; padding: 1.1rem;
+        font-family: 'Manrope', sans-serif; font-size: .8rem;
+        font-weight: 700; letter-spacing: .15em; text-transform: uppercase;
+        cursor: pointer; transition: background .2s;
+        display: flex; align-items: center; justify-content: center; gap: .5rem;
+    }
+    .btn-confirm:hover { background: #004b2a; }
+    .btn-cancel {
+        width: 100%; background: transparent;
+        border: 1px solid rgba(192,201,190,.5);
+        border-radius: .375rem; padding: 1rem;
+        font-family: 'Manrope', sans-serif; font-size: .8rem;
+        font-weight: 700; letter-spacing: .15em; text-transform: uppercase;
+        color: #404941; text-decoration: none;
+        display: flex; align-items: center; justify-content: center; gap: .5rem;
+        transition: background .2s;
+    }
+    .btn-cancel:hover { background: #f3f4f0; }
+    .penalty-block {
+        background: rgba(186,26,26,.06);
+        border: 1px solid rgba(186,26,26,.2);
+        border-radius: .375rem;
+        padding: .875rem 1rem;
+    }
+</style>
+
+<main class="ml-64 min-h-screen p-12">
+
+    <header class="mb-10">
+        <a asp-controller="AdminRentals" asp-action="Index"
+           class="inline-flex items-center gap-1 font-manrope text-xs text-on-surface-variant hover:text-primary transition-colors mb-4 uppercase tracking-wider font-semibold">
+            <span class="material-symbols-outlined text-base">arrow_back</span>
+            Back to Rentals
+        </a>
+        <h2 class="font-noto-serif text-4xl font-bold text-on-surface tracking-tight">Confirm Return</h2>
+        <p class="text-on-surface-variant mt-2 font-manrope text-sm">
+            Review the calculated amount before confirming collection.
+        </p>
+    </header>
+
+    <div class="receipt-card">
+
+        <div class="bg-tertiary text-on-tertiary px-8 py-6 rounded-t-xl">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="font-manrope text-[0.6875rem] uppercase tracking-[0.12em] font-bold opacity-70 mb-1">Rental #@Model.RentalId</p>
+                    <h3 class="font-noto-serif text-2xl font-bold">@Model.MemberName</h3>
+                    <p class="font-manrope text-xs opacity-70 mt-0.5">@Model.MemberEmail</p>
+                </div>
+                <div class="text-right">
+                    <span class="material-symbols-outlined" style="font-size:2.5rem; opacity:.4;">receipt_long</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="px-8 py-6 space-y-6">
+
+            <div>
+                <p class="font-manrope text-[0.6875rem] uppercase tracking-[0.1em] font-bold text-on-surface-variant mb-3">Rental Details</p>
+                <div class="receipt-row">
+                    <span class="receipt-label">Book(s)</span>
+                    <span class="receipt-value text-right max-w-xs text-sm">@Model.BookTitles</span>
+                </div>
+                <div class="receipt-row">
+                    <span class="receipt-label">Copy(s)</span>
+                    <span class="receipt-value text-sm">@Model.CopyNames</span>
+                </div>
+                <div class="receipt-row">
+                    <span class="receipt-label">Rented on</span>
+                    <span class="receipt-value">@Model.RentedAt.ToString("MMM d, yyyy")</span>
+                </div>
+                <div class="receipt-row">
+                    <span class="receipt-label">Due date</span>
+                    <span class="receipt-value @(Model.IsLate ? "text-error" : "")">
+                        @Model.DueAt.ToString("MMM d, yyyy")
+                        @if (Model.IsLate)
+                        {
+                            <span class="font-manrope text-xs font-bold text-error ml-2">(overdue)</span>
+                        }
+                    </span>
+                </div>
+                <div class="receipt-row">
+                    <span class="receipt-label">Return date</span>
+                    <span class="receipt-value">@DateTime.UtcNow.ToString("MMM d, yyyy")</span>
+                </div>
+                <div class="receipt-row">
+                    <span class="receipt-label">Price per copy / day</span>
+                    <span class="receipt-value">$@Model.BookPrice.ToString("0.00")</span>
+                </div>
+                <div class="receipt-row" style="border-bottom:none;">
+                    <span class="receipt-label">Total days rented</span>
+                    <span class="receipt-value">@Model.DaysRented day@(Model.DaysRented == 1 ? "" : "s")</span>
+                </div>
+            </div>
+
+            <div>
+                <p class="font-manrope text-[0.6875rem] uppercase tracking-[0.1em] font-bold text-on-surface-variant mb-3">Amount Breakdown</p>
+
+                @if (!Model.IsLate)
+                {
+                    <div class="receipt-row">
+                        <span class="receipt-label">
+                            @Model.DaysRented day@(Model.DaysRented == 1 ? "" : "s") × $@Model.BookPrice.ToString("0.00")
+                        </span>
+                        <span class="receipt-value">$@Model.BaseAmount.ToString("0.00")</span>
+                    </div>
+
+                    <div class="mt-3 px-4 py-3 bg-primary-container/20 border border-primary/15 rounded-lg flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary text-base">check_circle</span>
+                        <p class="font-manrope text-xs font-semibold text-on-surface">Returned on time — no late penalty.</p>
+                    </div>
+                }
+                else
+                {
+                    var onTimeDays = Model.DaysRented - Model.DaysLate;
+
+                    <div class="receipt-row">
+                        <span class="receipt-label">
+                            @onTimeDays day@(onTimeDays == 1 ? "" : "s") on time × $@Model.BookPrice.ToString("0.00")
+                        </span>
+                        <span class="receipt-value">$@Model.BaseAmount.ToString("0.00")</span>
+                    </div>
+
+                    <div class="penalty-block mt-2 mb-1">
+                        <div class="flex justify-between items-baseline">
+                            <span class="font-manrope text-sm text-error">
+                                <span class="material-symbols-outlined text-sm align-middle mr-1">warning</span>
+                                @Model.DaysLate day@(Model.DaysLate == 1 ? "" : "s") late × $@Model.BookPrice.ToString("0.00") × 2 (penalty)
+                            </span>
+                            <span class="font-manrope font-bold text-error">+$@Model.PenaltyAmount.ToString("0.00")</span>
+                        </div>
+                    </div>
+                }
+
+                <div class="receipt-total-row">
+                    <span class="font-noto-serif text-xl font-bold text-on-surface">Total Due</span>
+                    <span class="font-noto-serif text-2xl font-bold text-primary">$@Model.TotalAmount.ToString("0.00")</span>
+                </div>
+            </div>
+
+            <form asp-controller="AdminRentals" asp-action="ProcessReturn" method="post" class="space-y-3 pt-2">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="rentalId" value="@Model.RentalId" />
+
+                <button type="submit" class="btn-confirm">
+                    <span class="material-symbols-outlined text-lg">payments</span>
+                    Confirm — Collect $@Model.TotalAmount.ToString("0.00")
+                </button>
+
+                <a asp-controller="Rentals" asp-action="Index" class="btn-cancel">
+                    <span class="material-symbols-outlined text-base">close</span>
+                    Cancel
+                </a>
+            </form>
+
+        </div>
+    </div>
+
+</main>

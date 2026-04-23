@@ -1,4 +1,6 @@
-﻿using Library.Web.Core.Models;
+﻿using Library.Web.Core.Constants;
+using Library.Web.Core.Models;
+using Library.Web.Core.ViewModel.Book;
 using Library.Web.Data;
 using Library.Web.Migrations;
 using Library.Web.Repository.IRepositories;
@@ -6,6 +8,7 @@ using Library.Web.Repository.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.InteropServices;
 
 namespace Library.Web.Controllers
 {
@@ -17,23 +20,45 @@ namespace Library.Web.Controllers
         private readonly IBookRepository bookRepository;
         private readonly IRepository<Rental> rentalRepo;
         private readonly ApplicationDbContext appContext;
+        private readonly ICategoryRepository categoryRepository;
 
         public BooksController(IRepository<Book> _repo 
             , IBookRepository bookRepository
             ,IRepository<Rental> rentalRepo
             ,ApplicationDbContext appContext
+            , ICategoryRepository categoryRepository
             ) {
             
             repo = _repo;
             this.bookRepository = bookRepository;
             this.rentalRepo = rentalRepo;
             this.appContext = appContext;
+            this.categoryRepository = categoryRepository;
         } 
-        public async Task<IActionResult> IndexAsync()
+        public async Task<IActionResult> Index(int page = 1 , int? categoryId = null, string? search = null)
         {
-            var Books = await repo.GetAllAsync();
+            //var Books = await repo.GetAllAsync();
 
-            return View(Books);
+
+            var param = new PaginationParams
+            {
+                Page = page,
+                PageSize = 8
+            };
+
+            var result = await bookRepository.GetAllBooksAsync(param , categoryId, search);
+
+
+            var categories = await categoryRepository.GetAllAsync();
+
+            ViewBag.Categories = categories;
+            ViewBag.SelectedCategory = categoryId;
+            ViewBag.Search = search;
+
+            return View(result);
+
+
+            
         }
 
         public IActionResult Details(int Id)

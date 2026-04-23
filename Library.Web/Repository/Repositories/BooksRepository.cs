@@ -87,12 +87,29 @@ namespace Library.Web.Repository.Repositories
 
 
 
-        public async Task<PagedResult<BookRowVM>> GetAllBooksAsync(PaginationParams param)
+        public async Task<PagedResult<BookRowVM>> GetAllBooksAsync(PaginationParams param , int? categoryId= null, string? search = null)
         {
             var query = _context.Books
                 .Include(b => b.Category)
                 .Include(b => b.BookAuthors)
-                    .ThenInclude(ba => ba.Author);
+                    .ThenInclude(ba => ba.Author)
+                    .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                var q = search.Trim().ToLower();
+                query = query.Where(b =>
+                    b.Title.ToLower().Contains(q) ||
+                    (b.Description != null && b.Description.ToLower().Contains(q)) ||
+                    b.Category.Name.ToLower().Contains(q) ||
+                    b.BookAuthors.Any(ba => ba.Author.Name.ToLower().Contains(q)));
+            }
+
+            if (categoryId.HasValue)
+            {
+                query = query.Where(b => b.CategoryId == categoryId.Value);
+            }
+
 
             int total = await query.CountAsync();
 
@@ -126,7 +143,22 @@ namespace Library.Web.Repository.Repositories
                 .FirstOrDefaultAsync(b => b.Id == id);
         }
 
+        //public async Task<Book?> GetAllWithAuthorsAsync()
+        //{
 
+
+        //}
+
+
+        public async Task<List<Book>> GetNewBooks()
+        {
+            return await _context.Books
+                .Include(b=>b.Category)
+                .AsNoTracking()
+                .OrderByDescending(x => x.Id)
+                .Take(4)
+                .ToListAsync(); ;
+        }
 
 
 
