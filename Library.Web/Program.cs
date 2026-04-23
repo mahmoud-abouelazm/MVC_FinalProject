@@ -31,7 +31,7 @@ namespace Library.Web
 
             builder.Services.AddScoped<IImageService, ImageService>();
             builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-            builder.Services.AddScoped<IBookRepository , BooksRepository>();
+            builder.Services.AddScoped<IBookRepository, BooksRepository>();
             builder.Services.AddScoped<IAdminService, AdminService>();
             builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
             builder.Services.AddScoped<IAuthorService, AuthorService>();
@@ -41,6 +41,8 @@ namespace Library.Web
             builder.Services.AddScoped<ICopyService, CopyService>();
             builder.Services.AddScoped<IRentalRepository, RentalRepository>();
             builder.Services.AddScoped<IRentalService, RentalService>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IUserService, UserService>();    
 
 
 
@@ -48,8 +50,13 @@ namespace Library.Web
             //    options.SignIn.RequireConfirmedAccount = true)
             //    .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            builder.Services.AddIdentity<ApplicationUser, IdentityRole<int>>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole<int>>(options =>
+            {
+                options.SignIn.RequireConfirmedEmail = true;
+            })
+              .AddEntityFrameworkStores<ApplicationDbContext>();  
+            
+
             builder.Services.ConfigureApplicationCookie(options =>
             {
                 // Prevents client-side scripts (JS) from accessing the cookie
@@ -66,6 +73,7 @@ namespace Library.Web
                 options.LoginPath = "/identity/Account/Login"; // redirect here if not logged in
                 options.AccessDeniedPath = "/identity/Account/Login";
                 options.SlidingExpiration = true;
+                
             });
 
             builder.Services.AddControllersWithViews();
