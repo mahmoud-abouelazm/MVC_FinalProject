@@ -15,7 +15,7 @@ namespace Library.Web.Repository.IRepositories
 
         Task<ApplicationUser?> FindByIdAsync(int id);
 
-
+        Task<UserRowVM> GetUserDetails(int userId);
 
 
     }

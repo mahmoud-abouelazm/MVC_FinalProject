@@ -19,7 +19,9 @@ namespace Library.Web.Services
                 TotalUsers = total,
                 CurrentPage = page,
                 PageSize = pageSize,
-                Search = search
+                Search = search,
+                ActiveUsers = await _userRepository.CountOfActiveUsersAsync(),
+                NotActiveUsers = await _userRepository.CountOfNotActiveUsersAsync()
             };
 
         }
@@ -42,7 +44,14 @@ namespace Library.Web.Services
 
 
 
+        public async Task<UserRowVM?> GetUserDetails(int userId)
+        {
+            var user = await _userRepository.GetUserDetails(userId);
+            if (user is null) return null;
+            
+            return user;
 
+        }
 
 
 

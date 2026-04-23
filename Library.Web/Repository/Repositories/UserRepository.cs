@@ -7,15 +7,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Library.Web.Repository.Repositories
 {
-    public class UserRepository( UserManager<ApplicationUser> userManager ,ApplicationDbContext context) :Repository<ApplicationUser>(context) , IUserRepository
+    public class UserRepository(UserManager<ApplicationUser> userManager, ApplicationDbContext context) : Repository<ApplicationUser>(context), IUserRepository
     {
-        
+
         private readonly UserManager<ApplicationUser> _userManager = userManager;
         private readonly ApplicationDbContext _context = context;
 
-        public Task<IEnumerable<UserRowVM>> GetAllUsersAsync(int page , int pageSize, string search)
+        public async Task<IEnumerable<UserRowVM>> GetAllUsersAsync(int page, int pageSize, string search)
         {
-            var users = _userManager.Users
+            var users = await _userManager.Users
                 .Where(u => u.FullName != null && u.FullName.Contains(search) && u.Email.Contains(search))
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
@@ -26,9 +26,9 @@ namespace Library.Web.Repository.Repositories
                     Email = u.Email,
                     Role = _userManager.GetRolesAsync(u).Result.FirstOrDefault() ?? "No Role",
                     IsActive = u.EmailConfirmed
-                }).ToList();
+                }).ToListAsync();
 
-            return Task.FromResult(users.AsEnumerable());
+            return users ;
         }
 
         public Task ConfirmEmailAsync(ApplicationUser user)
@@ -44,31 +44,46 @@ namespace Library.Web.Repository.Repositories
             return Task.CompletedTask;
         }
 
-        public Task<int> CountOfActiveUsersAsync()
+        public async Task<int> CountOfActiveUsersAsync()
         {
-            return _userManager.Users.Where(u => u.EmailConfirmed).CountAsync();
+            return await _userManager.Users.Where(u => u.EmailConfirmed).CountAsync();
         }
 
-        public Task<int> CountOfNotActiveUsersAsync()
+        public async Task<int> CountOfNotActiveUsersAsync()
         {
-            return _userManager.Users.Where(u => !u.EmailConfirmed).CountAsync();
+            return await _userManager.Users.Where(u => !u.EmailConfirmed).CountAsync();
         }
 
-        public Task<int> CountOfUsersAsync(string search)
+        public async Task<int> CountOfUsersAsync(string search)
         {
-            return _userManager.Users.Where(u => u.FullName != null && u.FullName.Contains(search) && u.Email.Contains(search)).CountAsync();
+            return await _userManager.Users.Where(u => u.FullName != null && u.FullName.Contains(search) && u.Email.Contains(search)).CountAsync();
         }
 
         public async Task<ApplicationUser?> FindByIdAsync(int id)
         {
-         var user = await _userManager.FindByIdAsync(id.ToString());
-            
-           if(user is null)
+            var user = await _userManager.FindByIdAsync(id.ToString());
+
+            if (user is null)
                 return null;
-           return user;
+            return user;
 
         }
 
-    
+
+        public async Task<UserRowVM> GetUserDetails(int userId)
+        {
+            var user = await FindByIdAsync(userId);
+            if (user is null) return null;
+            return new UserRowVM
+            {
+                Id = user.Id,
+                Name = user.FullName,
+                Email = user.Email,
+                Role = await _userManager.GetRolesAsync(user).ContinueWith(t => t.Result.FirstOrDefault() ?? "No Role"),
+                PhoneNumber = user.PhoneNumber,
+                IsActive = user.EmailConfirmed
+            };
+
+        }
     }
 }

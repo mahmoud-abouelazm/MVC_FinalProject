@@ -30,9 +30,15 @@ namespace Library.Web.Controllers
 
 
         }
-        
 
-    
-    }
+        public async Task<IActionResult> Details(int userId)
+        {
+            var user = await _userService.GetUserDetails(userId);
+            if (user is null) return NotFound();
+            return View("UserDetails" ,user);
+        }
+
+
+        }
 
 }

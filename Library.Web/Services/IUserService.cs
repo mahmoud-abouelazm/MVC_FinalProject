@@ -10,5 +10,6 @@ namespace Library.Web.Services
 
         Task<bool> DeactiveEmailAsync(int userId);
 
+        Task<UserRowVM?> GetUserDetails(int userId);
     }
 }
