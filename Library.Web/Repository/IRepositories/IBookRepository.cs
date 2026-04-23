@@ -10,8 +10,8 @@ namespace Library.Web.Repository.IRepositories
         BookDetailsVM GetBookDetails(int Id);
         List<Copy> GetNBookCopies(int Id , int n);
 
-        Task<PagedResult<BookRowVM>> GetAllBooksAsync(PaginationParams param, int? categoryId);
+        Task<PagedResult<BookRowVM>> GetAllBooksAsync(PaginationParams param, int? categoryId, string? search);
         Task<Book?> GetWithAuthorsAsync(int id);
-
+        Task<List<Book>> GetNewBooks();
     }
 }
