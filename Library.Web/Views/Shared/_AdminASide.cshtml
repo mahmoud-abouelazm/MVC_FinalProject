@@ -104,10 +104,13 @@
             <span class="material-symbols-outlined text-lg">settings</span>
             Settings
         </a>
-        <a asp-controller="Account" asp-action="Logout" class="nav-tab" style="color:#ba1a1a;">
-            <span class="material-symbols-outlined text-lg">logout</span>
-            Logout
-        </a>
+
+        <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+            <button type="submit" class="nav-tab" style="color:#ba1a1a;">
+                <span class="material-symbols-outlined text-lg">logout</span>
+                Logout
+            </button>
+        </form>
     </div>
 
 </aside>
