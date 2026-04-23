@@ -143,6 +143,7 @@ namespace Library.Web.Repository.Repositories
         public async Task<List<Book>> GetNewBooks()
         {
             return await _context.Books
+                .Include(b=>b.Category)
                 .AsNoTracking()
                 .OrderByDescending(x => x.Id)
                 .Take(4)

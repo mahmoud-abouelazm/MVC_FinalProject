@@ -12,6 +12,6 @@ namespace Library.Web.Repository.IRepositories
 
         Task<PagedResult<BookRowVM>> GetAllBooksAsync(PaginationParams param, int? categoryId);
         Task<Book?> GetWithAuthorsAsync(int id);
-
+        Task<List<Book>> GetNewBooks();
     }
 }

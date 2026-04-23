@@ -1,4 +1,5 @@
-﻿@{
+﻿@model List<Book>
+@{
     ViewData["Title"] = "Home Page";
 }
 <style>
@@ -8,24 +9,24 @@
     }
 </style>
     <!-- Hero Section -->
-    <section class="relative h-[795px] flex items-center overflow-hidden bg-surface-container-low">
+    <section class="relative min-h-[620px] md:h-[795px] flex items-center overflow-hidden bg-surface-container-low py-24 md:py-0">
         <div class="absolute inset-0 z-0 opacity-40">
             <img alt="Grand library" class="w-full h-full object-cover" data-alt="Atmospheric wide shot of an ancient grand library with towering wooden bookshelves, rolling ladders, and soft dust motes dancing in sunlight" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD28So_-SwTab5pP6XHbvFGP7r2c487OEr-TNaHX_5DSXBhh824pVaCQLvLtr4eozD_rQqR0hoJUIO_aS7vBRvkAJ3Bb6LfppZYUsNnv3rtIuiLgC5YM7O2JNuNcJBSiFuRFGypLSR8oQkgN9Q_lReTLL1wPPj3C8zJOah61LNih0D8I8xCizWNXAffcWC4Rv5WvK8G3eiFvgeUdQnqLCNgE6BOU0uhVot1FMMUKB4Sx4Cdae9WjLrtHMXloRZniCNPIsZ8W6WQTEU9" />
         </div>
-        <div class="relative z-10 max-w-screen-2xl mx-auto px-6 md:px-12 w-full">
+        <div class="relative z-10 max-w-screen-2xl mx-auto px-4 sm:px-6 md:px-12 w-full">
             <div class="max-w-3xl">
-                <span class="font-label text-sm uppercase tracking-[0.2em] text-on-surface-variant mb-6 block">Established 1924</span>
-                <h1 class="font-headline text-5xl md:text-7xl lg:text-8xl text-primary leading-[1.1] mb-8">
+                <span class="font-label text-xs sm:text-sm uppercase tracking-[0.2em] text-on-surface-variant mb-4 sm:mb-6 block">Established 1924</span>
+                <h1 class="font-headline text-4xl sm:text-5xl md:text-7xl lg:text-8xl text-primary leading-[1.1] mb-6 sm:mb-8">
                     Preserving the <br /><i class="font-light">Narrative of History</i>
                 </h1>
-                <div class="flex flex-col sm:flex-row gap-6 items-start sm:items-center">
+                <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 items-stretch sm:items-center w-full sm:w-auto">
                     <a asp-action="index" asp-controller="books">
 
-                    <button class="bg-primary text-on-primary px-10 py-4 rounded-md font-body font-bold text-lg hover:bg-primary-container transition-all shadow-lg">
+                    <button class="bg-primary text-on-primary w-full sm:w-auto px-8 sm:px-10 py-3.5 sm:py-4 rounded-md font-body font-bold text-base sm:text-lg hover:bg-primary-container transition-all shadow-lg">
                         Browse the Collection
                     </button>
                     </a>
-                    <button class="group flex items-center gap-3 font-body font-semibold text-primary">
+                    <button class="group flex items-center gap-3 font-body font-semibold text-primary text-base sm:text-lg">
                         <span class="w-12 h-[1px] bg-primary group-hover:w-16 transition-all"></span>
                         Explore the Vault
                     </button>
@@ -40,19 +41,19 @@
         </div>
     </section>
     <!-- Mission Section -->
-    <section class="py-32 px-6 md:px-12 bg-surface">
-        <div class="max-w-screen-xl mx-auto grid md:grid-cols-2 gap-16 items-center">
+    <section class="py-16 md:py-24 px-4 sm:px-6 md:px-12 bg-surface">
+        <div class="max-w-screen-xl mx-auto grid md:grid-cols-2 gap-10 md:gap-16 items-center">
             <div class="relative">
-                <div class="aspect-[4/5] bg-surface-container-low rounded-xl overflow-hidden shadow-2xl rotate-[-2deg]">
+                <div class="aspect-[4/5] bg-surface-container-low rounded-xl overflow-hidden shadow-2xl md:rotate-[-2deg]">
                     <img alt="Archival study" class="w-full h-full object-cover" data-alt="Minimalist top-down view of a scholar's wooden desk with an open antique book, a fountain pen, and a cup of black coffee" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBdg7EpjRHfanPy9x16LKM0uXcs0toKjA1pRUp-wIoA37tgy2Dvt7LCegmhxwmoim8FUhaKhH8nFLB_nMgXWapFtyn5xrZfvRWDzdc_LkywBgJTXY28YBM2AiT3J6tAtnFv0Xy7OCTyqYf3LUgZ9vBhsUvrw9XLCHz6dMrMbQhitThrx84atG8kTvpqvhfdwjm5Zt2zJfKD5rOcst8Xrvq68SN4RVgP1jIiuocvDc-zQ0FAtRBJWeHz2G2f6InWKQHRoG7TZSZKINc-" />
                 </div>
-                <div class="absolute -bottom-8 -right-8 w-48 h-48 bg-primary-fixed rounded-xl -z-10 opacity-20"></div>
+                <div class="hidden md:block absolute -bottom-8 -right-8 w-48 h-48 bg-primary-fixed rounded-xl -z-10 opacity-20"></div>
             </div>
             <div class="flex flex-col justify-center">
-                <h2 class="font-headline text-3xl md:text-4xl text-primary mb-8 leading-tight">
+                <h2 class="font-headline text-2xl sm:text-3xl md:text-4xl text-primary mb-6 md:mb-8 leading-tight">
                     A Sanctuary for the Written Word.
                 </h2>
-                <p class="font-headline text-xl text-on-surface-variant leading-relaxed mb-10 italic">
+                <p class="font-headline text-lg md:text-xl text-on-surface-variant leading-relaxed mb-8 md:mb-10 italic">
                     The Editorial Archive serves as a living repository for the world's most significant typographic and literary artifacts. We are a haven for researchers, bibliophiles, and those who believe that history's pulse is felt most clearly through the ink of its creators.
                 </p>
                 <div class="space-y-4">
@@ -75,71 +76,75 @@
         </div>
     </section>
     <!-- Featured Collections (Asymmetric Bento Grid) -->
-    <section class="py-32 bg-surface-container-low">
-        <div class="max-w-screen-2xl mx-auto px-6 md:px-12">
-            <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+    <section class="py-16 md:py-24 bg-surface-container-low">
+        <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 md:px-12">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 md:mb-16 gap-6 md:gap-8">
                 <div class="max-w-xl">
-                    <h2 class="font-headline text-4xl md:text-5xl text-primary mb-4">Curated Collections</h2>
-                    <p class="font-body text-on-surface-variant">Hand-selected exhibitions focusing on specific eras of human thought.</p>
+                    <h2 class="font-headline text-3xl md:text-5xl text-primary mb-4">New Collections</h2>
                 </div>
-                <a class="font-label text-[0.6875rem] uppercase tracking-widest text-primary font-bold border-b border-primary/20 pb-1 hover:border-primary transition-all" href="#">View all archives</a>
+                <a class="font-label text-[0.6875rem] uppercase tracking-widest text-primary font-bold border-b border-primary/20 pb-1 hover:border-primary transition-all" asp-action="index" asp-controller="books">View all archives</a>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8">
                 <!-- Collection 1 -->
-                <div class="md:col-span-8 group relative aspect-[16/9] overflow-hidden rounded-xl bg-surface-container-highest">
-                    <img alt="Modernist Archive" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="Editorial layout of modernist graphic design posters with bold typography and geometric shapes, museum exhibition style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQeCw6QdOy6iI85Qcb5d6qpvaixNiD4pg3F8eP7tIl4CIvV2MTJspoofoTxyVNgoJMl6IOGHXXPPF1Wsgr6fXWTy3dZAZPAw53r176ZXgsRobT3vEPIQjs0fpmLCAxYhL_PtUuOxE3XLXrJtQKtk9OKnZwXj64rfCCM7eQ5G5jyVxZr-OFhG9kctqV1qzLmJ_OgYVdq9fp5BqFu-mtyVyy-FxUgwJhHQtRYURhDVEZnws5RYsH_8ubyHEv_s9e8m5WLZ-ZnPALUhBz" />
+                <div class="md:col-span-8 group relative aspect-[4/3] md:aspect-[16/9] overflow-hidden rounded-xl bg-surface-container-highest">
+                <img alt="Modernist Archive" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="Editorial layout of modernist graphic design posters with bold typography and geometric shapes, museum exhibition style" src="/@Model[0].Img" />
                     <div class="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent"></div>
-                    <div class="absolute bottom-0 left-0 p-10 text-on-primary">
-                        <span class="font-label text-xs uppercase tracking-widest mb-2 block opacity-80">1920 — 1960</span>
-                        <h3 class="font-headline text-3xl md:text-4xl mb-4">The Modernist Archive</h3>
-                        <p class="max-w-md font-body text-sm opacity-90 line-clamp-2">Exploring the seismic shift from ornate decoration to functionalist clarity in mid-century literature.</p>
+                    <div class="absolute bottom-0 left-0 p-6 md:p-10 text-on-primary">
+                        <h3 class="font-headline text-2xl md:text-4xl mb-3 md:mb-4">@Model[0].Title</h3>
+                        <p class="max-w-md font-body text-sm opacity-90 line-clamp-2">@Model[0].Description</p>
                     </div>
                 </div>
                 <!-- Collection 2 -->
-                <div class="md:col-span-4 group relative aspect-[4/5] overflow-hidden rounded-xl bg-surface-container-highest">
-                    <img alt="Classical Typologies" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="Close up of ornate gold-leaf illuminated manuscript letters from the medieval era on aged vellum" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrwdkUSiAKxWCRWzWFbkb7x9pCxHaKuDc4WlB_sjnA3ayhbrQoztNKNoz1IKE_dMDuSSUekg3RdDrm7hr0tYdH-Md9BqHKRFzzgXIvotx_oV_dUrpMS2XtfYw5rAPmpGKmC61_bPf_h18M7nlsERoJ0M4bJoZSgapsgUs_RyzDa7zI65G7uDsQPrOEXfCGGMyK6UQFbWIveWJjFRnbgGi8xxsgHh1FSXniJ6FYSkVJ-iNvDLfSv7x4DVNYwCuL7DbX0vQy_M1rWCeq" />
+                <div class="md:col-span-4 group relative aspect-[4/3] md:aspect-[4/5] overflow-hidden rounded-xl bg-surface-container-highest">
+                    <img alt="Classical Typologies" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="Close up of ornate gold-leaf illuminated manuscript letters from the medieval era on aged vellum" src="/@Model[1].Img" />
                     <div class="absolute inset-0 bg-gradient-to-t from-tertiary/80 to-transparent"></div>
-                    <div class="absolute bottom-0 left-0 p-8 text-on-primary">
-                        <span class="font-label text-xs uppercase tracking-widest mb-2 block opacity-80">Medieval — Renaissance</span>
-                        <h3 class="font-headline text-2xl mb-2">Classical Typologies</h3>
-                        <button class="material-symbols-outlined mt-4 bg-white/20 p-2 rounded-full hover:bg-white/40 transition-colors">arrow_forward</button>
+                    <div class="absolute bottom-0 left-0 p-6 md:p-8 text-on-primary">
+                        <span class="font-label text-xs uppercase tracking-widest mb-2 block opacity-80">@Model[1].Category.Name</span>
+                        <h3 class="font-headline text-2xl mb-2">@Model[1].Title</h3>
+                       <a asp-action="Details" asp-controller="Books" asp-route-id="@Model[1].Id">
+
+                       <button class="material-symbols-outlined mt-4 bg-white/20 p-2 rounded-full hover:bg-white/40 transition-colors">arrow_forward</button>
+                       </a>
                     </div>
                 </div>
                 <!-- Collection 3 -->
-                <div class="md:col-span-4 group relative aspect-[4/5] overflow-hidden rounded-xl bg-surface-container-highest">
-                    <img alt="The Romantic Epistles" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="Stack of hand-written letters with wax seals and dried flowers resting on a velvet cloth, soft romantic lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhlOWW9mTD91fx5jEYnvWGvuZsgEQhdJBXLETLPvGFs-FmImxOcT3seK-alqnkhCLLuVN7mZ67LtwpZZQilmByQM1HeP5qWOVsdmcoOiyK_dh7-CllDiHS3Y2iSAt5ZDgCPmnMbK71YrVI7wFAXjazzp72sPBYyfoM0Zgi_xnS2mbrbTw6irq33rizR5UwvohhK6N2Rt5tu-NbMV8POOIwGlRHUhsdYJu51DTQdjhSrdhxtRNXaBzwoHFkutHqUgo7L7f7CgjbuS15" />
+                <div class="md:col-span-4 group relative aspect-[4/3] md:aspect-[4/5] overflow-hidden rounded-xl bg-surface-container-highest">
+                    <img alt="@Model[2].Title" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="Stack of hand-written letters with wax seals and dried flowers resting on a velvet cloth, soft romantic lighting" src="/@Model[2].Img" />
                     <div class="absolute inset-0 bg-gradient-to-t from-primary-container/80 to-transparent"></div>
-                    <div class="absolute bottom-0 left-0 p-8 text-on-primary">
-                        <span class="font-label text-xs uppercase tracking-widest mb-2 block opacity-80">18th Century</span>
-                        <h3 class="font-headline text-2xl mb-2">Romantic Epistles</h3>
-                        <button class="material-symbols-outlined mt-4 bg-white/20 p-2 rounded-full hover:bg-white/40 transition-colors">arrow_forward</button>
+                    <div class="absolute bottom-0 left-0 p-6 md:p-8 text-on-primary">
+                        <span class="font-label text-xs uppercase tracking-widest mb-2 block opacity-80">@Model[2].Category.Name</span>
+                    <h3 class="font-headline text-2xl mb-2">@Model[2].Title</h3>
+                     <a asp-action="Details" asp-controller="Books" asp-route-id="@Model[2].Id">
+                    <button class="material-symbols-outlined mt-4 bg-white/20 p-2 rounded-full hover:bg-white/40 transition-colors">arrow_forward</button>
+                    </a>
                     </div>
                 </div>
                 <!-- Collection 4 -->
-                <div class="md:col-span-8 group relative overflow-hidden rounded-xl bg-surface-container-highest">
-                    <img alt="Scientific Observation" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="Botanical illustrations and sketches of birds in a leather-bound journal with pressed leaves, Victorian explorer style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJdb8fHUvTlbK4FXJLYUmE7UejZxPMeEVnSpEeH4Wenwa1Omq9DhAGUtAZPpcgxZxb9qzL03YdEA3PSDkpaTCvvmj4_Fb5JgoAQforny9yiMt9MCJjcJsJxPaHQqreO7t9CylTOJr16mrhL7q0rShMvKRW6ZtdOLgcwIUYXp_pmzwsex_YYrNyyNlKtYMNY7PDAyHMIrISIECA844_sBgzewuoN2QkJIXZanpmKbfWQwNNwz5M6B0_SVNjC6x3tsiL1rUmCrBP7UaT" />
+                <div class="md:col-span-8 group relative overflow-hidden rounded-xl bg-surface-container-highest min-h-[320px] md:min-h-[420px]">
+                    <img alt="Scientific Observation" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="Botanical illustrations and sketches of birds in a leather-bound journal with pressed leaves, Victorian explorer style" src="/@Model[3].Img" />
                     <div class="absolute inset-0 bg-primary/20 transition-opacity group-hover:opacity-0"></div>
                     <div class="absolute inset-0 flex items-center justify-center">
-                        <div class="bg-surface/90 backdrop-blur-md p-10 rounded-xl shadow-2xl max-w-lg text-center transform translate-y-4 group-hover:translate-y-0 transition-transform">
-                            <span class="font-label text-xs uppercase tracking-widest text-primary mb-4 block">New Exhibition</span>
-                            <h3 class="font-headline text-3xl text-primary mb-4">Scientific Observation</h3>
-                            <p class="font-body text-on-surface-variant mb-6">The intersection of art and empirical discovery in the 19th-century field notes.</p>
-                            <button class="px-8 py-3 bg-primary text-on-primary rounded-md font-bold text-sm">Explore Plates</button>
+                        <div class="bg-surface/90 backdrop-blur-md p-6 md:p-10 rounded-xl shadow-2xl max-w-lg text-center transform translate-y-4 group-hover:translate-y-0 transition-transform mx-4">
+                            <span class="font-label text-xs uppercase tracking-widest text-primary mb-4 block">@Model[3].Category.Name</span>
+                            <h3 class="font-headline text-2xl md:text-3xl text-primary mb-4">@Model[3].Title</h3>
+                            <p class="font-body text-on-surface-variant mb-6">@Model[3].Description</p>
+                                                   <a asp-action="Details" asp-controller="Books" asp-route-id="@Model[3].Id">
+
+                            <button class="px-8 py-3 bg-primary text-on-primary rounded-md font-bold text-sm">Explore</button>
+                        </a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    <!-- Scholar Program -->
+    @* <!-- Scholar Program -->
     <section class="py-32 relative overflow-hidden bg-primary text-on-primary">
         <div class="absolute top-0 right-0 w-1/3 h-full bg-primary-container/30 skew-x-12 translate-x-20"></div>
         <div class="max-w-screen-xl mx-auto px-6 md:px-12 relative z-10 flex flex-col md:flex-row items-center gap-20">
             <div class="md:w-1/2">
-                <h2 class="font-headline text-4xl md:text-6xl mb-8 leading-tight">Join the Archival Circle</h2>
-                <p class="font-body text-lg opacity-80 mb-10 leading-relaxed">
-                    Become a patron of the literary arts. Your membership provides exclusive access to high-resolution metadata, first-rights for institutional borrowing, and entry into our quarterly symposia.
-                </p>
+                <h2 class="font-headline text-4xl md:text-6xl mb-8 leading-tight">Join us now</h2>
+                
                 <div class="grid grid-cols-2 gap-8 mb-12">
                     <div>
                         <span class="font-headline text-3xl block mb-1">12k+</span>
@@ -165,4 +170,4 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> *@

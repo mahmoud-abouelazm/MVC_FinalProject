@@ -1,5 +1,6 @@
 using Library.Web.Core.Constants;
 using Library.Web.Core.ViewModel;
+using Library.Web.Repository.IRepositories;
 using Library.Web.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,18 +13,20 @@ namespace Library.Web.Controllers
     {
 
         IAuthorService AuthorService;
+        private readonly IBookRepository bookRepository;
 
-        public HomeController(IAuthorService IAuthorService)
+        public HomeController(IAuthorService IAuthorService,
+            IBookRepository bookRepository
+            )
         {
             this.AuthorService = IAuthorService;
+            this.bookRepository = bookRepository;
         }
 
 
-        public IActionResult Index()
+        public async Task<IActionResult>Index()
         {
-
-
-            return View();
+            return View(await bookRepository.GetNewBooks());
         }
 
 
