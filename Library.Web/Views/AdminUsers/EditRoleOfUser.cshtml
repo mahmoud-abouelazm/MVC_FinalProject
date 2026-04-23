@@ -1,0 +1,42 @@
+﻿
+@model EditUserRoleVM
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["ActiveNav"] = "Users";
+}
+<main class="md:ml-64 pt-24 pb-12 px-8">
+
+    <div class="max-w-xl mx-auto form-card p-8">
+
+        <h2 class="text-xl font-bold mb-6">Edit User Role</h2>
+
+        <form asp-action="EditRoleOfUser" method="post" class="space-y-5">
+
+            <input type="hidden" asp-for="UserId" />
+
+            <div>
+                <label class="field-label">User</label>
+                <input value="@Model.UserName" class="field-input" disabled />
+            </div>
+
+            <div>
+                <label class="field-label">Current Role</label>
+                <input value="@Model.CurrentRole" class="field-input" disabled />
+            </div>
+
+            <div>
+                <label class="field-label">New Role</label>
+                <select asp-for="NewRole" asp-items="Model.Roles" class="field-input"></select>
+                <span asp-validation-for="NewRole" class="field-validation-error"></span>
+            </div>
+
+            <div class="flex gap-3 pt-4">
+                <button type="submit" class="btn-primary">Save</button>
+                <a asp-action="Index" class="btn-secondary">Cancel</a>
+            </div>
+
+        </form>
+
+    </div>
+
+</main>

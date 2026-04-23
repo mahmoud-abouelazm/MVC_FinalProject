@@ -1,9 +1,11 @@
 ﻿using Library.Web.Core.ViewModel.Copies;
 using Library.Web.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Library.Web.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AdminCopiesController(ICopyService copyService) : Controller
     {
         private const int PageSize = 15;

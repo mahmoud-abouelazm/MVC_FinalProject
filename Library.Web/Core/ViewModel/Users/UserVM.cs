@@ -13,6 +13,7 @@ namespace Library.Web.Core.ViewModel.Users
 
         public int ActiveUsers { get; set; }
         public int NotActiveUsers { get; set; }
+
         
 
     }

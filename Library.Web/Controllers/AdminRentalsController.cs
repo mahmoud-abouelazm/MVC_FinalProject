@@ -1,8 +1,10 @@
 ﻿using Library.Web.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Library.Web.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AdminRentalsController(IRentalService rentalService) : Controller
     {
         private const int PageSize = 10;

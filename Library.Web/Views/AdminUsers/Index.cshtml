@@ -1,4 +1,4 @@
-﻿@model UserVM
+@model UserVM
 @{
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
      ViewData["ActiveNav"] = "Users";
@@ -96,23 +96,35 @@
         </div>
     }
 
-    <form asp-controller="AdminUsers" asp-action="Index" method="get" class="flex gap-3 mb-3">
-            <div class="relative flex-1 max-w-md">
-                <input type="text" name="search" value="@Model.Search"
-                       placeholder="Search member, email, book or copy…"
-                       class="w-full bg-surface-container-highest border-none rounded-full px-6 py-2.5 font-manrope text-sm outline-none focus:ring-2 focus:ring-primary/20 transition-all" />
-                <button type="submit" class="absolute right-3 top-1/2 -translate-y-1/2 text-primary">
-                    <span class="material-symbols-outlined text-lg">search</span>
-                </button>
-            </div>
-            @if (!string.IsNullOrEmpty(Model.Search))
-            {
-                <a  href="?search="
-                       class="flex items-center gap-1 px-4 py-2 bg-surface-container rounded-full font-manrope text-xs font-semibold text-on-surface-variant hover:bg-surface-container-high transition-colors">
-                    <span class="material-symbols-outlined text-sm">close</span>Clear
-                </a>
-            }
-        </form>
+    <form asp-controller="AdminUsers" asp-action="Index" method="get" class="flex gap-3 mb-3 items-center">
+    
+    <div class="relative flex-1 max-w-md">
+        <input type="text" name="search" value="@Model.Search"
+               placeholder="Search member, email, name…"
+               class="w-full bg-surface-container-highest border-none rounded-full px-6 py-2.5 font-manrope text-sm outline-none focus:ring-2 focus:ring-primary/20 transition-all" />
+        
+        <button type="submit" class="absolute right-3 top-1/2 -translate-y-1/2 text-primary">
+            <span class="material-symbols-outlined text-lg">search</span>
+        </button>
+    </div>
+     @if (!string.IsNullOrEmpty(Model.Search))
+    {
+        <a href="?search="
+           class="flex items-center gap-1 px-4 py-2 bg-surface-container rounded-full text-xs font-semibold hover:bg-surface-container-high transition-colors">
+            <span class="material-symbols-outlined text-sm">close</span>Clear
+        </a>
+    }
+    <a asp-controller="AdminUsers" asp-action="AddNewUser"
+       class="flex items-center gap-2 px-5 py-2.5 bg-primary text-white rounded-full text-xs font-bold uppercase tracking-wider hover:bg-primary/90 transition-all shadow-sm">
+        <span class="material-symbols-outlined text-sm">person_add</span>
+        Add User
+    </a>
+
+  
+
+</form>
+
+
         <section class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden border border-outline-variant/30 mb-12">
             <div class="p-6 border-b border-surface-container flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <h3 class="text-xl font-headline font-bold text-primary">Active Directory</h3>
@@ -145,28 +157,46 @@
                             <td class="text-on-surface-variant">@user.Email</td>
                             <td class="text-on-surface-variant">@user.PhoneNumber</td>
                             <td class="text-right">
-                                <div class="flex items-center  gap-3">
-                                    <a class="text-primary hover:underline text-xs font-bold" asp-controller="AdminUsers" asp-action="Details" asp-route-userId="@user.Id">See Details</a>
+                                <div class="flex items-center gap-2 justify-end">
+
+                                    <a class="text-primary hover:underline text-xs font-bold"
+                                       asp-controller="AdminUsers"
+                                       asp-action="Details"
+                                       asp-route-userId="@user.Id">
+                                        Details
+                                    </a>
+
+                                    <a asp-controller="AdminUsers"
+                                       asp-action="EditRoleOfUser"
+                                       asp-route-userId="@user.Id"
+                                       class="p-2 rounded-full bg-surface-container hover:bg-primary/10 transition-all"
+                                       title="Edit Role">
+                                        <span class="material-symbols-outlined text-[18px] text-primary">manage_accounts</span>
+                                    </a>
+
                                     @if (user.IsActive)
                                     {
-                                      <a asp-controller="AdminUsers" asp-action="DeactiveEmail" asp-route-userId="@user.Id" class="px-3 py-1 bg-error-container text-error text-[0.65rem] font-bold uppercase rounded-full hover:bg-error hover:text-on-error transition-all">Deactivate</a>
-
+                                        <a asp-action="DeactiveEmail"
+                                           asp-route-userId="@user.Id"
+                                           class="px-3 py-1 bg-error-container text-error text-[0.65rem] font-bold uppercase rounded-full hover:bg-error hover:text-on-error transition-all">
+                                            Deactivate
+                                        </a>
                                     }
                                     else
                                     {
-                                      <a asp-controller="AdminUsers" asp-action="ConfirmEmail" asp-route-userId="@user.Id" class="px-3 py-1 bg-primary-container text-on-primary-container text-[0.65rem] font-bold uppercase rounded-full hover:bg-primary hover:text-on-primary transition-all">Activate</a>
+                                        <a asp-action="ConfirmEmail"
+                                           asp-route-userId="@user.Id"
+                                           class="px-3 py-1 bg-primary-container text-on-primary-container text-[0.65rem] font-bold uppercase rounded-full hover:bg-primary hover:text-on-primary transition-all">
+                                            Activate
+                                        </a>
                                     }
+
                                 </div>
                             </td>
                         </tr>
                     }
-                    @*   
-                        photos may need it 
-                        https://lh3.googleusercontent.com/aida-public/AB6AXuCZyPCGq239lPU4g00p8AOAxooEAmAmoHsRmbC9n9KzuffADfX-Tr2s3lTYBPV5Pa8n5-0o81He1xjCevP5mQ_iMNDJXv2VChXNmsus835o9WqfMCqTGsw4yzMNyPSS2B63XuF7vCVGTwT9trOKjQjjjou_NZQXlVFJ7CjcITbcKWgTQu4kmVWtIIA2tbM95HPEhCr7BMVRUgtFMzHQanIaWDANtJoZpfyKPfsd7-8QPKRE4z0cjA143eG6180hHhdHZyNSJlrp-8dc
-                        https://lh3.googleusercontent.com/aida-public/AB6AXuB_LAHI-qv7xnCQdSsfRMk0Xe8OCU5XQkHNrnkZbcoI0gVcD-RvGlTVdDdCCMQOH7dpV4zQKCJ5buzBLnvxV0OfzEDpbeSSZUR0m7mgOk7l-0Z3r25eqYpJuAk7KVgBDSZqAJ8IoAzx1xSrBOM9K-azoH87C8Nsf7fotYC6zQTIdFj9b4VEocwUPs63s7CSHyrhigoruDs9eNvz_jG6F7j1dS9bME_IJ6albMiEa5qpZeCW2Q-mvGVppMb-fd2-zLINsMjL0-jJA_jo
-                        https://lh3.googleusercontent.com/aida-public/AB6AXuBjosTxng7qrWwLrg7hu8hj_EvWctkwzpPWdJ2Ntgfyl5UYolkJjiTvzSmqInmJZXM6T0fDZw0nGmr81W4aLDjsaPZfakPQRKy6s9lbEYH5xvgQ-tXORxgKK6VY2ALhoyGdaeloPG98pW4gQnDOXnMATLmwTXIGKsSCiBhPCm-NNwaqaDOTeWcckiTNns9XAxfYnbSpeAdYIcwFpl0EgEULBcqCRriJB6Shyd0aIjhzk--wfReLrBQhkPO63AB2j0X329uWLV1GcLf-
-                        *@
-                        
+
+                       
                     </tbody>
                 </table>
             </div>

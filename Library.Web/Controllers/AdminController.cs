@@ -5,6 +5,7 @@ using Library.Web.Core.ViewModel.Book;
 using Library.Web.Data;
 using Library.Web.Repository.IRepositories;
 using Library.Web.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,7 @@ using System.Text.Json;
 
 namespace Library.Web.Controllers
 {
+ [Authorize(Roles = "Admin")]
     public class AdminController(IAdminService adminService ) : Controller
     {
         private readonly IAdminService _adminService = adminService;

@@ -1,11 +1,13 @@
 ﻿using Library.Web.Core.Models;
 using Library.Web.Core.ViewModel.Category;
 using Library.Web.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Library.Web.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class CategoriesController(ApplicationDbContext context) : Controller
     {
         private const int PageSize = 10;
