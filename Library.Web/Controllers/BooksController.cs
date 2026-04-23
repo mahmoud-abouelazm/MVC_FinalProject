@@ -35,7 +35,7 @@ namespace Library.Web.Controllers
             this.appContext = appContext;
             this.categoryRepository = categoryRepository;
         } 
-        public async Task<IActionResult> Index(int page = 1 , int? categoryId = null)
+        public async Task<IActionResult> Index(int page = 1 , int? categoryId = null, string? search = null)
         {
             //var Books = await repo.GetAllAsync();
 
@@ -46,13 +46,14 @@ namespace Library.Web.Controllers
                 PageSize = 8
             };
 
-            var result = await bookRepository.GetAllBooksAsync(param , categoryId);
+            var result = await bookRepository.GetAllBooksAsync(param , categoryId, search);
 
 
             var categories = await categoryRepository.GetAllAsync();
 
             ViewBag.Categories = categories;
             ViewBag.SelectedCategory = categoryId;
+            ViewBag.Search = search;
 
             return View(result);
 
