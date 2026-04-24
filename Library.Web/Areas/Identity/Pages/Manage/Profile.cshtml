@@ -5,13 +5,13 @@
 }
 
 
-<main class="pt-8 sm:pt-20 md:pt-28 pb-12 sm:pb-16 px-4 sm:px-8 md:px-12 max-w-7xl mx-auto flex flex-col md:flex-row gap-6 sm:gap-8 md:gap-12">
+<main class="pt-3 sm:pt-8 md:pt-12 pb-12 sm:pb-16 px-4 sm:px-8 md:px-12 max-w-7xl mx-auto flex flex-col md:flex-row gap-6 sm:gap-8 md:gap-12">
     <!-- User Profile Sidebar (Asymmetric Layout) -->
     <aside class="w-full md:w-1/3 flex flex-col gap-6 sm:gap-8">
         <div class="bg-surface-container-lowest p-6 sm:p-8 rounded-xl shadow-[0px_12px_32px_rgba(26,28,26,0.04)] border border-outline-variant/15">
             <div class="flex flex-col items-center text-center">
                 <div class="w-24 sm:w-28 md:w-32 h-24 sm:h-28 md:h-32 rounded-full mb-4 sm:mb-6 overflow-hidden ring-4 ring-primary-fixed-dim">
-                    <img alt="User Profile" class="w-full h-full object-cover" data-alt="Close-up portrait of a thoughtful man in a library setting with soft natural window lighting and books in background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5v-8dO4aUpE3_ycLaOmU2AetKHERRJW6ffeKdSqaYSxyiB7qu0ZUVWsJBzKJfzmdb7NRU8fpVkL1naFJcNO1GpCTMYdZ9eJSg7bo2vNG1ZHjM37RYmcaWhE85syG-B_CxxKAttRC1Z9pG64gh_MVoOrA0xw8CKeFKr0ERNKeXanF1sSl5UeCzl1AXfD9bZjG-JuuEP22Qqiobz5gioJyR_fseFc9JPaWDOXvT1dMSzqYZDpZLVDrvpisSi6P1zsnBK9jwaQIx_CMX" />
+                    <img alt="User Profile" class="w-full h-full object-cover" data-alt="Close-up portrait of a thoughtful man in a library setting with soft natural window lighting and books in background" src="//lh3.googleusercontent.com/aida-public/AB6AXuD5v-8dO4aUpE3_ycLaOmU2AetKHERRJW6ffeKdSqaYSxyiB7qu0ZUVWsJBzKJfzmdb7NRU8fpVkL1naFJcNO1GpCTMYdZ9eJSg7bo2vNG1ZHjM37RYmcaWhE85syG-B_CxxKAttRC1Z9pG64gh_MVoOrA0xw8CKeFKr0ERNKeXanF1sSl5UeCzl1AXfD9bZjG-JuuEP22Qqiobz5gioJyR_fseFc9JPaWDOXvT1dMSzqYZDpZLVDrvpisSi6P1zsnBK9jwaQIx_CMX" />
                 </div>
                 <h2 class="font-headline text-xl sm:text-2xl md:text-2xl font-bold text-on-surface">@Model.Name</h2>
                 @* <p class="font-label text-sm uppercase tracking-widest text-on-surface-variant mb-6">Archival Contributor</p> *@
@@ -71,60 +71,104 @@
         @if(Model.ReturnedRentals.Any()){
         <div class="mb-6 sm:mb-8">
             <h3 class="font-headline text-lg sm:text-xl font-bold mb-3 sm:mb-4 text-on-surface">Returned Items</h3>
-            <div class="overflow-x-auto rounded-xl bg-surface-container-low shadow-sm">
-                <table class="w-full text-left border-collapse min-w-max sm:min-w-full">
-                    <thead class="bg-tertiary text-on-tertiary sticky top-0">
-                        <tr>
-                            <th class="px-3 sm:px-6 py-3 sm:py-4 font-label text-[0.6875rem] uppercase tracking-wider whitespace-nowrap">Catalogue Title</th>
-                            <th class="px-3 sm:px-6 py-3 sm:py-4 font-label text-[0.6875rem] uppercase tracking-wider whitespace-nowrap">Amount</th>
-                            <th class="px-3 sm:px-6 py-3 sm:py-4 font-label text-[0.6875rem] uppercase tracking-wider whitespace-nowrap">Copies</th>
-                            <th class="px-3 sm:px-6 py-3 sm:py-4 font-label text-[0.6875rem] uppercase tracking-wider whitespace-nowrap">Returned At</th>
-                            <th class="px-3 sm:px-6 py-3 sm:py-4 font-label text-[0.6875rem] uppercase tracking-wider whitespace-nowrap text-right">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-outline-variant/15">
+            <div class="space-y-4 sm:space-y-5">
+                @for (int i = 0; i < Model.ReturnedRentals?.Count(); i++)
+                {
+                    var rental = Model.ReturnedRentals[i];
+                    var returnedAt = rental.ReturnedAt ?? DateTime.UtcNow;
+                    var daysRented = Math.Max(1, (int)Math.Ceiling((returnedAt - rental.RentedAt).TotalDays));
+                    var totalPricePerDay = rental.CopyRentals.Sum(cr => cr.Copy?.Book?.Price ?? 0);
+                    var isLate = returnedAt > rental.DueAt;
+                    var daysLate = isLate ? (int)Math.Ceiling((returnedAt - rental.DueAt).TotalDays) : 0;
+                    var onTimeDays = Math.Max(0, daysRented - daysLate);
+                    var baseAmount = onTimeDays * totalPricePerDay;
+                    var penaltyAmount = isLate ? daysLate * totalPricePerDay * 2 : 0;
+                    var totalAmount = rental.Amount > 0 ? rental.Amount : baseAmount + penaltyAmount;
+                    var copyNames = string.Join(", ", rental.CopyRentals.Select(cr => cr.Copy?.Name).Where(n => !string.IsNullOrWhiteSpace(n)));
+                    var bookTitles = string.Join(", ", rental.CopyRentals.Select(cr => cr.Copy?.Book?.Title).Where(t => !string.IsNullOrWhiteSpace(t)).Distinct());
+                    var firstBookId = rental.CopyRentals.FirstOrDefault()?.Copy?.Book?.Id;
 
-                    @for (int i = 0; i < Model.ReturnedRentals?.Count(); i++)
-                    {
-                        <tr class="bg-surface hover:bg-surface-container-high transition-colors">
-                            <td class="px-3 sm:px-6 py-3 sm:py-5 whitespace-nowrap">
-                                <div class="flex items-center gap-2 sm:gap-4">
-                                    <div class="w-8 h-12 sm:w-10 sm:h-14 bg-surface-variant rounded-sm flex-shrink-0 grayscale">
-                                        <img alt="Book Cover" class="w-full h-full object-cover rounded-sm" data-alt="@Model.ReturnedRentals[i]?.CopyRentals?.FirstOrDefault()?.Copy.Book.Description" src="@Model.ReturnedRentals[i]?.CopyRentals?.FirstOrDefault()?.Copy.Book.Img" />
+                    <details class="rounded-xl border border-outline-variant/20 bg-surface-container-lowest shadow-sm overflow-hidden">
+                        <summary class="cursor-pointer list-none px-4 sm:px-6 py-4 bg-tertiary text-on-tertiary">
+                            <div class="flex items-center justify-between gap-3">
+                                <div class="min-w-0">
+                                    <p class="font-manrope text-[0.6875rem] uppercase tracking-[0.12em] font-bold opacity-70 mb-1">Rental #@rental.Id</p>
+                                    <p class="font-noto-serif text-sm sm:text-lg font-bold truncate">@bookTitles</p>
+                                    <p class="font-manrope text-xs opacity-80 mt-0.5">Returned @returnedAt.ToString("MMM d, yyyy")</p>
+                                </div>
+                                <div class="text-right shrink-0">
+                                    <p class="font-manrope text-[0.6875rem] uppercase tracking-[0.12em] font-bold opacity-70">Total Paid</p>
+                                    <p class="font-noto-serif text-lg sm:text-2xl font-bold">$@totalAmount.ToString("0.00")</p>
+                                </div>
+                            </div>
+                        </summary>
+
+                        <div class="px-4 sm:px-6 py-4 sm:py-6 space-y-4 sm:space-y-5">
+                            <div>
+                                <p class="font-manrope text-[0.6875rem] uppercase tracking-[0.1em] font-bold text-on-surface-variant mb-3">Rental Details</p>
+                                <div class="space-y-2">
+                                    <div class="flex items-start justify-between gap-3 py-2 border-b border-dashed border-outline-variant/30">
+                                        <span class="font-manrope text-xs text-on-surface-variant">Book(s)</span>
+                                        <span class="font-manrope text-sm font-bold text-on-surface text-right">@bookTitles</span>
                                     </div>
-                                    <div class="min-w-0">
-                                        <p class="font-headline text-xs sm:text-base font-bold leading-tight truncate">@Model.ReturnedRentals[i]?.CopyRentals?.FirstOrDefault()?.Copy.Book.Title</p>
+                                    <div class="flex items-start justify-between gap-3 py-2 border-b border-dashed border-outline-variant/30">
+                                        <span class="font-manrope text-xs text-on-surface-variant">Copy(s)</span>
+                                        <span class="font-manrope text-sm font-bold text-on-surface text-right">@copyNames</span>
+                                    </div>
+                                    <div class="flex items-start justify-between gap-3 py-2 border-b border-dashed border-outline-variant/30">
+                                        <span class="font-manrope text-xs text-on-surface-variant">Rented on</span>
+                                        <span class="font-manrope text-sm font-bold text-on-surface">@rental.RentedAt.ToString("MMM d, yyyy")</span>
+                                    </div>
+                                    <div class="flex items-start justify-between gap-3 py-2 border-b border-dashed border-outline-variant/30">
+                                        <span class="font-manrope text-xs text-on-surface-variant">Due date</span>
+                                        <span class="font-manrope text-sm font-bold @(isLate ? "text-error" : "text-on-surface")">
+                                            @rental.DueAt.ToString("MMM d, yyyy")
+                                            @if (isLate)
+                                            {
+                                                <span class="font-manrope text-xs font-bold text-error ml-2">(overdue)</span>
+                                            }
+                                        </span>
+                                    </div>
+                                    <div class="flex items-start justify-between gap-3 py-2">
+                                        <span class="font-manrope text-xs text-on-surface-variant">Return date</span>
+                                        <span class="font-manrope text-sm font-bold text-on-surface">@returnedAt.ToString("MMM d, yyyy")</span>
                                     </div>
                                 </div>
-                            </td>
-                            <td class="px-3 sm:px-6 py-3 sm:py-5 whitespace-nowrap">
-                                <span class="font-body text-xs sm:text-sm text-on-surface-variant">@{
-                                        var rental = Model.ReturnedRentals[i];
-                                        var price = rental.CopyRentals.FirstOrDefault()?.Copy?.Book?.Price ?? 0;
-                                        var count = rental.CopyRentals.Count();                                       
-                                    }
-                                    @(price*count)
-                                    </span>
-                            </td>
-                                <td class="px-3 sm:px-6 py-3 sm:py-5 whitespace-nowrap">
-                                    <span class="font-body text-xs sm:text-sm text-on-surface-variant">
-                                        @Model.ReturnedRentals[i].CopyRentals.Count()
-                                    </span>
-                                </td>
-                            <td class="px-3 sm:px-6 py-3 sm:py-5 whitespace-nowrap">
-                                <span class="font-body text-xs sm:text-sm text-on-surface-variant">@Model.ReturnedRentals[i]?.CopyRentals?.FirstOrDefault()?.Rental.ReturnedAt?.ToString("M/d/yyyy")</span>
-                            </td>
-                            <td class="px-3 sm:px-6 py-3 sm:py-5 whitespace-nowrap text-right">
-                                <a asp-controller="Book" asp-action="Details" asp-route-id="@Model.ReturnedRentals[i]?.CopyRentals?.FirstOrDefault()?.Copy.Book.Id"
-                                class="inline-block px-2 sm:px-4 py-1.5 sm:py-2 bg-transparent border border-outline-variant text-on-surface-variant rounded-md font-manrope font-bold text-[0.65rem] sm:text-xs hover:bg-surface-container-highest transition-all">
-                                    Re-Rent                                
-                                </a>
-                            </td>
-                        </tr>
-                    }                 
+                            </div>
 
-                    </tbody>
-                </table>
+                            <div>
+                                <p class="font-manrope text-[0.6875rem] uppercase tracking-[0.1em] font-bold text-on-surface-variant mb-3">Amount Breakdown</p>
+
+                                <div class="flex items-start justify-between gap-3 py-2 border-b border-dashed border-outline-variant/30">
+                                    <span class="font-manrope text-xs text-on-surface-variant">
+                                        @onTimeDays day@(onTimeDays == 1 ? "" : "s") on time × $@totalPricePerDay.ToString("0.00")
+                                    </span>
+                                    <span class="font-manrope text-sm font-bold text-on-surface">$@baseAmount.ToString("0.00")</span>
+                                </div>
+
+                                @if (isLate)
+                                {
+                                    <div class="mt-3 p-3 rounded-lg bg-error-container/30 border border-error-container/50 flex items-start justify-between gap-3">
+                                        <span class="font-manrope text-xs text-error">
+                                            @daysLate day@(daysLate == 1 ? "" : "s") late × $@totalPricePerDay.ToString("0.00") × 2 (penalty)
+                                        </span>
+                                        <span class="font-manrope text-sm font-bold text-error">+$@penaltyAmount.ToString("0.00")</span>
+                                    </div>
+                                }
+
+                                <div class="mt-4 pt-3 border-t-2 border-on-surface flex items-center justify-between gap-3">
+                                    <span class="font-noto-serif text-base sm:text-xl font-bold text-on-surface">Total Paid</span>
+                                    <span class="font-noto-serif text-xl sm:text-2xl font-bold text-primary">$@totalAmount.ToString("0.00")</span>
+                                </div>
+                            </div>
+
+                            <a asp-controller="Books" asp-action="Details" asp-route-id="@firstBookId"
+                               class="inline-flex w-full items-center justify-center px-4 py-2.5 bg-transparent border border-outline-variant text-on-surface-variant rounded-md font-manrope font-bold text-xs sm:text-sm hover:bg-surface-container-highest transition-all">
+                                Re-Rent
+                            </a>
+                        </div>
+                    </details>
+                }
             </div>
         </div>
         }
@@ -155,7 +199,7 @@
                                     <td class="px-3 sm:px-6 py-3 sm:py-5 whitespace-nowrap">
                                         <div class="flex items-center gap-2 sm:gap-4">
                                             <div class="w-8 h-12 sm:w-10 sm:h-14 bg-surface-variant rounded-sm flex-shrink-0 grayscale">
-                                                <img alt="Book Cover" class="w-full h-full object-cover rounded-sm" data-alt="@Model.ActiveRentals[i]?.CopyRentals?.FirstOrDefault()?.Copy.Book.Description" src="@Model.ActiveRentals[i]?.CopyRentals?.FirstOrDefault()?.Copy.Book.Img" />
+                                                <img alt="Book Cover" class="w-full h-full object-cover rounded-sm" data-alt="@Model.ActiveRentals[i]?.CopyRentals?.FirstOrDefault()?.Copy.Book.Description" src="/@Model.ActiveRentals[i]?.CopyRentals?.FirstOrDefault()?.Copy.Book.Img" />
                                             </div>
                                             <div class="min-w-0">
                                                 <p class="font-headline text-xs sm:text-base font-bold leading-tight truncate">@Model.ActiveRentals[i]?.CopyRentals?.FirstOrDefault()?.Copy.Book.Title</p>

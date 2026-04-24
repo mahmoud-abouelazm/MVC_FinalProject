@@ -28,14 +28,17 @@ namespace Library.Web
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
             // Configure Identity with custom user and role types
+           
+
             builder.Services.AddIdentity<ApplicationUser, IdentityRole<int>>()
-             .AddEntityFrameworkStores<ApplicationDbContext>();
+              .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();  
+            
 
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
             builder.Services.AddScoped<IImageService, ImageService>();
             builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-            builder.Services.AddScoped<IBookRepository , BooksRepository>();
+            builder.Services.AddScoped<IBookRepository, BooksRepository>();
             builder.Services.AddScoped<IAdminService, AdminService>();
             builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
             builder.Services.AddScoped<IAuthorService, AuthorService>();
@@ -46,6 +49,9 @@ namespace Library.Web
             builder.Services.AddScoped<IRentalRepository, RentalRepository>();
             builder.Services.AddScoped<IRentalService, RentalService>();
             builder.Services.AddSingleton<IEmailSender, EmailSender>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IUserService, UserService>();    
+
 
 
             //builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
@@ -54,6 +60,8 @@ namespace Library.Web
 
 
             // Configure application cookie security settings
+         
+
             builder.Services.ConfigureApplicationCookie(options =>
             {
                 // Prevents client-side scripts (JS) from accessing the cookie
@@ -70,6 +78,7 @@ namespace Library.Web
                 options.LoginPath = "/identity/Account/Login"; // redirect here if not logged in
                 options.AccessDeniedPath = "/identity/Account/Login";
                 options.SlidingExpiration = true;
+                
             });
 
 			
