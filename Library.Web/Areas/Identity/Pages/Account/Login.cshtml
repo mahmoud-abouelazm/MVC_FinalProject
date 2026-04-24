@@ -26,6 +26,12 @@
                     <span class="font-body font-bold">Login failed. Please check your email and password.</span>
                 </div>
             }
+            @if (TempData["ExErrorMessage"] != null)
+            {
+                <div class="bg-error-container border-l-4 border-error text-on-error-container p-4 rounded-lg" role="alert">
+                    <span class="font-body font-bold">@TempData["ExErrorMessage"]</span>
+                </div>
+            }
 
             <!-- Email Input -->
             <div class="space-y-2">
@@ -86,18 +92,33 @@
             }
             else
             {
-                <div class="space-y-3">
-                    @foreach (var provider in Model.ExternalLogins)
+               
+            }
+        </form>
+        <div class="space-y-3">
+            @* @foreach (var provider in Model.ExternalLogins)
                     {
                         <form id="external-account" asp-page="./ExternalLogin" asp-route-provider="@provider.Name" asp-route-returnUrl="@Model.ReturnUrl" method="post" style="display:none">
                         </form>
                         <button type="submit" form="external-account" class="w-full border-2 border-outline-variant/30 text-on-surface px-6 py-3 rounded-lg font-body font-bold hover:bg-surface-container-low transition-all">
                             @provider.DisplayName
                         </button>
-                    }
-                </div>
+                    } *@
+            @foreach (var provider in Model.ExternalLogins)
+            {
+                <form method="post"
+                      asp-page="./ExternalLogin"
+                      asp-route-provider="@provider.Name"
+                      asp-route-returnUrl="@Model.ReturnUrl">
+
+                    <button type="submit"
+                            class="w-full border-2 px-6 py-3 rounded-lg font-bold hover:bg-gray-100">
+                        Continue with @provider.DisplayName
+                    </button>
+
+                </form>
             }
-        </form>
+        </div>
 
         <!-- Register Link -->
         <div class="text-center mt-8 pt-8 border-t border-outline-variant/15">
