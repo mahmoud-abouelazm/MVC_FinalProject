@@ -1,0 +1,135 @@
+@model Library.Web.Core.ViewModel.Settings.AdminSettingsVM
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Settings";
+    ViewData["ActiveNav"] = "Settings";
+}
+
+<main class="ml-0 md:ml-64 min-h-screen pt-20 md:pt-12 px-4 sm:px-6 md:px-12 pb-8 md:pb-12">
+
+    <header class="mb-10">
+        <h2 class="font-noto-serif text-4xl font-bold text-on-surface tracking-tight">Admin Settings</h2>
+        <p class="text-on-surface-variant mt-1 font-manrope text-sm">Update your admin details and account password.</p>
+    </header>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="mb-6 px-6 py-4 bg-primary-container text-on-primary-container rounded-lg font-manrope text-sm flex items-center gap-3">
+            <span class="material-symbols-outlined text-lg">check_circle</span>@TempData["Success"]
+        </div>
+    }
+
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="mb-6 px-6 py-4 bg-error-container text-on-error-container rounded-lg font-manrope text-sm">
+            <div asp-validation-summary="ModelOnly"></div>
+        </div>
+    }
+
+    <section class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+
+        <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0px_12px_32px_rgba(26,28,26,0.06)] border border-outline-variant/10 p-6 md:p-8">
+            <div class="mb-6">
+                <h3 class="font-noto-serif text-2xl font-bold text-on-surface tracking-tight">Profile Details</h3>
+                <p class="text-on-surface-variant font-manrope text-sm mt-1">Change your name, email, and phone number.</p>
+            </div>
+
+            <form asp-action="UpdateProfile" method="post" class="space-y-4">
+                @Html.AntiForgeryToken()
+
+                <div>
+                    <label asp-for="Profile.FullName" class="block mb-1.5 font-manrope text-xs font-bold uppercase tracking-wider text-on-surface-variant"></label>
+                    <input asp-for="Profile.FullName" class="w-full bg-surface-container-highest border-none rounded-md px-4 py-2.5 font-manrope text-sm outline-none focus:ring-2 focus:ring-primary/20" />
+                    <span asp-validation-for="Profile.FullName" class="text-error text-xs font-manrope"></span>
+                </div>
+
+                <div>
+                    <label asp-for="Profile.Email" class="block mb-1.5 font-manrope text-xs font-bold uppercase tracking-wider text-on-surface-variant"></label>
+                    <input asp-for="Profile.Email" class="w-full bg-surface-container-highest border-none rounded-md px-4 py-2.5 font-manrope text-sm outline-none focus:ring-2 focus:ring-primary/20" />
+                    <span asp-validation-for="Profile.Email" class="text-error text-xs font-manrope"></span>
+                </div>
+
+                <div>
+                    <label asp-for="Profile.PhoneNumber" class="block mb-1.5 font-manrope text-xs font-bold uppercase tracking-wider text-on-surface-variant"></label>
+                    <input asp-for="Profile.PhoneNumber" class="w-full bg-surface-container-highest border-none rounded-md px-4 py-2.5 font-manrope text-sm outline-none focus:ring-2 focus:ring-primary/20" />
+                    <span asp-validation-for="Profile.PhoneNumber" class="text-error text-xs font-manrope"></span>
+                </div>
+
+                <button type="submit" class="inline-flex items-center gap-2 px-6 py-2.5 bg-primary text-on-primary rounded-md font-manrope text-xs font-bold uppercase tracking-wider hover:bg-primary-container transition-all">
+                    <span class="material-symbols-outlined text-sm">save</span>
+                    Save Profile
+                </button>
+            </form>
+        </div>
+
+        <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0px_12px_32px_rgba(26,28,26,0.06)] border border-outline-variant/10 p-6 md:p-8">
+            <div class="mb-6">
+                <h3 class="font-noto-serif text-2xl font-bold text-on-surface tracking-tight">Change Password</h3>
+                <p class="text-on-surface-variant font-manrope text-sm mt-1">Use a strong password for better account security.</p>
+            </div>
+
+            <form asp-action="ChangePassword" method="post" class="space-y-4">
+                @Html.AntiForgeryToken()
+
+                <div>
+                    <label asp-for="Password.CurrentPassword" class="block mb-1.5 font-manrope text-xs font-bold uppercase tracking-wider text-on-surface-variant"></label>
+                    <div class="relative">
+                        <input asp-for="Password.CurrentPassword" type="password" class="w-full bg-surface-container-highest border-none rounded-md px-4 py-2.5 pr-11 font-manrope text-sm outline-none focus:ring-2 focus:ring-primary/20" />
+                        <button type="button" class="toggle-password absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant" data-target="Password_CurrentPassword" aria-label="Toggle current password visibility">
+                            <span class="material-symbols-outlined text-lg">visibility</span>
+                        </button>
+                    </div>
+                    <span asp-validation-for="Password.CurrentPassword" class="text-error text-xs font-manrope"></span>
+                </div>
+
+                <div>
+                    <label asp-for="Password.NewPassword" class="block mb-1.5 font-manrope text-xs font-bold uppercase tracking-wider text-on-surface-variant"></label>
+                    <div class="relative">
+                        <input asp-for="Password.NewPassword" type="password" class="w-full bg-surface-container-highest border-none rounded-md px-4 py-2.5 pr-11 font-manrope text-sm outline-none focus:ring-2 focus:ring-primary/20" />
+                        <button type="button" class="toggle-password absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant" data-target="Password_NewPassword" aria-label="Toggle new password visibility">
+                            <span class="material-symbols-outlined text-lg">visibility</span>
+                        </button>
+                    </div>
+                    <span asp-validation-for="Password.NewPassword" class="text-error text-xs font-manrope"></span>
+                </div>
+
+                <div>
+                    <label asp-for="Password.ConfirmPassword" class="block mb-1.5 font-manrope text-xs font-bold uppercase tracking-wider text-on-surface-variant"></label>
+                    <div class="relative">
+                        <input asp-for="Password.ConfirmPassword" type="password" class="w-full bg-surface-container-highest border-none rounded-md px-4 py-2.5 pr-11 font-manrope text-sm outline-none focus:ring-2 focus:ring-primary/20" />
+                        <button type="button" class="toggle-password absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant" data-target="Password_ConfirmPassword" aria-label="Toggle confirm password visibility">
+                            <span class="material-symbols-outlined text-lg">visibility</span>
+                        </button>
+                    </div>
+                    <span asp-validation-for="Password.ConfirmPassword" class="text-error text-xs font-manrope"></span>
+                </div>
+
+                <button type="submit" class="inline-flex items-center gap-2 px-6 py-2.5 bg-tertiary text-on-tertiary rounded-md font-manrope text-xs font-bold uppercase tracking-wider hover:opacity-90 transition-all">
+                    <span class="material-symbols-outlined text-sm">lock</span>
+                    Update Password
+                </button>
+            </form>
+        </div>
+    </section>
+</main>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        (() => {
+            const toggles = document.querySelectorAll('.toggle-password');
+            toggles.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const targetId = btn.getAttribute('data-target');
+                    const input = document.getElementById(targetId);
+                    const icon = btn.querySelector('.material-symbols-outlined');
+                    if (!input || !icon) return;
+
+                    const isPassword = input.type === 'password';
+                    input.type = isPassword ? 'text' : 'password';
+                    icon.textContent = isPassword ? 'visibility_off' : 'visibility';
+                });
+            });
+        })();
+    </script>
+}
