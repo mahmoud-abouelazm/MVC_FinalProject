@@ -5,6 +5,7 @@ using Library.Web.Repository.Repositories;
 using Library.Web.Services;
 using Library.Web.Services.HelperServices;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace Library.Web
@@ -22,28 +23,14 @@ namespace Library.Web
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
-            builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
-            builder.Services.AddScoped<IImageService, ImageService>();
-            builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-            builder.Services.AddScoped<IBookRepository , BooksRepository>();
-            builder.Services.AddScoped<IAdminService, AdminService>();
-            builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
-            builder.Services.AddScoped<IAuthorService, AuthorService>();
-            builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
-            builder.Services.AddScoped<ICategoryService, CategoryService>();
-            builder.Services.AddScoped<IRentalRepository, RentalRepository>();
-
-
-
-
-
-            //builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
-            //    options.SignIn.RequireConfirmedAccount = true)
-            //    .AddEntityFrameworkStores<ApplicationDbContext>();
-
-            builder.Services.AddIdentity<ApplicationUser, IdentityRole<int>>()
+            // Configure Identity with custom user and role types
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole<int>>(options =>
+            {
+                options.SignIn.RequireConfirmedAccount = true;
+            })
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            // Configure application cookie security settings
             builder.Services.ConfigureApplicationCookie(options =>
             {
                 // Prevents client-side scripts (JS) from accessing the cookie
@@ -61,6 +48,36 @@ namespace Library.Web
                 options.AccessDeniedPath = "/identity/Account/Login";
                 options.SlidingExpiration = true;
             });
+
+            builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+            // Register custom services
+            builder.Services.AddScoped<IImageService, ImageService>();
+            builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            builder.Services.AddScoped<IBookRepository , BooksRepository>();
+            builder.Services.AddScoped<IAdminService, AdminService>();
+            builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
+            builder.Services.AddScoped<IAuthorService, AuthorService>();
+            builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+            builder.Services.AddScoped<ICategoryService, CategoryService>();
+            builder.Services.AddScoped<IRentalRepository, RentalRepository>();
+			builder.Services.AddSingleton<IEmailSender, EmailSender>();
+
+			// Configure external authentication (Google)
+			var googleClientId = builder.Configuration["Authentication:Google:ClientId"];
+            var googleClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+
+            if (!string.IsNullOrEmpty(googleClientId) && !string.IsNullOrEmpty(googleClientSecret))
+            {
+                builder.Services.AddAuthentication()
+                    .AddGoogle(options =>
+                    {
+                        options.ClientId = googleClientId;
+                        options.ClientSecret = googleClientSecret;
+                        options.SignInScheme = IdentityConstants.ExternalScheme;
+						
+					});
+            }
 
             builder.Services.AddControllersWithViews();
 			builder.Services.AddRazorPages();
