@@ -5,9 +5,9 @@
     ViewData["ActiveNav"] = "Copies";
 }
 
-<main class="ml-64 min-h-screen p-12">
+<main class="ml-0 md:ml-64 min-h-screen pt-20 md:pt-12 px-4 sm:px-6 md:px-12 pb-8 md:pb-12">
 
-    <header class="mb-10 flex justify-between items-end">
+    <header class="mb-8 md:mb-10 flex flex-col md:flex-row md:justify-between md:items-end gap-4">
         <div>
             @if (Model.FilterBookId.HasValue)
             {
@@ -44,7 +44,7 @@
     }
 
     @* ── Search bar ── *@
-    <form asp-controller="AdminCopies" asp-action="Index" method="get" class="mb-6 flex gap-3">
+    <form asp-controller="AdminCopies" asp-action="Index" method="get" class="mb-6 flex flex-col sm:flex-row gap-3">
         <input type="hidden" name="bookId" value="@Model.FilterBookId" />
         <div class="relative flex-1 max-w-md">
             <input type="text" name="search" value="@Model.Search"
@@ -73,7 +73,8 @@
             <span class="text-[0.6875rem] font-manrope">@Model.TotalCopies total</span>
         </div>
 
-        <table class="w-full text-left border-collapse">
+        <div class="overflow-x-auto">
+        <table class="w-full min-w-[920px] text-left border-collapse">
             <thead>
                 <tr class="bg-surface-container-low border-b border-outline-variant/10">
                     @if (!Model.FilterBookId.HasValue)
@@ -188,6 +189,7 @@
                 }
             </tbody>
         </table>
+        </div>
 
         <div class="px-6 py-4 flex items-center justify-between bg-surface-container-low/50">
             <p class="text-xs font-manrope text-on-surface-variant">

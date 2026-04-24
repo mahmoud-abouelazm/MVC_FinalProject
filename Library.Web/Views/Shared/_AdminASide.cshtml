@@ -40,15 +40,26 @@
         }
     </style>
 
+@inject Microsoft.AspNetCore.Identity.UserManager<Library.Web.Core.Models.ApplicationUser> UserManager
+
 @{
     var activeNav = ViewData["ActiveNav"]?.ToString() ?? "";
+    var currentUser = await UserManager.GetUserAsync(User);
+    var fullName = currentUser?.FullName ?? User.Identity?.Name ?? "Admin";
 }
 
-<aside class="h-screen w-64 fixed left-0 top-0 bg-[#f2f3ee] flex flex-col py-6 z-40">
+<aside id="adminSidebar" class="h-screen w-64 fixed left-0 top-0 bg-[#f2f3ee] flex flex-col py-6 z-50 transform -translate-x-full md:translate-x-0 transition-transform duration-200 ease-out">
+
+    <div class="px-4 mb-2 flex justify-end md:hidden">
+        <button id="closeAdminSidebar" type="button" class="p-2 rounded-md text-on-surface-variant hover:bg-surface-container" aria-label="Close menu">
+            <span class="material-symbols-outlined text-xl">close</span>
+        </button>
+    </div>
 
     <div class="px-6 mb-8">
         <h1 class="font-noto-serif text-xl text-[#1a1c1a] tracking-tight font-bold">Admin Console</h1>
         <p class="font-manrope text-[.6rem] font-semibold tracking-[.1em] uppercase text-[#1a1c1a]/40 mt-0.5">The Editorial Archive</p>
+        <p class="font-manrope text-xs font-semibold text-[#1a1c1a]/70 mt-2">Welcome, @fullName</p>
     </div>
 
     <nav class="flex-1 flex flex-col gap-1">

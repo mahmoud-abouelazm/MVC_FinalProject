@@ -86,15 +86,54 @@
     </style>
 </head>
 <body class="bg-surface selection:bg-primary-fixed selection:text-on-primary-fixed">
-    
+    <div id="adminSidebarOverlay" class="fixed inset-0 bg-black/40 z-40 hidden md:hidden"></div>
+
+    <header class="md:hidden fixed top-0 inset-x-0 z-40 h-14 bg-surface-container-lowest border-b border-outline-variant/20 flex items-center px-4">
+        <button id="openAdminSidebar" type="button" class="p-2 -ml-2 rounded-md text-on-surface hover:bg-surface-container" aria-label="Open menu">
+            <span class="material-symbols-outlined text-2xl">menu</span>
+        </button>
+        <span class="ml-2 font-manrope text-sm font-bold uppercase tracking-wider text-on-surface">@ViewData["Title"]</span>
+    </header>
 
     <partial name="_AdminASide" />
-        @RenderBody()
+    @RenderBody()
     <partial name="_AdminFooter" />
 
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        (() => {
+            const sidebar = document.getElementById('adminSidebar');
+            const overlay = document.getElementById('adminSidebarOverlay');
+            const openBtn = document.getElementById('openAdminSidebar');
+            const closeBtn = document.getElementById('closeAdminSidebar');
+
+            if (!sidebar || !overlay || !openBtn || !closeBtn) return;
+
+            const openSidebar = () => {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+                document.body.classList.add('overflow-hidden');
+            };
+
+            const closeSidebar = () => {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+                document.body.classList.remove('overflow-hidden');
+            };
+
+            openBtn.addEventListener('click', openSidebar);
+            closeBtn.addEventListener('click', closeSidebar);
+            overlay.addEventListener('click', closeSidebar);
+            window.addEventListener('resize', () => {
+                if (window.innerWidth >= 768) {
+                    overlay.classList.add('hidden');
+                    document.body.classList.remove('overflow-hidden');
+                }
+            });
+        })();
+    </script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
