@@ -44,7 +44,13 @@
     var activeNav = ViewData["ActiveNav"]?.ToString() ?? "";
 }
 
-<aside class="h-screen w-64 fixed left-0 top-0 bg-[#f2f3ee] flex flex-col py-6 z-40">
+<aside id="adminSidebar" class="h-screen w-64 fixed left-0 top-0 bg-[#f2f3ee] flex flex-col py-6 z-50 transform -translate-x-full md:translate-x-0 transition-transform duration-200 ease-out">
+
+    <div class="px-4 mb-2 flex justify-end md:hidden">
+        <button id="closeAdminSidebar" type="button" class="p-2 rounded-md text-on-surface-variant hover:bg-surface-container" aria-label="Close menu">
+            <span class="material-symbols-outlined text-xl">close</span>
+        </button>
+    </div>
 
     <div class="px-6 mb-8">
         <h1 class="font-noto-serif text-xl text-[#1a1c1a] tracking-tight font-bold">Admin Console</h1>

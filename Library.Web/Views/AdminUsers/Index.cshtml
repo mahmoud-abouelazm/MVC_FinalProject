@@ -30,7 +30,7 @@
     </style>
 
     <!-- Main Content -->
-    <main class="md:ml-64 pt-24 pb-12 px-8 min-h-screen">
+    <main class="ml-0 md:ml-64 pt-20 md:pt-24 pb-8 md:pb-12 px-4 sm:px-6 md:px-8 min-h-screen">
 
         <!-- Header Section -->
         <section class="mb-12">
@@ -39,7 +39,7 @@
         </section>
 
 
-         <section class="grid grid-cols-4 gap-6 mb-10">
+         <section class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 md:gap-6 mb-10">
 
      <div class="bg-surface-container-lowest rounded-xl p-6 border border-outline-variant/10 shadow-sm flex flex-col justify-between relative overflow-hidden group">
          <div class="relative z-10">
@@ -96,7 +96,7 @@
         </div>
     }
 
-    <form asp-controller="AdminUsers" asp-action="Index" method="get" class="flex gap-3 mb-3 items-center">
+    <form asp-controller="AdminUsers" asp-action="Index" method="get" class="flex flex-col sm:flex-row gap-3 mb-3 sm:items-center">
     
     <div class="relative flex-1 max-w-md">
         <input type="text" name="search" value="@Model.Search"
@@ -115,7 +115,7 @@
         </a>
     }
     <a asp-controller="AdminUsers" asp-action="AddNewUser"
-       class="flex items-center gap-2 px-5 py-2.5 bg-primary text-white rounded-full text-xs font-bold uppercase tracking-wider hover:bg-primary/90 transition-all shadow-sm">
+       class="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-primary text-white rounded-full text-xs font-bold uppercase tracking-wider hover:bg-primary/90 transition-all shadow-sm">
         <span class="material-symbols-outlined text-sm">person_add</span>
         Add User
     </a>
