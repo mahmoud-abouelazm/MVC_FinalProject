@@ -20,14 +20,44 @@ namespace Library.Web
                 .GetConnectionString("DefaultConnection")
                 ?? throw new InvalidOperationException("Connection string not found.");
 
+
+            //var shadyConnection = builder.Configuration
+            //    .GetConnectionString("shadyConnection")
+            //    ?? throw new InvalidOperationException("Connection string not found.");
+
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
+<<<<<<< HEAD
             // Configure Identity with custom user and role types
             builder.Services.AddIdentity<ApplicationUser, IdentityRole<int>>(options =>
             {
                 options.SignIn.RequireConfirmedAccount = true;
             })
+=======
+            builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+            builder.Services.AddScoped<IImageService, ImageService>();
+            builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            builder.Services.AddScoped<IBookRepository , BooksRepository>();
+            builder.Services.AddScoped<IAdminService, AdminService>();
+            builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
+            builder.Services.AddScoped<IAuthorService, AuthorService>();
+            builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+            builder.Services.AddScoped<ICategoryService, CategoryService>();
+            builder.Services.AddScoped<ICopyRepository, CopyRepository>();
+            builder.Services.AddScoped<ICopyService, CopyService>();
+            builder.Services.AddScoped<IRentalRepository, RentalRepository>();
+            builder.Services.AddScoped<IRentalService, RentalService>();
+
+
+
+            //builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
+            //    options.SignIn.RequireConfirmedAccount = true)
+            //    .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole<int>>()
+>>>>>>> 464bce57cac13bbea45f1cdf1f09913eed0bb692
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             // Configure application cookie security settings

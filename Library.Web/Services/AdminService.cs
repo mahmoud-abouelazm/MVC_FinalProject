@@ -19,7 +19,7 @@ namespace Library.Web.Services
 
         public async Task<PagedResult<BookRowVM>> GetAllAsync(PaginationParams param)
         {
-            return await _repo.GetAllBooksAsync(param);
+            return await _repo.GetAllBooksAsync(param, null, null);
         }
 
         public async Task CreateAsync(BookFormVM vm, IFormFile? file)

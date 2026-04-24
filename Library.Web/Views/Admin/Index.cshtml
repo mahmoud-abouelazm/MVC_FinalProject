@@ -71,7 +71,7 @@
                                     }
                                 </div>
                                 <div>
-                                    <p class="font-noto-serif text-sm font-bold text-on-surface">@book.Title</p>
+                                    <a asp-controller="AdminCopies" asp-action="Index" asp-route-bookId="@book.Id" class="font-noto-serif text-sm font-bold text-on-surface">@book.Title</a>
                                     <p class="font-manrope text-xs text-on-surface-variant italic">@book.AuthorNames</p>
                                 </div>
                             </div>

@@ -1,0 +1,280 @@
+﻿@model Library.Web.Core.ViewModel.Rentals.RentalVM
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Rentals";
+    ViewData["ActiveNav"] = "Rentals";
+
+  
+}
+
+<main class="ml-64 min-h-screen p-12">
+
+
+    <header class="mb-10">
+        <h2 class="font-noto-serif text-4xl font-bold text-on-surface tracking-tight">Rentals</h2>
+        <p class="text-on-surface-variant mt-1 font-manrope text-sm">Track and manage all member borrowing activity.</p>
+    </header>
+
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="mb-6 px-6 py-4 bg-primary-container text-on-primary-container rounded-lg font-manrope text-sm flex items-center gap-3">
+            <span class="material-symbols-outlined text-lg">check_circle</span>@TempData["Success"]
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="mb-6 px-6 py-4 bg-error-container text-on-error-container rounded-lg font-manrope text-sm flex items-center gap-3">
+            <span class="material-symbols-outlined text-lg">error</span>@TempData["Error"]
+        </div>
+    }
+
+
+    <section class="grid grid-cols-4 gap-6 mb-10">
+
+        <div class="bg-surface-container-lowest rounded-xl p-6 border border-outline-variant/10 shadow-sm flex flex-col justify-between relative overflow-hidden group">
+            <div class="relative z-10">
+                <p class="font-manrope text-[0.6875rem] uppercase tracking-[0.1em] font-bold text-on-surface-variant mb-2">Active</p>
+                <h4 class="font-noto-serif text-3xl font-bold text-on-surface">@Model.ActiveCount</h4>
+            </div>
+            <div class="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity duration-500">
+                <span class="material-symbols-outlined" style="font-size:7rem;">autorenew</span>
+            </div>
+        </div>
+
+        <div class="bg-error-container/30 rounded-xl p-6 border border-error/10 shadow-sm flex flex-col justify-between relative overflow-hidden group">
+            <div class="relative z-10">
+                <p class="font-manrope text-[0.6875rem] uppercase tracking-[0.1em] font-bold text-on-error-container mb-2">Overdue</p>
+                <h4 class="font-noto-serif text-3xl font-bold text-error">@Model.OverdueCount</h4>
+            </div>
+            <div class="absolute -right-4 -bottom-4 opacity-10 group-hover:opacity-20 transition-opacity duration-500">
+                <span class="material-symbols-outlined text-error" style="font-size:7rem;">warning</span>
+            </div>
+        </div>
+
+        <div class="bg-primary-container/10 rounded-xl p-6 border border-primary/10 shadow-sm flex flex-col justify-between relative overflow-hidden group">
+            <div class="relative z-10">
+                <p class="font-manrope text-[0.6875rem] uppercase tracking-[0.1em] font-bold text-on-primary-container mb-2">Returned</p>
+                <h4 class="font-noto-serif text-3xl font-bold text-primary">@Model.ReturnedCount</h4>
+            </div>
+            <div class="absolute -right-4 -bottom-4 opacity-10 group-hover:opacity-20 transition-opacity duration-500">
+                <span class="material-symbols-outlined text-primary" style="font-size:7rem;">task_alt</span>
+            </div>
+        </div>
+
+        <div class="bg-tertiary text-on-tertiary rounded-xl p-6 shadow-sm flex flex-col justify-between relative overflow-hidden group">
+            <div class="relative z-10">
+                <p class="font-manrope text-[0.6875rem] uppercase tracking-[0.1em] font-bold opacity-70 mb-2">Total Revenue</p>
+                <h4 class="font-noto-serif text-3xl font-bold">$@Model.TotalRevenue.ToString("0.00")</h4>
+            </div>
+            <div class="absolute -right-4 -bottom-4 opacity-10 group-hover:opacity-20 transition-opacity duration-500">
+                <span class="material-symbols-outlined" style="font-size:7rem;">payments</span>
+            </div>
+        </div>
+
+    </section>
+
+    <div class="flex flex-col gap-4 mb-6">
+
+        
+        <form asp-controller="AdminRentals" asp-action="Index" method="get" class="flex gap-3">
+            <input type="hidden" name="statusFilter" value="@Model.StatusFilter" />
+            <div class="relative flex-1 max-w-md">
+                <input type="text" name="search" value="@Model.Search"
+                       placeholder="Search member, email, book or copy…"
+                       class="w-full bg-surface-container-highest border-none rounded-full px-6 py-2.5 font-manrope text-sm outline-none focus:ring-2 focus:ring-primary/20 transition-all" />
+                <button type="submit" class="absolute right-3 top-1/2 -translate-y-1/2 text-primary">
+                    <span class="material-symbols-outlined text-lg">search</span>
+                </button>
+            </div>
+            @if (!string.IsNullOrEmpty(Model.Search))
+            {
+                <a href="?search=&statusFilter=@Model.StatusFilter&page=1"
+                       class="flex items-center gap-1 px-4 py-2 bg-surface-container rounded-full font-manrope text-xs font-semibold text-on-surface-variant hover:bg-surface-container-high transition-colors">
+                    <span class="material-symbols-outlined text-sm">close</span>Clear
+                </a>
+            }
+        </form>
+
+        <div class="flex gap-2">
+            @{
+                var tabs = new[] {
+                    ("", "All"),
+                    ("Active",   "Active"),
+                    ("Overdue",  "Overdue"),
+                    ("Returned", "Returned")
+                };
+            }
+            @foreach (var (value, label) in tabs)
+            {
+                bool active = Model.StatusFilter == value;
+                <a href="?search=@Uri.EscapeDataString(Model.Search)&statusFilter=@value&page=1"
+                       class="px-4 py-2 rounded-full font-manrope text-xs font-bold uppercase tracking-wider transition-all
+                    @(active ? "bg-primary text-on-primary shadow-sm" : "bg-surface-container text-on-surface-variant hover:bg-surface-container-high")">
+                    @label
+                </a>
+            }
+        </div>
+
+    </div>
+
+    @* ── Table ── *@
+    <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0px_12px_32px_rgba(26,28,26,0.06)] border border-outline-variant/10">
+
+        <div class="bg-tertiary text-on-tertiary px-6 py-4 flex justify-between items-center">
+            <span class="font-manrope text-[0.6875rem] uppercase tracking-[0.1em] font-bold">Rental Ledger</span>
+            <span class="text-[0.6875rem] font-manrope">@Model.TotalRentals total records</span>
+        </div>
+
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="bg-surface-container-low border-b border-outline-variant/10">
+                    <th class="px-6 py-4 font-manrope text-[0.6875rem] uppercase tracking-wider text-on-surface-variant font-bold">Member</th>
+                    <th class="px-6 py-4 font-manrope text-[0.6875rem] uppercase tracking-wider text-on-surface-variant font-bold">Books / Copies</th>
+                    <th class="px-6 py-4 font-manrope text-[0.6875rem] uppercase tracking-wider text-on-surface-variant font-bold text-center">Rented</th>
+                    <th class="px-6 py-4 font-manrope text-[0.6875rem] uppercase tracking-wider text-on-surface-variant font-bold text-center">Due</th>
+                    <th class="px-6 py-4 font-manrope text-[0.6875rem] uppercase tracking-wider text-on-surface-variant font-bold text-right">Amount</th>
+                    <th class="px-6 py-4 font-manrope text-[0.6875rem] uppercase tracking-wider text-on-surface-variant font-bold text-center">Status</th>
+                    <th class="px-6 py-4 font-manrope text-[0.6875rem] uppercase tracking-wider text-on-surface-variant font-bold text-right">Action</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-outline-variant/10">
+                @foreach (var rental in Model.Rentals)
+                {
+                    <tr class="@(rental.IsOverdue ? "bg-error-container/10" : "bg-surface") hover:bg-surface-container-low transition-colors group">
+
+                        <td class="px-6 py-4">
+                            <p class="font-manrope text-sm font-semibold text-on-surface">@rental.MemberName</p>
+                            <p class="font-manrope text-xs text-on-surface-variant">@rental.MemberEmail</p>
+                        </td>
+
+                        <td class="px-6 py-4 max-w-xs">
+                            <p class="font-noto-serif text-sm font-bold text-on-surface truncate" title="@rental.BookTitles">
+                                @rental.BookTitles
+                            </p>
+                            <p class="font-manrope text-xs text-on-surface-variant truncate" title="@rental.CopyNames">
+                                @rental.CopyNames
+                                @if (rental.CopyCount > 1)
+                                {
+                                    <span class="ml-1 px-1.5 py-0.5 bg-surface-container rounded text-[10px] font-bold">×@rental.CopyCount</span>
+                                }
+                            </p>
+                        </td>
+
+                        @* Rented At *@
+                        <td class="px-6 py-4 text-center">
+                            <p class="font-manrope text-xs text-on-surface">@rental.RentedAt.ToString("MMM d, yyyy")</p>
+                        </td>
+
+                        @* Due At *@
+                        <td class="px-6 py-4 text-center">
+                            <p class="font-manrope text-xs @(rental.IsOverdue ? "text-error font-bold" : "text-on-surface")">
+                                @rental.DueAt.ToString("MMM d, yyyy")
+                                @if (rental.IsOverdue)
+                                {
+                                    var daysLate = (int)Math.Ceiling((DateTime.UtcNow - rental.DueAt).TotalDays);
+                                    <span class="block text-[10px] text-error font-bold uppercase tracking-wide mt-0.5">
+                                        @daysLate day@(daysLate == 1 ? "" : "s") late
+                                    </span>
+                                }
+                            </p>
+                        </td>
+
+                        <td class="px-6 py-4 text-right">
+                            <p class="font-manrope text-sm font-semibold text-on-surface">
+                                @(rental.Amount > 0 ? $"${rental.Amount:0.00}" : "—")
+                            </p>
+                        </td>
+
+                        <td class="px-6 py-4 text-center">
+                            @switch (rental.Status)
+                            {
+                                case Library.Web.Core.Constants.RentalState.Active:
+                                    <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-primary-container/10 text-on-primary-container text-[10px] font-bold uppercase tracking-wider rounded-full">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-primary-fixed-dim inline-block"></span>Active
+                                    </span>
+                                    break;
+                                case Library.Web.Core.Constants.RentalState.Overdue:
+                                    <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-error-container text-on-error-container text-[10px] font-bold uppercase tracking-wider rounded-full">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-error inline-block"></span>Overdue
+                                    </span>
+                                    break;
+                                case Library.Web.Core.Constants.RentalState.Returned:
+                                    <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-primary-container/10 text-on-primary-container text-[10px] font-bold uppercase tracking-wider rounded-full">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-primary-fixed-dim inline-block"></span>Returned
+                                    </span>
+                                    break;
+                            }
+                        </td>
+
+                        <td class="px-6 py-4 text-right">
+                            @if (rental.Status != Library.Web.Core.Constants.RentalState.Returned)
+                            {
+                                <a asp-controller="AdminRentals" asp-action="ConfirmReturn"
+                                       asp-route-id="@rental.Id"
+                                       class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary text-on-primary rounded-md font-manrope text-xs font-bold uppercase tracking-wider hover:bg-primary-container transition-all shadow-sm">
+                                    <span class="material-symbols-outlined text-sm">assignment_return</span>
+                                    Return
+                                </a>
+                            }
+                            else
+                            {
+                                <span class="font-manrope text-xs text-on-surface-variant">
+                                    @rental.ReturnedAt?.ToString("MMM d, yyyy")
+                                </span>
+                            }
+                        </td>
+
+                    </tr>
+                }
+
+                @if (!Model.Rentals.Any())
+                {
+                    <tr>
+                        <td colspan="7" class="px-6 py-16 text-center font-manrope text-sm text-on-surface-variant">
+                            @if (!string.IsNullOrEmpty(Model.Search) || !string.IsNullOrEmpty(Model.StatusFilter))
+                            {
+                                @("No rentals match your current filters.")
+                            }
+                            else
+                            {
+                                @("No rental records yet.")
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="px-6 py-4 flex items-center justify-between bg-surface-container-low/50">
+            <p class="text-xs font-manrope text-on-surface-variant">
+                @if (Model.TotalRentals > 0)
+                {
+                    @($"Showing {(Model.CurrentPage - 1) * Model.PageSize + 1}–{Math.Min(Model.CurrentPage * Model.PageSize, Model.TotalRentals)} of {Model.TotalRentals} records")
+                }
+                else
+                {
+
+                    @("No records")
+                }
+            </p>
+            <div class="flex gap-2">
+                @if (Model.CurrentPage > 1)
+                {
+                    <a href="?search=@Uri.EscapeDataString(Model.Search)&statusFilter=@Model.StatusFilter&page=@(Model.CurrentPage - 1)"
+                           class="p-2 border border-outline-variant/20 rounded-md hover:bg-white transition-colors">
+                        <span class="material-symbols-outlined text-sm">chevron_left</span>
+                    </a>
+                }
+                @if (Model.CurrentPage < Model.TotalPages)
+                {
+                    <a href="?search=@Uri.EscapeDataString(Model.Search)&statusFilter=@Model.StatusFilter&page=@(Model.CurrentPage + 1)"
+                           class="p-2 border border-outline-variant/20 rounded-md hover:bg-white transition-colors">
+                        <span class="material-symbols-outlined text-sm">chevron_right</span>
+                    </a>
+                }
+            </div>
+        </div>
+
+    </div>
+</main>
