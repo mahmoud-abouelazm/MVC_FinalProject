@@ -11,22 +11,22 @@ namespace Library.Web.Repository.Repositories
     {
         private readonly ApplicationDbContext _context = context;
 
-       public async Task<IEnumerable<CopyRowVM>> GetAllRowsAsync(int page, int pageSize, string search)
-            => await ApplySearch(BuildQuery(), search)
-                .OrderBy(c => c.Book.Title).ThenBy(c => c.Name)
-                .Skip((page - 1) * pageSize).Take(pageSize)
-                .Select(c => new CopyRowVM
-                {
-                    Id = c.Id,
-                    Name = c.Name,
-                    BookTitle = c.Book.Title,
-                    BookId = c.BookId,
-                    AllowToRental = c.AllowToRental,
-                    HasRentals = c.CopyRentals.Any(),
-                    RentalCount = c.CopyRentals.Count
-                }).ToListAsync();
+        public async Task<IEnumerable<CopyRowVM>> GetAllRowsAsync(int page, int pageSize, string search)
+             => await ApplySearch(BuildQuery(), search)
+                 .OrderBy(c => c.Book.Title).ThenBy(c => c.Name)
+                 .Skip((page - 1) * pageSize).Take(pageSize)
+                 .Select(c => new CopyRowVM
+                 {
+                     Id = c.Id,
+                     Name = c.Name,
+                     BookTitle = c.Book.Title,
+                     BookId = c.BookId,
+                     AllowToRental = c.AllowToRental,
+                     HasRentals = c.CopyRentals.Any(),
+                     RentalCount = c.CopyRentals.Count
+                 }).ToListAsync();
 
-        
+
 
         public async Task<IEnumerable<CopyRowVM>> GetRowsByBookIdAsync(
             int bookId, int page, int pageSize, string search)
@@ -81,6 +81,15 @@ namespace Library.Web.Repository.Repositories
             return query.Where(c =>
                 c.Name.ToLower().Contains(q) ||
                 c.Book.Title.ToLower().Contains(q));
+        }
+
+        public async Task<bool> IsNameAvaliableWithThisBookAsync(int bookId, string name, int? copyId)
+        {
+            var query = _context.Copies.Where(c => c.BookId == bookId && c.Name.ToLower().Trim() == name.Trim().ToLower());
+            if (copyId.HasValue)
+                query = query.Where(c => c.Id != copyId.Value);
+            return !await query.AnyAsync();
+
         }
     }
 }

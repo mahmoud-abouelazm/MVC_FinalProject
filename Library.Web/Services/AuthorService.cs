@@ -9,7 +9,7 @@ namespace Library.Web.Services
     {
         private readonly IAuthorRepository _repo = repo;
 
-        public async Task<PagedResult<AuthorRowVM>> GetAllAsync(PaginationParams param , string? sortBy = "")
+        public async Task<PagedResult<AuthorRowVM>> GetAllAsync(PaginationParams param, string? sortBy = "")
         {
             return await _repo.GetAllAsync(param, sortBy);
         }
@@ -22,7 +22,7 @@ namespace Library.Web.Services
                 Bio = vm.Bio
             };
 
-            await _repo.AddAsync(author); 
+            await _repo.AddAsync(author);
         }
 
         public async Task<AuthorFormVM?> GetVmForEditAsync(int id)
@@ -59,9 +59,14 @@ namespace Library.Web.Services
 
             if (author == null)
                 throw new Exception("Not found");
-           
-            await _repo.DeleteAsync(author); 
-                                            
+
+            await _repo.DeleteAsync(author);
+
+        }
+
+        public async Task<bool> IsNameAvailableAsync(int id, string name)
+        {
+            return await _repo.IsNameAvailableAsync( id,name);
         }
     }
 }

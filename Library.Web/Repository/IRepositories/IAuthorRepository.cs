@@ -9,5 +9,6 @@ namespace Library.Web.Repository.IRepositories
         Task<PagedResult<AuthorRowVM>> GetAllAsync(PaginationParams param, string? sortBy="");
         Task<Author?> GetByIdAsync(int id);
         Task DeleteAsync(Author? author);
+        Task<bool> IsNameAvailableAsync(int id, string name);
     }
 }

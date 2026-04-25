@@ -26,7 +26,7 @@ namespace Library.Web.Services
                 Search = search,
                 ActiveUsers = await _userRepository.CountOfActiveUsersAsync(),
                 NotActiveUsers = await _userRepository.CountOfNotActiveUsersAsync()
-                
+
             };
         }
 
@@ -135,6 +135,11 @@ namespace Library.Web.Services
             };
 
             return vm;
+        }
+
+        public async Task<bool> CheckIfEmailExistsAsync(string email)
+        {
+            return await _userRepository.CheckIfEmailExistsAsync(email);
         }
     }
 }

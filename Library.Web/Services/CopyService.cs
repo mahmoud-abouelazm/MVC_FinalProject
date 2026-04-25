@@ -150,6 +150,10 @@ namespace Library.Web.Services
                 .Select(b => new SelectListItem(b.Title, b.Id.ToString()))
                 .ToListAsync();
 
-        
+        public async Task<bool> IsNameAvaliableWithThisBookAsync(int bookId, string name, int? copyId)
+        {
+            return await repo.IsNameAvaliableWithThisBookAsync(bookId, name, copyId);
+        }
+
     }
 }

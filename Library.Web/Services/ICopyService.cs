@@ -12,6 +12,7 @@ namespace Library.Web.Services
         Task<ServiceResult> UpdateAsync(CopyFormVM vm);
         Task<ServiceResult> DeleteAsync(int id);
         Task<ServiceResult> ToggleRentalAsync(int id);
+        Task<bool> IsNameAvaliableWithThisBookAsync(int bookId, string name, int? copyId);
     }
     public record ServiceResult(bool Success, string Message);
 

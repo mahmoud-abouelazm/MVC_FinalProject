@@ -97,5 +97,16 @@ namespace Library.Web.Controllers
 
             return RedirectToAction(nameof(Index), new { bookId });
         }
+
+        public async Task<IActionResult> IsNameAvaliableWithThisBook(int bookId, string name, int? copyId)
+        {
+            {
+                var isAvailable = await _copyService.IsNameAvaliableWithThisBookAsync(bookId, name, copyId);
+                return isAvailable ?
+                    Json(isAvailable) :
+                    Json($"A copy with the name '{name}' already exists for this book.")
+                    ;
+            }
+        }
     }
 }

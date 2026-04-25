@@ -29,21 +29,25 @@
             <div>
                 <label class="field-label">Phone</label>
                 <input asp-for="PhoneNumber" class="field-input" />
+                <span asp-validation-for="PhoneNumber" class="field-validation-error"></span>
             </div>
 
             <div>
                 <label class="field-label">Password</label>
                 <input asp-for="Password" type="password" class="field-input" />
+                <span asp-validation-for="Password" class="field-validation-error"></span>
             </div>
 
             <div>
                 <label class="field-label">Confirm Password</label>
                 <input asp-for="ConfirmPassword" type="password" class="field-input" />
+                <span asp-validation-for="ConfirmPassword" class="field-validation-error"></span>
             </div>
 
             <div>
                 <label class="field-label">Role</label>
                 <select asp-for="RoleId" asp-items="Model.Roles" class="field-input"></select>
+                <span asp-validation-for="RoleId" class="field-validation-error"></span>
             </div>
 
             <div class="flex gap-3 pt-4">
@@ -56,115 +60,8 @@
     </div>
 
 </main>
-@* 
-<main class="ml-64 min-h-screen p-12">
-
-<header class="mb-10">
-    <a asp-controller="AdminUsers" asp-action="Index"
-           
-           class="inline-flex items-center gap-1 font-manrope text-xs text-on-surface-variant hover:text-primary transition-colors mb-4 uppercase tracking-wider font-semibold">
-        <span class="material-symbols-outlined text-base">arrow_back</span>
-        @(!string.IsNullOrEmpty(Model.FullName) ? $"Back to users of '{Model.FullName}'" : "Back to Users")
-    </a>
-    <h2 class="font-noto-serif text-4xl font-bold text-on-surface tracking-tight">
-        @(isEdit ? "Edit User" : "Add New User")
-    </h2>
-    <p class="text-on-surface-variant mt-2 font-manrope text-sm">
-        @(isEdit
-            ? "Update this user's details and role."
-            : "Register a new user and assign a role.")
-    </p>
-</header>
-
-<div class="max-w-xl">
-    <form asp-controller="AdminUsers"
-              asp-action="@(isEdit ? "EditRoleOfUser" : "AddNewUser")"
-          method="post">
-        @Html.AntiForgeryToken()
-        <input type="hidden" asp-for="Id" />
-
-        <div class="form-card p-8 space-y-7">
-
-            @if (!ViewData.ModelState.IsValid && ViewData.ModelState.ContainsKey(""))
-            {
-                <div class="px-4 py-3 bg-error-container text-on-error-container rounded-lg font-manrope text-sm flex items-center gap-2">
-                    <span class="material-symbols-outlined text-base">error</span>
-                    @ViewData.ModelState[""]!.Errors.First().ErrorMessage
-                </div>
-            }
-
-            <div>
-                <label class="field-label" asp-for="Roles">Role</label>
-                <select class="field-input" id="RoleId" asp-for="Roles" asp-items="Model.Roles">
-                    <option value="">— Select a Role —</option>
-                </select>
-                <span class="field-validation-error" asp-validation-for="Roles"></span>
-            </div>
-
-            <div>
-                <label class="field-label" asp-for="FullName">Full Name</label>
-                <input class="field-input" id="FullName" asp-for="FullName"
-                       placeholder="e.g. John Doe" />
-                <span class="field-validation-error" asp-validation-for="FullName"></span>
-                <p class="font-manrope text-[.7rem] text-on-surface-variant mt-1.5">
-                    Enter the full name of the user.
-                </p>
-            </div>
-            
-                <div>
-                    <label class="field-label" asp-for="Email">Email</label>
-                    <input class="field-input" id="Email" asp-for="Email"
-                           placeholder="e.g. john.doe@example.com" />
-                    <span class="field-validation-error" asp-validation-for="Email"></span>
-                    <p class="font-manrope text-[.7rem] text-on-surface-variant mt-1.5">
-                        Enter the email address of the user.
-                    </p>
-                </div>
-            
-                <div>
-                    <label class="field-label" asp-for="PhoneNumber">PhoneNumber</label>
-                    <input class="field-input" id="PhoneNumber" asp-for="PhoneNumber"
-                           placeholder="e.g. 01096710329" />
-                    <span class="field-validation-error" asp-validation-for="PhoneNumber"></span>
-                    <p class="font-manrope text-[.7rem] text-on-surface-variant mt-1.5">
-                        Enter the phone number of the user.
-                    </p>
-                </div>
-                <div>
-                    <label class="field-label" asp-for="Password">Password</label>
-                    <input class="field-input" id="Password" asp-for="Password"
-                           placeholder="e.g. ********" />
-                    <span class="field-validation-error" asp-validation-for="Password"></span>
-                    <p class="font-manrope text-[.7rem] text-on-surface-variant mt-1.5">
-                        Enter the password of the user.
-                    </p>
-                </div>
-
-                <div>
-                    <label class="field-label" asp-for="ConfirmPassword">Confirm Password</label>
-                    <input class="field-input" id="ConfirmPassword" asp-for="ConfirmPassword"
-                           placeholder="e.g. ********" />
-                    <span class="field-validation-error" asp-validation-for="ConfirmPassword"></span>
-                    <p class="font-manrope text-[.7rem] text-on-surface-variant mt-1.5">
-                        Confirm the password of the user.
-                    </p>
-                </div>
 
 
-
-        </div>
-
-        <div class="flex items-center gap-4 mt-6">
-            <button type="submit" class="btn-primary">
-                @(isEdit ? "Save Changes" : "Add User")
-            </button>
-            <a asp-controller="AdminUsers" asp-action="Index"
-               class="btn-secondary">Cancel</a>
-        </div>
-
-    </form>
-</div>
-</main> *@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

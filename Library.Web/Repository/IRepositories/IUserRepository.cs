@@ -20,6 +20,7 @@ namespace Library.Web.Repository.IRepositories
         Task AddNewUserAsync(CreateUserVM user, string password, string roleName);
         Task ChangeUserRoleAsync(int userId, string newRoleName);
         Task<IEnumerable<IdentityRole<int>>> GetAllRolesAsync();
+        Task<bool> CheckIfEmailExistsAsync(string email);
 
     }
 }

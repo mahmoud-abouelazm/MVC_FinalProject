@@ -1,6 +1,7 @@
 ﻿using Library.Web.Core.ViewModel.Users;
 using Library.Web.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -79,19 +80,7 @@ namespace Library.Web.Controllers
             var user = await _userService.GetUserDetails(userId);
             if (user is null) return NotFound();
 
-            //var roles = await _userService.GetAllRolesAsync();
-            //var vm = new EditUserRoleVM
-            //{
-            //    UserId = userId,
-            //    UserName = user.Name,
-            //    CurrentRole = user.Role,
-            //    Roles = roles.Select(r => new SelectListItem
-            //    {
-            //        Text = r.Name,
-            //        Value = r.Name,
-            //        Selected = user.Role == r.Name
-            //    }).ToList()
-            //};
+           
 
             var vm = await _userService.GetEditUserRoleVMAsync(userId);
             if (vm is null) return NotFound();
@@ -119,6 +108,15 @@ namespace Library.Web.Controllers
 
             TempData["Success"] = result.Message;
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> CheckEmail(string email)
+        {
+            var existing = await _userService.CheckIfEmailExistsAsync(email);
+            return existing is false
+                ? Json(true)
+                : Json("This email is already registered");
         }
     }
 }

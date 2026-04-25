@@ -76,6 +76,15 @@ namespace Library.Web.Controllers
 
             return RedirectToAction(nameof(Index));
         }
-      
+
+
+        [HttpGet]
+        public async Task<IActionResult> IsNameAvailable(int id, string name)
+        {
+            var isAvailable = await _authorService.IsNameAvailableAsync(id, name);
+            return Json(isAvailable);
+
+        }
+
     }
 }

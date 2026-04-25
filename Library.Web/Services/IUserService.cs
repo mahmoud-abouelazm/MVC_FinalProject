@@ -19,5 +19,6 @@ namespace Library.Web.Services
         Task<IEnumerable<IdentityRole<int>>> GetAllRolesAsync();
 
         Task<EditUserRoleVM> GetEditUserRoleVMAsync(int userId);
+        Task<bool> CheckIfEmailExistsAsync(string email);
     }
 }
