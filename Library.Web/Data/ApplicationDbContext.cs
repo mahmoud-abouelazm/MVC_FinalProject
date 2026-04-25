@@ -18,6 +18,10 @@ namespace Library.Web.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            
+            builder.Entity<Book>()
+                .HasQueryFilter(b => !b.IsDeleted);
+
 
             builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
 
