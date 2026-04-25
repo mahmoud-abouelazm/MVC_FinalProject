@@ -11,6 +11,7 @@ namespace Library.Web.Services
         Task DeleteAsync(int id);
         Task<BookFormVM> BuildFormAsync(BookFormVM vm);
         Task<BookFormVM> GetForEditAsync(int id);
+        Task<bool> IsTitleAvailableAsync(string title, int id);
 
     }
 }

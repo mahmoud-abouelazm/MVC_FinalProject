@@ -13,5 +13,7 @@ namespace Library.Web.Repository.IRepositories
         Task<PagedResult<BookRowVM>> GetAllBooksAsync(PaginationParams param, int? categoryId, string? search);
         Task<Book?> GetWithAuthorsAsync(int id);
         Task<List<Book>> GetNewBooks();
+
+        Task<bool> IsTitleAvailableAsync(string title, int id);
     }
 }

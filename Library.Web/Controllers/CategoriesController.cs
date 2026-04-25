@@ -95,5 +95,15 @@ namespace Library.Web.Controllers
             TempData["Success"] = $"Category '{cat.Name}' deleted.";
             return RedirectToAction(nameof(Index));
         }
+
+        [HttpGet]
+        public async Task<IActionResult> IsNameAvailable(int id , string name ) 
+        {
+           bool isAvailable = !_context.Categories.Any(c => c.Name.ToLower().Trim() == name.ToLower().Trim() && c.Id != id);
+           return isAvailable ?
+                Json(isAvailable) :
+                Json("Category name is already taken.")
+                ;
+        }
     }
 }

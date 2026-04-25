@@ -35,7 +35,7 @@ namespace Library.Web.Services
                 Img = img
             };
 
-            object value = await _repo.AddAsync(book); 
+            object value = await _repo.AddAsync(book);
 
             var authors = vm.AuthorIds.Select(aid => new BookAuthor
             {
@@ -47,7 +47,7 @@ namespace Library.Web.Services
             await _context.SaveChangesAsync();
         }
 
-       public async Task<BookFormVM> GetForEditAsync(int id)
+        public async Task<BookFormVM> GetForEditAsync(int id)
         {
             var book = await _repo.GetWithAuthorsAsync(id);
             if (book == null) throw new Exception("Book not found");
@@ -103,7 +103,7 @@ namespace Library.Web.Services
 
             book.IsDeleted = true;
 
-            await _repo.UpdateAsync(book); 
+            await _repo.UpdateAsync(book);
         }
 
         public async Task<BookFormVM> BuildFormAsync(BookFormVM vm)
@@ -119,6 +119,11 @@ namespace Library.Web.Services
                 .ToListAsync();
 
             return vm;
+        }
+
+        public async Task<bool> IsTitleAvailableAsync(string title , int id)
+        {
+            return await _repo.IsTitleAvailableAsync(title , id);
         }
     }
 }

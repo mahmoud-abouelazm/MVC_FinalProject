@@ -14,40 +14,6 @@ namespace Library.Web.Repository.Repositories
                 private const int PageSize = 10;
         private readonly ApplicationDbContext _context = context;
 
-        //public async Task<PagedResult<BookRowVM>> GetAllBooksAsync(PaginationParams param)
-        //{
-        //    var query = _context.Books
-        //    .Include(b => b.Category)
-        //    .Include(b => b.BookAuthors)
-        //        .ThenInclude(ba => ba.Author)
-        //    .AsQueryable();
-
-        //    int total = await query.CountAsync();
-
-        //    var data = await query
-        //        .OrderBy(b => b.Title)
-        //        .Skip((param.Page - 1) * param.PageSize)
-        //        .Take(param.PageSize)
-        //        .Select(b => new BookRowVM
-        //        {
-        //            Id = b.Id,
-        //            Title = b.Title,
-        //            Img = b.Img,
-        //            Price = b.Price,
-        //            IsDeleted = b.IsDeleted,
-        //            CategoryName = b.Category.Name,
-        //            AuthorNames = string.Join(", ", b.BookAuthors.Select(ba => ba.Author.Name))
-        //        })
-        //        .ToListAsync();
-
-        //    return new PagedResult<BookRowVM>
-        //    {
-        //        Data = data,
-        //        TotalCount = total
-        //    };
-
-        //}
-
 
 
         public BookDetailsVM GetBookDetails(int id)
@@ -143,12 +109,7 @@ namespace Library.Web.Repository.Repositories
                 .FirstOrDefaultAsync(b => b.Id == id);
         }
 
-        //public async Task<Book?> GetAllWithAuthorsAsync()
-        //{
-
-
-        //}
-
+     
 
         public async Task<List<Book>> GetNewBooks()
         {
@@ -162,7 +123,10 @@ namespace Library.Web.Repository.Repositories
 
 
 
-
+        public async Task<bool> IsTitleAvailableAsync(string title , int id)
+        {
+            return !await _context.Books.AnyAsync(b => b.Id != id && b.Title.ToLower().Trim() == title.ToLower().Trim());
+        }
 
 
 

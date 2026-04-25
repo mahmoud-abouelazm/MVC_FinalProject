@@ -155,6 +155,11 @@ namespace Library.Web.Repository.Repositories
             await _userManager.AddToRoleAsync(user, newRoleName);
         }
 
+        public async Task<bool> CheckIfEmailExistsAsync(string email)
+        {
+            return await _userManager.FindByEmailAsync(email) != null;
+        }
+
 
     }
 }

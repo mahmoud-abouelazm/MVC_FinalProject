@@ -13,5 +13,6 @@ namespace Library.Web.Repository.IRepositories
         Task<bool> HasRentalHistoryAsync(int copyId);
 
         Task DeleteAsync(Copy copy);
+        Task<bool> IsNameAvaliableWithThisBookAsync(int bookId, string name, int? copyId);
     }
 }

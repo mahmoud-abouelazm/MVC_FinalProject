@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 
 namespace Library.Web.Core.ViewModel.Book
@@ -9,6 +10,7 @@ namespace Library.Web.Core.ViewModel.Book
 
         [Required(ErrorMessage = "Title is required")]
         [StringLength(200)]
+        [Remote(action: "IsTitleAvailable", controller: "Admin", ErrorMessage = "Title is already taken")]
         public string Title { get; set; } = null!;
 
         public string? Description { get; set; }

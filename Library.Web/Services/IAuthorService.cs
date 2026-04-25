@@ -10,5 +10,6 @@ namespace Library.Web.Services
         Task<AuthorFormVM?> GetVmForEditAsync(int id); 
         Task UpdateAsync(AuthorFormVM vm);
         Task DeleteAsync(int id);
+        Task<bool> IsNameAvailableAsync(int id, string name);
     }
 }

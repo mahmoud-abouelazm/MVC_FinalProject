@@ -81,4 +81,9 @@ namespace Library.Web.Repository.Repositories;
     {
         return await _context.Authors.FindAsync(id);
     }
+
+    public async Task<bool> IsNameAvailableAsync(int id, string name)
+    {
+        return !await _context.Authors.AnyAsync(a => a.Name.ToLower().Trim() == name.ToLower().Trim() && a.Id != id);
+    }
 }

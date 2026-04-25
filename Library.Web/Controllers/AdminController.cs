@@ -13,8 +13,8 @@ using System.Text.Json;
 
 namespace Library.Web.Controllers
 {
- [Authorize(Roles = "Admin")]
-    public class AdminController(IAdminService adminService ) : Controller
+    [Authorize(Roles = "Admin")]
+    public class AdminController(IAdminService adminService) : Controller
     {
         private readonly IAdminService _adminService = adminService;
 
@@ -53,7 +53,7 @@ namespace Library.Web.Controllers
 
         public async Task<IActionResult> Edit(int id)
         {
-            var vm =await _adminService.GetForEditAsync(id);
+            var vm = await _adminService.GetForEditAsync(id);
             return View("Form", await _adminService.BuildFormAsync(vm));
         }
 
@@ -75,5 +75,13 @@ namespace Library.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpGet]
+        public async Task<IActionResult> IsTitleAvailable(string title , int id)
+        {
+            bool isAvailable = await _adminService.IsTitleAvailableAsync(title , id);
+            return isAvailable
+               ? Json(true)
+               : Json("This title is already registered");
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 
 namespace Library.Web.Core.ViewModel.Copies
@@ -10,6 +11,7 @@ namespace Library.Web.Core.ViewModel.Copies
         [Required(ErrorMessage = "Copy name is required")]
         [StringLength(200, ErrorMessage = "Name cannot exceed 200 characters")]
         [Display(Name = "Copy Name")]
+        [Remote(action: "IsNameAvaliableWithThisBook", controller: "AdminCopies", AdditionalFields = "Id,BookId", ErrorMessage = "Name is already taken")]
         public string Name { get; set; } = null!;
 
         [Required(ErrorMessage = "Please select a book")]
