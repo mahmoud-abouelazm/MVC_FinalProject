@@ -1,5 +1,6 @@
 using Library.Web.Core.Models;
 using Library.Web.Data;
+using Library.Web.Middleware;
 using Library.Web.Repository.IRepositories;
 using Library.Web.Repository.Repositories;
 using Library.Web.Services;
@@ -52,6 +53,7 @@ namespace Library.Web
             builder.Services.AddScoped<IRentalRepository, RentalRepository>();
             builder.Services.AddScoped<IRentalService, RentalService>();
             builder.Services.AddSingleton<IEmailSender, EmailSender>();
+            builder.Services.AddScoped<IEmailTemplateService, EmailTemplateService>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IUserService, UserService>();    
 
@@ -107,15 +109,18 @@ namespace Library.Web
 
 			var app = builder.Build();
 
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseMigrationsEndPoint();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-                app.UseHsts();
-            }
+			// Add global exception handling middleware
+			app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
+
+			if (app.Environment.IsDevelopment())
+			{
+				app.UseMigrationsEndPoint();
+			}
+			else
+			{
+				app.UseExceptionHandler("/Home/Error");
+				app.UseHsts();
+			}
 
             app.UseHttpsRedirection();
             app.UseRouting();

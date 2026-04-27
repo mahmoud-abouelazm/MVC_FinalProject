@@ -83,7 +83,16 @@ namespace Library.Web.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var errorViewModel = new ErrorViewModel
+            {
+                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier,
+                StatusCode = HttpContext.Response.StatusCode,
+                StatusMessage = (string?)HttpContext.Items["StatusMessage"],
+                ExceptionMessage = (string?)HttpContext.Items["ExceptionMessage"],
+                ExceptionStackTrace = (string?)HttpContext.Items["ExceptionStackTrace"]
+            };
+
+            return View(errorViewModel);
         }
     }
 }

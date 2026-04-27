@@ -9,6 +9,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 using Library.Web.Core.Models;
@@ -116,6 +117,13 @@ namespace Library.Web.Areas.Identity.Pages.Account
             if (user != null)
             {
                 await _signInManager.SignInAsync(user, isPersistent: false);
+
+                // Refresh the user principal to ensure authentication is established before redirect
+                await HttpContext.SignInAsync(
+                    IdentityConstants.ApplicationScheme,
+                    await _signInManager.CreateUserPrincipalAsync(user)
+                );
+
                 return LocalRedirect(returnUrl);
             }
             var email = info.Principal.FindFirstValue(ClaimTypes.Email);
@@ -155,22 +163,28 @@ namespace Library.Web.Areas.Identity.Pages.Account
                 return RedirectToPage("./Login");
             }
 			await _userManager.AddToRoleAsync(newUser, "User");
-			string subject = $"Welcome {name}🎉";
+			string subject = $"Welcome {name}";
 			string htmlMessage = $"<h3>Your account has been created successfully</h3>";
 			await _emailSender.SendEmailAsync(email, subject, htmlMessage);
 
 
 			var addLoginResult = await _userManager.AddLoginAsync(newUser, info);
 
-            if (!addLoginResult.Succeeded)
-            {
-                return RedirectToPage("./Login");
-            }
+			if (!addLoginResult.Succeeded)
+			{
+				return RedirectToPage("./Login");
+			}
 
-            // 🔐 login
-            await _signInManager.SignInAsync(newUser, isPersistent: false);
-            
-            return LocalRedirect(returnUrl);
+			// login
+			await _signInManager.SignInAsync(newUser, isPersistent: false);
+
+			// Refresh the user principal to ensure authentication is established before redirect
+			await HttpContext.SignInAsync(
+				IdentityConstants.ApplicationScheme,
+				await _signInManager.CreateUserPrincipalAsync(newUser)
+			);
+
+			return LocalRedirect(returnUrl);
 
         }
        

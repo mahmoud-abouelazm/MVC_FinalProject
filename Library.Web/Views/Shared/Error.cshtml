@@ -1,70 +1,115 @@
 ﻿@model ErrorViewModel
 @{
     ViewData["Title"] = "Error";
+    var isDevelopment = Context.RequestServices.GetService<IWebHostEnvironment>()?.IsDevelopment() ?? false;
+    var statusCode = Model.StatusCode ?? 500;
+    var statusMessage = Model.StatusMessage ?? "Internal Server Error";
 }
 
-<main class="min-h-screen flex items-center justify-center px-4 pt-32 pb-20">
-    <div class="w-full max-w-2xl">
+<main class="min-h-screen flex items-center justify-center px-4 pt-32 pb-20 bg-gradient-to-br from-surface via-surface-container-low to-surface-container-lowest">
+    <div class="w-full max-w-3xl">
         <!-- Error Icon & Header -->
         <div class="text-center mb-12 space-y-6">
             <div class="flex justify-center mb-6">
                 <div class="relative">
-                    <div class="absolute inset-0 blur-[80px] opacity-20 bg-error rounded-full scale-75"></div>
-                    <span class="material-symbols-outlined text-9xl text-error relative">error</span>
+                    <div class="absolute inset-0 blur-[80px] opacity-30 bg-error rounded-full scale-75 animate-pulse"></div>
+                    <span class="material-symbols-outlined text-9xl md:text-[150px] text-error relative font-bold">error</span>
                 </div>
             </div>
-            
+
             <div class="space-y-3">
-                <h1 class="font-headline text-6xl md:text-7xl font-bold text-error">Oops!</h1>
-                <h2 class="font-headline text-2xl md:text-3xl text-on-surface">An error occurred while processing your request</h2>
+                <div class="flex items-center justify-center gap-3">
+                    <h1 class="font-headline text-7xl md:text-8xl font-bold text-error">@statusCode</h1>
+                </div>
+                <h1 class="font-headline text-4xl md:text-5xl font-bold text-on-surface">Oops!</h1>
+                <h2 class="font-headline text-xl md:text-2xl text-on-surface-variant">@statusMessage</h2>
             </div>
         </div>
 
         <!-- Error Details Card -->
-        <div class="bg-surface-container-lowest p-8 md:p-12 rounded-xl border border-outline-variant/15 shadow-sm space-y-8 mb-8">
-            
+        <div class="bg-surface-container-lowest p-8 md:p-12 rounded-2xl border border-outline-variant/20 shadow-lg space-y-8 mb-8 backdrop-blur-sm">
+
             <!-- Error Message -->
             <div class="space-y-3">
                 <div class="flex items-center gap-3">
                     <span class="material-symbols-outlined text-error text-xl">warning</span>
                     <h3 class="font-headline text-xl font-bold text-on-surface">What Happened?</h3>
                 </div>
-                <p class="font-body text-on-surface-variant leading-relaxed text-lg">
+                <p class="font-body text-on-surface-variant leading-relaxed text-base md:text-lg">
                     Something unexpected occurred while we were processing your request. Our team has been notified of this issue and we're working to resolve it as quickly as possible.
                 </p>
             </div>
+
+            <!-- Status Code Info -->
+            <div class="space-y-3 p-6 bg-surface-container-low rounded-lg border-l-4 border-tertiary">
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-tertiary">info</span>
+                    <span class="font-label text-sm font-bold uppercase tracking-widest text-on-surface-variant">Status Code</span>
+                </div>
+                <p class="font-body text-lg text-on-surface font-semibold">
+                    @statusCode - @statusMessage
+                </p>
+            </div>
+
+            <!-- Exception Details (Development Only) -->
+            @if (isDevelopment && Model.ShowException)
+            {
+                <div class="space-y-3 p-6 bg-error-container rounded-lg border-l-4 border-error">
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-error">bug_report</span>
+                        <span class="font-label text-sm font-bold uppercase tracking-widest text-on-error-container">Exception Details (Development Only)</span>
+                    </div>
+                    <div class="space-y-3">
+                        <div>
+                            <p class="font-label text-xs font-bold text-on-error-container opacity-75">Exception Message:</p>
+                            <code class="block font-mono text-sm text-on-error-container break-words bg-surface px-4 py-3 rounded-lg border border-on-error-container/10 mt-2">
+                                @Model.ExceptionMessage
+                            </code>
+                        </div>
+
+                        @if (Model.ShowStackTrace)
+                        {
+                            <details class="pt-3 border-t border-on-error-container/20">
+                                <summary class="cursor-pointer font-label text-xs font-bold text-on-error-container opacity-75 hover:opacity-100 transition-opacity">
+                                    <span class="material-symbols-outlined text-sm align-middle">expand_more</span> Stack Trace
+                                </summary>
+                                <code class="block font-mono text-xs text-on-error-container break-words bg-surface px-4 py-3 rounded-lg border border-on-error-container/10 mt-3 max-h-64 overflow-auto">
+                                    @Model.ExceptionStackTrace
+                                </code>
+                            </details>
+                        }
+                    </div>
+                </div>
+            }
 
             <!-- Request ID (if available) -->
             @if (Model.ShowRequestId)
             {
                 <div class="space-y-3 p-6 bg-surface-container-low rounded-lg border-l-4 border-secondary">
                     <div class="flex items-center gap-2">
-                        <span class="material-symbols-outlined text-secondary">info</span>
+                        <span class="material-symbols-outlined text-secondary">receipt_long</span>
                         <span class="font-label text-sm font-bold uppercase tracking-widest text-on-surface-variant">Request ID</span>
                     </div>
-                    <code class="block font-mono text-sm text-on-surface break-all bg-surface-container-lowest px-4 py-3 rounded-lg border border-outline-variant/15">
+                    <code class="block font-mono text-sm text-on-surface break-all bg-surface-container-lowest px-4 py-3 rounded-lg border border-outline-variant/15 select-all cursor-copy hover:bg-surface-container-low transition-colors">
                         @Model.RequestId
                     </code>
                     <p class="font-body text-xs text-on-surface-variant">
-                        Please provide this ID when contacting support to help us investigate this issue faster.
+                        Save this ID for your records. It will help our support team investigate this issue faster.
                     </p>
                 </div>
             }
-
-            <!-- Development Mode Info -->
-          
         </div>
 
         <!-- Action Buttons -->
-        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <div class="flex flex-col sm:flex-row gap-4 justify-center mb-8">
             <a href="javascript:history.back()" 
-               class="flex items-center justify-center gap-2 px-6 py-4 rounded-lg font-body font-bold text-lg border-2 border-outline-variant/30 text-on-surface hover:bg-surface-container-low transition-all duration-300 active:scale-95">
+               class="flex items-center justify-center gap-2 px-8 py-4 rounded-lg font-body font-bold text-lg border-2 border-outline-variant/30 text-on-surface hover:bg-surface-container-low hover:border-outline-variant/50 transition-all duration-300 active:scale-95 hover:shadow-md">
                 <span class="material-symbols-outlined">arrow_back</span>
                 <span>Go Back</span>
             </a>
-            
+
             <a href="/" 
-               class="flex items-center justify-center gap-2 px-6 py-4 rounded-lg font-body font-bold text-lg bg-primary text-on-primary hover:bg-primary-container transition-all duration-300 shadow-md active:scale-95">
+               class="flex items-center justify-center gap-2 px-8 py-4 rounded-lg font-body font-bold text-lg bg-primary text-on-primary hover:bg-primary-container hover:text-on-primary-container transition-all duration-300 shadow-md active:scale-95 hover:shadow-lg">
                 <span class="material-symbols-outlined">home</span>
                 <span>Home</span>
             </a>
@@ -72,38 +117,38 @@
 
         <!-- Help Section -->
         <div class="mt-12 pt-8 border-t border-outline-variant/15 space-y-6">
-            <h3 class="font-headline text-center text-xl font-bold text-on-surface">Need Help?</h3>
-            
+            <h3 class="font-headline text-center text-xl font-bold text-on-surface">What Can You Do?</h3>
+
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <!-- Documentation -->
-                <a href="#" class="p-6 rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors duration-300 group">
+                <!-- Try Again -->
+                <button onclick="location.reload()" class="p-6 rounded-lg bg-surface-container-low hover:bg-surface-container transition-all duration-300 group border border-outline-variant/20 hover:border-outline-variant/40 hover:shadow-md cursor-pointer">
                     <div class="flex items-start gap-3">
-                        <span class="material-symbols-outlined text-primary text-2xl group-hover:scale-110 transition-transform">description</span>
-                        <div>
-                            <h4 class="font-body font-bold text-on-surface mb-1">Documentation</h4>
-                            <p class="font-body text-sm text-on-surface-variant">Browse our help documentation</p>
+                        <span class="material-symbols-outlined text-primary text-2xl group-hover:scale-110 transition-transform">refresh</span>
+                        <div class="text-left">
+                            <h4 class="font-body font-bold text-on-surface mb-1">Try Again</h4>
+                            <p class="font-body text-sm text-on-surface-variant">Refresh the page</p>
+                        </div>
+                    </div>
+                </button>
+
+                <!-- Home Page -->
+                <a href="/" class="p-6 rounded-lg bg-surface-container-low hover:bg-surface-container transition-all duration-300 group border border-outline-variant/20 hover:border-outline-variant/40 hover:shadow-md">
+                    <div class="flex items-start gap-3">
+                        <span class="material-symbols-outlined text-primary text-2xl group-hover:scale-110 transition-transform">home</span>
+                        <div class="text-left">
+                            <h4 class="font-body font-bold text-on-surface mb-1">Home Page</h4>
+                            <p class="font-body text-sm text-on-surface-variant">Return to the main page</p>
                         </div>
                     </div>
                 </a>
 
-                <!-- Contact Support -->
-                <a href="#" class="p-6 rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors duration-300 group">
+                <!-- Browse -->
+                <a href="/Books" class="p-6 rounded-lg bg-surface-container-low hover:bg-surface-container transition-all duration-300 group border border-outline-variant/20 hover:border-outline-variant/40 hover:shadow-md">
                     <div class="flex items-start gap-3">
-                        <span class="material-symbols-outlined text-primary text-2xl group-hover:scale-110 transition-transform">mail</span>
-                        <div>
-                            <h4 class="font-body font-bold text-on-surface mb-1">Contact Support</h4>
-                            <p class="font-body text-sm text-on-surface-variant">Reach out to our team</p>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- Report Bug -->
-                <a href="#" class="p-6 rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors duration-300 group">
-                    <div class="flex items-start gap-3">
-                        <span class="material-symbols-outlined text-primary text-2xl group-hover:scale-110 transition-transform">bug_report</span>
-                        <div>
-                            <h4 class="font-body font-bold text-on-surface mb-1">Report Bug</h4>
-                            <p class="font-body text-sm text-on-surface-variant">Help us improve the service</p>
+                        <span class="material-symbols-outlined text-primary text-2xl group-hover:scale-110 transition-transform">library_books</span>
+                        <div class="text-left">
+                            <h4 class="font-body font-bold text-on-surface mb-1">Browse Books</h4>
+                            <p class="font-body text-sm text-on-surface-variant">Continue exploring</p>
                         </div>
                     </div>
                 </a>
@@ -111,13 +156,28 @@
         </div>
 
         <!-- Footer Note -->
-        <div class="mt-12 text-center">
+        <div class="mt-12 text-center space-y-2">
             <p class="font-body text-sm text-on-surface-variant">
-                Error ID: <code class="bg-surface-container-low px-2 py-1 rounded text-xs">@(Model.ShowRequestId ? Model.RequestId : "N/A")</code>
+                Timestamp: <code class="bg-surface-container-low px-2 py-1 rounded text-xs">@DateTime.Now:yyyy-MM-dd HH:mm:ss</code>
             </p>
-            <p class="font-body text-xs text-on-surface-variant/60 mt-2">
+            <p class="font-body text-xs text-on-surface-variant/60">
                 © 2024 The Editorial Archive. All Rights Reserved.
             </p>
         </div>
     </div>
 </main>
+
+<style>
+    @@keyframes pulse {
+        0%, 100% {
+            opacity: 0.3;
+        }
+        50% {
+            opacity: 0.5;
+        }
+    }
+
+    .animate-pulse {
+        animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+</style>

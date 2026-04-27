@@ -44,6 +44,7 @@ namespace Library.Web.Repository.Repositories
         public List<Copy> GetNBookCopies(int Id ,int n)
         {
             return context.Copies
+                .Include(c => c.Book)
                 .Where(c => c.BookId == Id && c.AllowToRental)
                 .OrderBy(c => c.Id)
                 .Take(n)

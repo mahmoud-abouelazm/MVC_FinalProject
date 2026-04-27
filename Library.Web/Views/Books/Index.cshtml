@@ -19,126 +19,151 @@
 
 
     <!-- Page Header -->
-    <header class="mb-12">
-        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+    <header class="mb-16">
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-8">
 
             <div>
-                <p class="font-manrope text-[0.6875rem] uppercase tracking-[0.05em] text-secondary font-bold mb-2">
-                    
+                <p class="font-manrope text-[0.6875rem] uppercase tracking-[0.1em] text-secondary font-bold mb-3 opacity-75">
+                    📚 Discover Our Collection
                 </p>
-                <h1 class="text-4xl md:text-5xl font-noto-serif text-primary">Public Catalog </h1>
+                <h1 class="text-5xl md:text-6xl font-noto-serif text-primary leading-tight">Public Catalog</h1>
+                <p class="text-on-surface-variant mt-3 text-lg max-w-md">Browse our extensive collection of books across multiple categories</p>
             </div>
 
-            <!-- Categories Dropdown/Filter -->
+            <!-- Categories Filter -->
+            <div class="flex flex-col gap-2">
+                <p class="text-xs uppercase tracking-widest text-on-surface-variant font-semibold">Filter by Category</p>
+                <form method="get" asp-action="Index" class="flex gap-2">
+                    <input type="hidden" name="search" value="@search" />
 
-            <div class="flex gap-4">
-                <div class="relative group">
-    
-                    <form method="get" asp-action="Index">
-                        <input type="hidden" name="search" value="@search" />
-    
-                        <select name="categoryId"
-                                class="px-6 py-3 bg-surface-container-low hover:bg-surface-container-high rounded-xl text-sm font-semibold"
-                                onchange="this.form.submit()">
+                    <select name="categoryId"
+                            class="px-6 py-3 bg-surface-container-low hover:bg-surface-container-high border border-surface-container-high rounded-xl text-sm font-semibold text-on-surface transition-all focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer"
+                            onchange="this.form.submit()">
 
-                            <!-- All Categories -->
-                            <option value="">
-                                All Categories
+                        <option value="">
+                            ✨ All Categories
+                        </option>
+
+                        @foreach (var cat in categories)
+                        {
+                            <option value="@cat.Id"
+                                    selected="@(selectedCategory == cat.Id)">
+
+                                @cat.Name (@cat.BookCount)
                             </option>
+                        }
 
-                            @foreach (var cat in categories)
-                            {
-                                <option value="@cat.Id"
-                                        selected="@(selectedCategory == cat.Id)">
-                
-                                    @cat.Name (@cat.BookCount)
-                                </option>
-                            }
+                    </select>
 
-                        </select>
-
-                    </form>
-
-                </div>
+                    <button type="submit" class="px-6 py-3 bg-primary text-white rounded-xl font-semibold hover:bg-primary-dark transition-colors hidden sm:inline-flex items-center gap-2">
+                        <span class="material-symbols-outlined">filter_list</span>
+                    </button>
+                </form>
             </div>
-
-            @* ///////////////////////////////////////////////////////////////// Filter *@
 
         </div>
     </header>
 
-    <!-- Catalog Grid (Asymmetric feel with specific spacing) -->
-    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-16">
-
+    <!-- Catalog Grid -->
+    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-20">
 
         @foreach(var Book in Model.Data)
         {
-            <!-- Book Card 1 -->
-            <article class="flex flex-col group">
+            <!-- Book Card -->
+            <article class="flex flex-col group h-full transform transition-all duration-300 hover:scale-105">
 
-                <div class="aspect-[3/4] overflow-hidden rounded-xl bg-surface-container-low transition-all duration-300 group-hover:shadow-[0px_12px_32px_rgba(26,28,26,0.12)]">
-                    
+                <!-- Book Image Container -->
+                <div class="aspect-[3/4] overflow-hidden rounded-2xl bg-surface-container-low transition-all duration-300 shadow-md group-hover:shadow-2xl mb-6 relative">
+
                     <img alt="@Book.Title"
-                         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                         data-alt="@Book.CategoryName"
+                         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                          src="/@Book.Img" />
-                </div>
-                <div class="mt-6">
 
-                    <div class="flex justify-between items-start mb-2">
-                        <h3 class="text-xl font-noto-serif text-on-surface leading-tight">@Book.Title</h3>
-                        <span class="font-manrope font-bold text-primary-container">$@Book.Price</span>
+                    <!-- Category Badge -->
+                    <div class="absolute top-3 right-3 bg-primary/90 backdrop-blur-sm text-white px-3 py-1 rounded-full text-xs font-semibold">
+                        @Book.CategoryName
+                    </div>
+                </div>
+
+                <!-- Book Info -->
+                <div class="flex-1 flex flex-col">
+
+                    <!-- Title and Price -->
+                    <div class="mb-3">
+                        <div class="flex justify-between items-start gap-2 mb-2">
+                            <h3 class="text-lg font-noto-serif text-on-surface leading-tight line-clamp-2 flex-1">@Book.Title</h3>
+                            <span class="font-manrope font-bold text-primary text-lg flex-shrink-0 whitespace-nowrap">$@Book.Price</span>
+                        </div>
+
+                        <p class="text-sm font-manrope text-on-surface-variant mb-4">@Book.AuthorNames</p>
                     </div>
 
-                    <p class="text-sm font-manrope text-on-surface-variant mb-4">@Book.AuthorNames</p>
-                   
+                    <!-- View Details Link -->
                     <a asp-controller="Books" asp-action="Details" asp-route-id="@Book.Id"
-                           class="inline-flex items-center gap-2 text-sm font-bold text-primary hover:text-white transition-all group">
+                       class="mt-auto inline-flex items-center gap-2 text-sm font-bold text-primary hover:text-white hover:bg-primary px-4 py-2 rounded-lg transition-all duration-200 group/link">
                         View Details
-                        <span class="material-symbols-outlined text-xl transition-transform duration-300 group-hover:translate-x-1">
+                        <span class="material-symbols-outlined text-base transition-transform duration-300 group-hover/link:translate-x-1">
                             arrow_forward
                         </span>
                     </a>
 
                 </div>
             </article>
-
-
         }
-
-
-   
 
     </section>
 
 
 
     <!-- Pagination -->
-    <nav class="mt-24 flex justify-center items-center gap-2">
+    <nav class="mt-16 flex justify-center items-center gap-2 py-8 border-t border-surface-container">
 
-        <button class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-surface-container-low transition-colors text-on-surface/50">
-            <span class="material-symbols-outlined">chevron_left</span>
-        </button>
-
-
-        @for (int i = 1; i < totalPages; i++)
+        @if (ViewBag.CurrentPage > 1)
         {
-               <a class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-surface-container-low transition-colors font-semibold"
-               asp-action="Index" asp-route-page="@i" asp-route-categoryId="@selectedCategory" asp-route-search="@search">
-               
-               @i</a>
+            <a href="@Url.Action("Index", new { page = ViewBag.CurrentPage - 1, categoryId = selectedCategory, search = search })"
+               class="w-10 h-10 flex items-center justify-center rounded-lg bg-surface-container-low hover:bg-primary hover:text-white transition-all text-on-surface font-semibold">
+                <span class="material-symbols-outlined">chevron_left</span>
+            </a>
+        }
+        else
+        {
+            <button disabled class="w-10 h-10 flex items-center justify-center rounded-lg bg-surface-container-low text-on-surface-variant/30 cursor-not-allowed opacity-50">
+                <span class="material-symbols-outlined">chevron_left</span>
+            </button>
         }
 
-        <span class="px-2 text-on-surface/30">...</span>
-        
-        <a class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-surface-container-low transition-colors font-semibold"
-               asp-action="Index" asp-route-page="@totalPages" asp-route-categoryId="@selectedCategory" asp-route-search="@search">
-            @totalPages
-       </a>
+        @for (int i = 1; i <= totalPages; i++)
+        {
+            if (i == 1 || i == totalPages || (i >= (ViewBag.CurrentPage ?? 1) - 1 && i <= (ViewBag.CurrentPage ?? 1) + 1))
+            {
+                <a class="w-10 h-10 flex items-center justify-center rounded-lg font-semibold transition-all @(i == (ViewBag.CurrentPage ?? 1) ? "bg-primary text-white shadow-md" : "bg-surface-container-low text-on-surface hover:bg-surface-container-high")"
+                   asp-action="Index" asp-route-page="@i" asp-route-categoryId="@selectedCategory" asp-route-search="@search">
+                   @i
+                </a>
+            }
+            else if (i == 2 && (ViewBag.CurrentPage ?? 1) > 3)
+            {
+                <span class="px-2 text-on-surface-variant/50">...</span>
+            }
+            else if (i == totalPages - 1 && (ViewBag.CurrentPage ?? 1) < totalPages - 2)
+            {
+                <span class="px-2 text-on-surface-variant/50">...</span>
+            }
+        }
 
-        <button class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-surface-container-low transition-colors text-primary">
-            <span class="material-symbols-outlined">chevron_right</span>
-        </button>
+        @if ((ViewBag.CurrentPage ?? 1) < totalPages)
+        {
+            <a href="@Url.Action("Index", new { page = (ViewBag.CurrentPage ?? 1) + 1, categoryId = selectedCategory, search = search })"
+               class="w-10 h-10 flex items-center justify-center rounded-lg bg-surface-container-low hover:bg-primary hover:text-white transition-all text-on-surface font-semibold">
+                <span class="material-symbols-outlined">chevron_right</span>
+            </a>
+        }
+        else
+        {
+            <button disabled class="w-10 h-10 flex items-center justify-center rounded-lg bg-surface-container-low text-on-surface-variant/30 cursor-not-allowed opacity-50">
+                <span class="material-symbols-outlined">chevron_right</span>
+            </button>
+        }
 
     </nav>
 

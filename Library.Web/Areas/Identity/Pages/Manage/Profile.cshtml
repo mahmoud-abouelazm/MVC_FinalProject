@@ -76,13 +76,15 @@
                 {
                     var rental = Model.ReturnedRentals[i];
                     var returnedAt = rental.ReturnedAt ?? DateTime.UtcNow;
-                    var daysRented = Math.Max(1, (int)Math.Ceiling((returnedAt - rental.RentedAt).TotalDays));
+                    var daysRented = (int)Math.Floor((returnedAt - rental.RentedAt).TotalDays) + 1;
                     var totalPricePerDay = rental.CopyRentals.Sum(cr => cr.Copy?.Book?.Price ?? 0);
                     var isLate = returnedAt > rental.DueAt;
-                    var daysLate = isLate ? (int)Math.Ceiling((returnedAt - rental.DueAt).TotalDays) : 0;
+                    var daysLate = isLate ? (int)Math.Floor((returnedAt - rental.DueAt).TotalDays) : 0;
                     var onTimeDays = Math.Max(0, daysRented - daysLate);
                     var baseAmount = onTimeDays * totalPricePerDay;
-                    var penaltyAmount = isLate ? daysLate * totalPricePerDay * 2 : 0;
+                    var numberOfBooks = rental.CopyRentals.Count;
+                    var lateFeesPerDay = 5m * numberOfBooks;
+                    var penaltyAmount = isLate ? daysLate * lateFeesPerDay : 0;
                     var totalAmount = rental.Amount > 0 ? rental.Amount : baseAmount + penaltyAmount;
                     var copyNames = string.Join(", ", rental.CopyRentals.Select(cr => cr.Copy?.Name).Where(n => !string.IsNullOrWhiteSpace(n)));
                     var bookTitles = string.Join(", ", rental.CopyRentals.Select(cr => cr.Copy?.Book?.Title).Where(t => !string.IsNullOrWhiteSpace(t)).Distinct());
@@ -150,7 +152,7 @@
                                 {
                                     <div class="mt-3 p-3 rounded-lg bg-error-container/30 border border-error-container/50 flex items-start justify-between gap-3">
                                         <span class="font-manrope text-xs text-error">
-                                            @daysLate day@(daysLate == 1 ? "" : "s") late × $@totalPricePerDay.ToString("0.00") × 2 (penalty)
+                                            @daysLate day@(daysLate == 1 ? "" : "s") late × $@lateFeesPerDay.ToString("0.00")
                                         </span>
                                         <span class="font-manrope text-sm font-bold text-error">+$@penaltyAmount.ToString("0.00")</span>
                                     </div>
