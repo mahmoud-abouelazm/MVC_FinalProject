@@ -14,13 +14,16 @@ namespace Library.Web.Controllers
 
         IAuthorService AuthorService;
         private readonly IBookRepository bookRepository;
+        private readonly ISeedService seedService;
 
         public HomeController(IAuthorService IAuthorService,
-            IBookRepository bookRepository
+            IBookRepository bookRepository,
+            ISeedService seedService
             )
         {
             this.AuthorService = IAuthorService;
             this.bookRepository = bookRepository;
+            this.seedService = seedService;
         }
 
 
@@ -78,6 +81,31 @@ namespace Library.Web.Controllers
         public IActionResult Privacy()
         {
             return View();
+        }
+
+        [HttpGet]
+        [Route("seed")]
+        public async Task<IActionResult> Seed()
+        {
+            try
+            {
+                await seedService.SeedDatabaseAsync();
+                return Ok(new
+                {
+                    success = true,
+                    message = "Database seeded successfully!",
+                    accounts = new[]
+                    {
+                        new { email = "john.doe@library.com", password = "Password@123", role = "User" },
+                        new { email = "jane.smith@library.com", password = "Password@123", role = "User" },
+                        new { email = "admin@library.com", password = "Password@123", role = "Admin" }
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { success = false, message = ex.Message });
+            }
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

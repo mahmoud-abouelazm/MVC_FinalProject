@@ -55,7 +55,8 @@ namespace Library.Web
             builder.Services.AddSingleton<IEmailSender, EmailSender>();
             builder.Services.AddScoped<IEmailTemplateService, EmailTemplateService>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
-            builder.Services.AddScoped<IUserService, UserService>();    
+            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<ISeedService, SeedService>();
 
 
 
@@ -121,7 +122,7 @@ namespace Library.Web
 				app.UseExceptionHandler("/Home/Error");
 				app.UseHsts();
 			}
-
+            app.UseStaticFiles();
             app.UseHttpsRedirection();
             app.UseRouting();
 
