@@ -59,10 +59,8 @@ namespace Library.Web.Services
             // Calculate base amount (only for days on time)
             var baseAmount = daysOnTime * totalPrice;
 
-            // Calculate late penalty: $5 per day per book (not double the price)
-            // Number of books in this rental
-            var numberOfBooks = rental.CopyRentals.Count;
-            var lateFeesPerDay = 5m * numberOfBooks; // $5 per day per book
+            // Calculate late penalty: 2x the daily rental price for each overdue day
+            var lateFeesPerDay = 2m * totalPrice;
             var penalty = isLate ? daysLate * lateFeesPerDay : 0;
 
             var totalAmount = baseAmount + penalty;

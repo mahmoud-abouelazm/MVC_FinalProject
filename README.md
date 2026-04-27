@@ -48,18 +48,18 @@ The formula is:
 ```
 daysRented   = floor((returnedAt - rentedAt).TotalDays) + 1   (minimum 1)
 daysOnTime   = daysRented - daysLate
-baseAmount   = daysOnTime × book.Price
-lateFee      = daysLate × $5 × numberOfBooks
+baseAmount   = daysOnTime × totalBookPrice
+lateFee      = daysLate × 2 × totalBookPrice
 totalAmount  = baseAmount + lateFee
 ```
 
 **Reason:** The actual return date is unknown at rental creation. Pricing on return ensures accuracy and simplifies the create-rental flow.
 
-### 5. Late Fee: Flat $5 Per Day Per Book
+### 5. Late Fee: Double the Daily Rental Price
 
-Overdue penalties are charged as **$5 per overdue day per book** — a fixed fee independent of the book's price.
+Overdue penalties are charged at **2× the normal daily rental price** for each overdue day across all books in the rental.
 
-**Reason:** A flat fee is predictable for users, easy to communicate, and avoids penalising users more for renting expensive books.
+**Reason:** The penalty is proportional to the value of the borrowed books, creating a meaningful deterrent while remaining directly tied to the rental's own pricing.
 
 ### 6. Rental States: Active / Returned / Overdue
 
