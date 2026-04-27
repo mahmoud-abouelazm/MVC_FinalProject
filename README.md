@@ -6,7 +6,7 @@ An ASP.NET Core MVC web application for managing a physical library's book inven
 
 | Layer | Technology |
 |---|---|
-| Framework | ASP.NET Core MVC (.NET 9) |
+| Framework | ASP.NET Core MVC (.NET 10) |
 | ORM | Entity Framework Core (Code-First) |
 | Database | SQL Server |
 | Identity | ASP.NET Core Identity (integer PKs) |
