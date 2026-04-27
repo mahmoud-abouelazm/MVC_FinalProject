@@ -1,4 +1,5 @@
 using Library.Web.Core.Models;
+using Library.Web.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -15,29 +16,32 @@ using System.Threading.Tasks;
 
 namespace Library.Web.Areas.Identity.Pages.Account
 {
-    public class RegisterModel : PageModel
-    {
-        private readonly SignInManager<ApplicationUser> _signInManager;
+	public class RegisterModel : PageModel
+	{
+		private readonly SignInManager<ApplicationUser> _signInManager;
 		private readonly IEmailSender _emailSender;
 		private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IUserStore<ApplicationUser> _userStore;
-        private readonly IUserEmailStore<ApplicationUser> _emailStore;
-        private readonly ILogger<RegisterModel> _logger;
+		private readonly IUserStore<ApplicationUser> _userStore;
+		private readonly IUserEmailStore<ApplicationUser> _emailStore;
+		private readonly ILogger<RegisterModel> _logger;
+		private readonly IEmailTemplateService _emailTemplateService;
 
-        public RegisterModel(
-            UserManager<ApplicationUser> userManager,
-            IUserStore<ApplicationUser> userStore,
-            SignInManager<ApplicationUser> signInManager,
-            IEmailSender emailSender,
-            ILogger<RegisterModel> logger)
-        {
-            _userManager = userManager;
-            _userStore = userStore;
-            _emailStore = GetEmailStore();
-            _signInManager = signInManager;
+		public RegisterModel(
+			UserManager<ApplicationUser> userManager,
+			IUserStore<ApplicationUser> userStore,
+			SignInManager<ApplicationUser> signInManager,
+			IEmailSender emailSender,
+			ILogger<RegisterModel> logger,
+			IEmailTemplateService emailTemplateService)
+		{
+			_userManager = userManager;
+			_userStore = userStore;
+			_emailStore = GetEmailStore();
+			_signInManager = signInManager;
 			_emailSender = emailSender;
 			_logger = logger;
-        }
+			_emailTemplateService = emailTemplateService;
+		}
 
         [BindProperty]
         public InputModel Input { get; set; }
@@ -95,33 +99,41 @@ namespace Library.Web.Areas.Identity.Pages.Account
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
 
-                if (result.Succeeded)
-                {
-                    await _userManager.AddToRoleAsync(user, "user");  // 
-                    _logger.LogInformation("User created a new account with password.");
+				if (result.Succeeded)
+				{
+					await _userManager.AddToRoleAsync(user, "user");  // 
+					_logger.LogInformation("User created a new account with password.");
 
-					string subject = $"Welcome {user.FullName}🎉";
-					string htmlMessage = $"<h3>Your account has been created successfully</h3>";
-					await _emailSender.SendEmailAsync(user.Email!, subject, htmlMessage);
+					// Send improved welcome email
+					try
+					{
+						var emailHtml = await _emailTemplateService.GetRegistrationWelcomeEmailAsync(user);
+						await _emailSender.SendEmailAsync(user.Email!, "Welcome to The Editorial Archive - Your Account is Ready!", emailHtml);
+					}
+					catch (Exception ex)
+					{
+						_logger.LogError($"Error sending welcome email: {ex.Message}");
+						// Don't fail registration if email fails
+					}
 
 					if (_userManager.Options.SignIn.RequireConfirmedAccount)
-                    {
-                        return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
-                    }
-                    else
-                    {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        //return LocalRedirect(returnUrl);
-                        if (User.IsInRole("Admin"))
-                        {
-                            return RedirectToAction("Index", "Admin");
-                        }
-                        else
-                        {
-                            return RedirectToAction("Index", "Home");
-                        }
-                    }
-                }
+					{
+						return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
+					}
+					else
+					{
+						await _signInManager.SignInAsync(user, isPersistent: false);
+						//return LocalRedirect(returnUrl);
+						if (User.IsInRole("Admin"))
+						{
+							return RedirectToAction("Index", "Admin");
+						}
+						else
+						{
+							return RedirectToAction("Index", "Home");
+						}
+					}
+				}
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);

@@ -44,6 +44,7 @@ namespace Library.Web.Repository.Repositories
         public List<Copy> GetNBookCopies(int Id ,int n)
         {
             return context.Copies
+                .Include(c => c.Book)
                 .Where(c => c.BookId == Id && c.AllowToRental)
                 .OrderBy(c => c.Id)
                 .Take(n)
@@ -126,6 +127,49 @@ namespace Library.Web.Repository.Repositories
         public async Task<bool> IsTitleAvailableAsync(string title , int id)
         {
             return !await _context.Books.AnyAsync(b => b.Id != id && b.Title.ToLower().Trim() == title.ToLower().Trim());
+        }
+
+        public async Task<PagedResult<BookRowVM>> GetBooksByAuthorAsync(PaginationParams param, int authorId, string? search = null)
+        {
+            var query = _context.Books
+                .Include(b => b.Category)
+                .Include(b => b.BookAuthors)
+                    .ThenInclude(ba => ba.Author)
+                .Where(b => b.BookAuthors.Any(ba => ba.AuthorId == authorId))
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                var q = search.Trim().ToLower();
+                query = query.Where(b =>
+                    b.Title.ToLower().Contains(q) ||
+                    (b.Description != null && b.Description.ToLower().Contains(q)) ||
+                    b.Category.Name.ToLower().Contains(q));
+            }
+
+            int total = await query.CountAsync();
+
+            var data = await query
+                .OrderBy(b => b.Title)
+                .Skip((param.Page - 1) * param.PageSize)
+                .Take(param.PageSize)
+                .Select(b => new BookRowVM
+                {
+                    Id = b.Id,
+                    Title = b.Title,
+                    Img = b.Img,
+                    Price = b.Price,
+                    IsDeleted = b.IsDeleted,
+                    CategoryName = b.Category.Name,
+                    AuthorNames = string.Join(", ", b.BookAuthors.Select(a => a.Author.Name))
+                })
+                .ToListAsync();
+
+            return new PagedResult<BookRowVM>
+            {
+                Data = data,
+                TotalCount = total
+            };
         }
 
 

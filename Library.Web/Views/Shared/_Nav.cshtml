@@ -14,7 +14,8 @@
 <nav role="navigation" aria-label="Primary" class="fixed top-0 inset-x-0 z-50 bg-[#f9faf6]/90 dark:bg-[#1a1c1a]/90 backdrop-blur-md shadow-[0px_12px_32px_rgba(26,28,26,0.06)]">
     <div class="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 py-3 md:py-4">
         <div class="flex items-center justify-between gap-3">
-            <a asp-action="Index" asp-controller="Home" class="font-noto-serif italic font-bold text-[#1a1c1a] dark:text-[#f9faf6] text-lg sm:text-xl tracking-tight whitespace-nowrap">The Editorial Archive</a>
+            <a asp-action="Index" asp-controller="Home" class="font-noto-serif italic font-bold text-[#1a1c1a] dark:text-[#f9faf6] text-lg sm:text-xl tracking-tight whitespace-nowrap"><img 
+                images/logo.png" style="width:70px"/></a>
 
             <div class="hidden lg:flex items-center gap-4 xl:gap-6">
                 <a class="@(currentController == "Home" && !isAuthorsPage ? "text-[#004b23] font-bold border-b-2 border-[#004b23] pb-1" : "text-[#1a1c1a]/70 dark:text-[#f9faf6]/70") transition-colors duration-300" asp-action="Index" asp-controller="Home">Home</a>

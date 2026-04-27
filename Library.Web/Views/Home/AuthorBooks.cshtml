@@ -1,0 +1,116 @@
+@using Library.Web.Core.Constants
+@using Library.Web.Core.ViewModel.Book
+
+@model PagedResult<BookRowVM>
+
+@{
+    int totalPages = (int)Math.Ceiling((double)Model.TotalCount / 8);
+    var authorName = ViewBag.AuthorName as string;
+    var authorId = ViewBag.AuthorId as int?;
+    var search = ViewBag.Search as string;
+}
+
+<!-- Page Header -->
+<header class="mb-12">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <!-- Back Button -->
+        <div class="mb-4">
+            <a asp-action="Authors" asp-controller="Home" class="group flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors">
+                <span class="material-symbols-outlined text-sm">arrow_back</span>
+                <span class="font-label text-xs font-bold uppercase tracking-widest">Back to Authors</span>
+            </a>
+        </div>
+
+        <div>
+            <p class="font-manrope text-[0.6875rem] uppercase tracking-[0.05em] text-secondary font-bold mb-2">
+                Author Collection
+            </p>
+            <h1 class="text-4xl md:text-5xl font-noto-serif text-primary">@authorName</h1>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="flex gap-4">
+            <form method="get" asp-action="AuthorBooks" asp-route-authorId="@authorId" class="flex items-center gap-2 bg-surface-container-low rounded-xl px-4 py-2">
+                <button type="submit" class="inline-flex items-center text-primary hover:text-primary-container transition-colors" aria-label="Search books">
+                    <span class="material-symbols-outlined text-lg">search</span>
+                </button>
+                <input name="search" 
+                       class="bg-transparent border-none focus:ring-0 text-sm font-body w-48" 
+                       placeholder="Search books by @authorName..." 
+                       type="text"
+                       value="@search" />
+            </form>
+        </div>
+    </div>
+</header>
+
+<!-- Catalog Grid -->
+<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-16">
+    @if (Model.Data.Any())
+    {
+        @foreach(var book in Model.Data)
+        {
+            <!-- Book Card -->
+            <article class="flex flex-col group">
+                <div class="aspect-[3/4] overflow-hidden rounded-xl bg-surface-container-low transition-all duration-300 group-hover:shadow-[0px_12px_32px_rgba(26,28,26,0.12)]">
+                    <img alt="@book.Title"
+                         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                         data-alt="@book.CategoryName"
+                         src="@book.Img" />
+                </div>
+                <div class="mt-6">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-xl font-noto-serif text-on-surface leading-tight">@book.Title</h3>
+                        <span class="font-manrope font-bold text-primary-container">$@book.Price</span>
+                    </div>
+
+                    <p class="text-sm font-manrope text-on-surface-variant mb-2">@book.CategoryName</p>
+                   
+                    <a asp-controller="Books" asp-action="Details" asp-route-id="@book.Id"
+                           class="inline-flex items-center gap-2 text-sm font-bold text-primary hover:text-white transition-all group">
+                        View Details
+                        <span class="material-symbols-outlined text-xl transition-transform duration-300 group-hover:translate-x-1">
+                            arrow_forward
+                        </span>
+                    </a>
+                </div>
+            </article>
+        }
+    }
+    else
+    {
+        <div class="col-span-full text-center py-12">
+            <span class="material-symbols-outlined text-6xl text-on-surface-variant opacity-30 mb-4 block">library_books</span>
+            <p class="text-xl text-on-surface-variant font-semibold">No books found for @authorName@(string.IsNullOrEmpty(search) ? "" : " matching \"" + search + "\"")</p>
+            <a asp-action="Authors" asp-controller="Home" class="inline-flex items-center gap-2 text-primary hover:text-primary-container transition-colors mt-4">
+                Back to Authors
+                <span class="material-symbols-outlined">arrow_forward</span>
+            </a>
+        </div>
+    }
+</section>
+
+@if (Model.Data.Any())
+{
+    <!-- Pagination -->
+    <nav class="mt-24 flex justify-center items-center gap-2">
+        <button class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-surface-container-low transition-colors text-on-surface/50" disabled>
+            <span class="material-symbols-outlined">chevron_left</span>
+        </button>
+
+        @for (int i = 1; i <= totalPages; i++)
+        {
+            <a class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-surface-container-low transition-colors font-semibold @(i == (ViewBag.Page ?? 1) ? "bg-primary text-on-primary" : "")"
+               asp-action="AuthorBooks" 
+               asp-route-authorId="@authorId"
+               asp-route-page="@i" 
+               asp-route-search="@search">
+               @i
+            </a>
+        }
+
+        <button class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-surface-container-low transition-colors text-primary" disabled>
+            <span class="material-symbols-outlined">chevron_right</span>
+        </button>
+    </nav>
+}

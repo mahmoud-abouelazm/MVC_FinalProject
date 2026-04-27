@@ -1,0 +1,187 @@
+@using Library.Web.Core.Models
+@using Library.Web.Core.Constants
+
+@model Rental
+
+@{
+    ViewData["Title"] = "Rental Confirmation";
+    var emailSent = ViewBag.EmailSent as bool? ?? false;
+    var totalAmount = ViewBag.TotalAmount as decimal? ?? 0;
+    var rentalDays = ViewBag.RentalDays as int? ?? 0;
+}
+
+<style>
+    @@keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+    }
+    .animate-pulse {
+        animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+</style>
+
+<div class="min-h-screen bg-gradient-to-br from-surface via-surface-container-low to-surface-container-high py-12 px-4">
+    <div class="max-w-2xl mx-auto">
+        
+        <!-- Success Header -->
+        <div class="text-center mb-12">
+            <div class="inline-flex items-center justify-center w-20 h-20 bg-green-100 rounded-full mb-6 animate-pulse">
+                <span class="material-symbols-outlined text-5xl text-green-600">
+                    check_circle
+                </span>
+            </div>
+            <h1 class="text-4xl font-noto-serif text-primary mb-2">Rental Confirmed!</h1>
+            <p class="text-lg text-on-surface-variant">Your books have been successfully rented</p>
+        </div>
+
+        <!-- Email Sent Status -->
+        @if (emailSent)
+        {
+            <div class="mb-8 p-4 bg-green-50 border-l-4 border-green-500 rounded-lg flex items-start gap-3">
+                <span class="material-symbols-outlined text-green-600 text-2xl flex-shrink-0 mt-1">
+                    mail
+                </span>
+                <div>
+                    <p class="font-semibold text-green-900">Confirmation Email Sent</p>
+                    <p class="text-sm text-green-800">A detailed confirmation has been sent to <strong>@Model.ApplicationUser?.Email</strong></p>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="mb-8 p-4 bg-amber-50 border-l-4 border-amber-500 rounded-lg flex items-start gap-3">
+                <span class="material-symbols-outlined text-amber-600 text-2xl flex-shrink-0 mt-1">
+                    warning
+                </span>
+                <div>
+                    <p class="font-semibold text-amber-900">Email Delivery Issue</p>
+                    <p class="text-sm text-amber-800">We couldn't send the confirmation email, but your rental was successful. Check your details below.</p>
+                </div>
+            </div>
+        }
+
+        <!-- Rental Details Card -->
+        <div class="bg-white rounded-2xl shadow-lg overflow-hidden mb-8">
+            
+            <!-- Card Header -->
+            <div class="bg-gradient-to-r from-primary to-secondary p-8 text-white">
+                <h2 class="text-2xl font-noto-serif mb-2">📚 Rental Details</h2>
+                <p class="text-white/80">Confirmation #@Model.Id</p>
+            </div>
+
+            <!-- Card Body -->
+            <div class="p-8">
+                
+                <!-- Rental Period -->
+                <div class="grid grid-cols-2 gap-8 mb-8 pb-8 border-b border-surface-container">
+                    <div>
+                        <p class="text-sm font-manrope text-on-surface-variant uppercase tracking-widest mb-2">Rental Date</p>
+                        <p class="text-xl font-semibold text-primary">@Model.RentedAt.ToString("MMMM d, yyyy")</p>
+                    </div>
+                    <div>
+                        <p class="text-sm font-manrope text-on-surface-variant uppercase tracking-widest mb-2">Due Date</p>
+                        <p class="text-xl font-semibold text-primary">@Model.DueAt.ToString("MMMM d, yyyy")</p>
+                    </div>
+                </div>
+
+                <!-- Books Rented -->
+                <div class="mb-8">
+                    <h3 class="text-lg font-noto-serif text-primary mb-4">Books Rented</h3>
+                    <div class="space-y-4">
+                        @foreach (var copyRental in Model.CopyRentals)
+                        {
+                            var copy = copyRental.Copy;
+                            var book = copy?.Book;
+                            
+                            @if (book != null)
+                            {
+                                <div class="flex items-center gap-4 p-4 bg-surface-container-low rounded-lg hover:bg-surface-container-high transition-colors">
+                                    <div class="w-12 h-16 flex-shrink-0 rounded bg-surface-container-high overflow-hidden">
+                                        <img src="@book.Img" alt="@book.Title" class="w-full h-full object-cover" />
+                                    </div>
+                                    <div class="flex-1">
+                                        <p class="font-semibold text-on-surface">@book.Title</p>
+                                        <p class="text-sm text-on-surface-variant">Copy #@copy.Id</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="font-bold text-primary">$@book.Price.ToString("0.00")</p>
+                                        <p class="text-sm text-on-surface-variant">/day</p>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+
+                <!-- Summary -->
+                <div class="bg-gradient-to-r from-primary/5 to-secondary/5 rounded-lg p-6 border-l-4 border-primary">
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-on-surface-variant">Books Rented:</span>
+                            @{
+                                var copyCount = Model.CopyRentals?.Count ?? 0;
+                                var copyLabel = copyCount == 1 ? "copy" : "copies";
+                            }
+                            <span class="font-semibold text-on-surface">@copyCount @copyLabel</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-on-surface-variant">Rental Period:</span>
+                            <span class="font-semibold text-on-surface">@rentalDays days</span>
+                        </div>
+                        <div class="h-px bg-primary/20 my-3"></div>
+                        <div class="flex justify-between items-center text-lg">
+                            <span class="font-bold text-on-surface">Total Amount:</span>
+                            <span class="font-bold text-primary text-2xl">$@totalAmount.ToString("0.00")</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Important Info -->
+                <div class="mt-8 pt-8 border-t border-surface-container">
+                    <h4 class="font-semibold text-on-surface mb-4 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary">info</span>
+                        Important Information
+                    </h4>
+                    <ul class="space-y-3 text-sm text-on-surface-variant">
+                        <li class="flex gap-3">
+                            <span class="material-symbols-outlined text-sm text-primary flex-shrink-0 mt-0.5">check</span>
+                            <span>Please return your books by <strong class="text-primary">@Model.DueAt.ToString("MMMM d, yyyy")</strong> to avoid late fees</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <span class="material-symbols-outlined text-sm text-primary flex-shrink-0 mt-0.5">check</span>
+                            <span>Late fees are <strong>$5 per day</strong> for each overdue book</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <span class="material-symbols-outlined text-sm text-primary flex-shrink-0 mt-0.5">check</span>
+                            <span>You can manage your rentals from your profile at any time</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <span class="material-symbols-outlined text-sm text-primary flex-shrink-0 mt-0.5">check</span>
+                            <span>Contact support if you have any questions</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex gap-4 justify-center">
+            <a href="@Url.Action("Index", "Books")" 
+               class="inline-flex items-center gap-2 px-8 py-3 bg-primary text-white font-semibold rounded-lg hover:bg-primary-dark transition-colors">
+                <span class="material-symbols-outlined">shopping_bag</span>
+                Browse More Books
+            </a>
+            <a href="@Url.Action("Index", "Home", new { area = "" })" 
+               class="inline-flex items-center gap-2 px-8 py-3 bg-surface-container text-primary font-semibold rounded-lg hover:bg-surface-container-high transition-colors">
+                <span class="material-symbols-outlined">home</span>
+                Back to Home
+            </a>
+        </div>
+
+        <!-- Footer Note -->
+        <div class="mt-12 text-center text-sm text-on-surface-variant">
+            <p>📧 A confirmation email with all details has been sent to <strong>@Model.ApplicationUser?.Email</strong></p>
+            <p class="mt-2">📚 Happy reading! Thank you for using The Editorial Archive</p>
+        </div>
+    </div>
+</div>

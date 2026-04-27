@@ -78,12 +78,12 @@
         @foreach(var author in Model.Data)
         {
 
-         
+
             <!-- Author Card 1 -->
-            <div class="group bg-surface-container-lowest border border-outline-variant/20 rounded-lg p-6 flex flex-col hover:shadow-lg transition-all duration-300">
+            <a asp-action="AuthorBooks" asp-route-authorId="@author.Id" class="group bg-surface-container-lowest border border-outline-variant/20 rounded-lg p-6 flex flex-col hover:shadow-lg transition-all duration-300 no-underline">
                 <div class="flex justify-between items-start mb-4">
                     <div>
-                        <h3 class="font-headline text-xl text-primary leading-tight">@author.Name</h3>
+                        <h3 class="font-headline text-xl text-primary leading-tight hover:text-primary-container transition-colors">@author.Name</h3>
                         <p class="font-label text-[11px] uppercase tracking-wider text-primary font-bold mt-1">
                             Works in
                             Archive: @author.BookCount
@@ -106,22 +106,20 @@
 
                     @foreach (var book in author.BooksOfTheAuthor?.Take(4) ?? Enumerable.Empty<BookRowVM>())
                         {
-                            <div class="book-thumbnail rounded-sm border border-outline-variant/30 hover:border-primary/40 transition-colors cursor-help">
+                            <div class="book-thumbnail rounded-sm border border-outline-variant/30 hover:border-primary/40 transition-colors cursor-pointer">
 
                                 @* @book.Title - @book.Price *@
-                                <a asp-controller="Books" asp-action="Details" asp-route-id="@book.Id">
-                                <img src="/@book.Img" title="@book.Title - @book.CategoryName - $@book.Price" />
-                                </a>
+                                <img src="@book.Img" title="@book.Title - @book.CategoryName - $@book.Price" />
                             </div>
                         }
-                        
+
 
 
                     </div>
                 </div>
-            </div>
+            </a>
 
-            
+
         }
 
             

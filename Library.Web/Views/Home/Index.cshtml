@@ -87,7 +87,7 @@
             <div class="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8">
                 <!-- Collection 1 -->
                 <div class="md:col-span-8 group relative aspect-[4/3] md:aspect-[16/9] overflow-hidden rounded-xl bg-surface-container-highest">
-                <img alt="Modernist Archive" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="Editorial layout of modernist graphic design posters with bold typography and geometric shapes, museum exhibition style" src="/@Model[0].Img" />
+                <img alt="Modernist Archive" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="Editorial layout of modernist graphic design posters with bold typography and geometric shapes, museum exhibition style" src="@Model[0].Img" />
                     <div class="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent"></div>
                     <div class="absolute bottom-0 left-0 p-6 md:p-10 text-on-primary">
                         <h3 class="font-headline text-2xl md:text-4xl mb-3 md:mb-4">@Model[0].Title</h3>
@@ -96,7 +96,7 @@
                 </div>
                 <!-- Collection 2 -->
                 <div class="md:col-span-4 group relative aspect-[4/3] md:aspect-[4/5] overflow-hidden rounded-xl bg-surface-container-highest">
-                    <img alt="Classical Typologies" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="Close up of ornate gold-leaf illuminated manuscript letters from the medieval era on aged vellum" src="/@Model[1].Img" />
+                    <img alt="Classical Typologies" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="Close up of ornate gold-leaf illuminated manuscript letters from the medieval era on aged vellum" src="@Model[1].Img" />
                     <div class="absolute inset-0 bg-gradient-to-t from-tertiary/80 to-transparent"></div>
                     <div class="absolute bottom-0 left-0 p-6 md:p-8 text-on-primary">
                         <span class="font-label text-xs uppercase tracking-widest mb-2 block opacity-80">@Model[1].Category.Name</span>
@@ -109,7 +109,7 @@
                 </div>
                 <!-- Collection 3 -->
                 <div class="md:col-span-4 group relative aspect-[4/3] md:aspect-[4/5] overflow-hidden rounded-xl bg-surface-container-highest">
-                    <img alt="@Model[2].Title" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="Stack of hand-written letters with wax seals and dried flowers resting on a velvet cloth, soft romantic lighting" src="/@Model[2].Img" />
+                    <img alt="@Model[2].Title" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="Stack of hand-written letters with wax seals and dried flowers resting on a velvet cloth, soft romantic lighting" src="@Model[2].Img" />
                     <div class="absolute inset-0 bg-gradient-to-t from-primary-container/80 to-transparent"></div>
                     <div class="absolute bottom-0 left-0 p-6 md:p-8 text-on-primary">
                         <span class="font-label text-xs uppercase tracking-widest mb-2 block opacity-80">@Model[2].Category.Name</span>
@@ -120,8 +120,8 @@
                     </div>
                 </div>
                 <!-- Collection 4 -->
-                <div class="md:col-span-8 group relative overflow-hidden rounded-xl bg-surface-container-highest min-h-[320px] md:min-h-[420px]">
-                    <img alt="Scientific Observation" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="Botanical illustrations and sketches of birds in a leather-bound journal with pressed leaves, Victorian explorer style" src="/@Model[3].Img" />
+            <div style=" height: 40%;" class="md:col-span-8 group relative overflow-hidden rounded-xl bg-surface-container-highest min-h-[320px] md:min-h-[420px]">
+                    <img alt="Scientific Observation" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="Botanical illustrations and sketches of birds in a leather-bound journal with pressed leaves, Victorian explorer style" src="@Model[3].Img" />
                     <div class="absolute inset-0 bg-primary/20 transition-opacity group-hover:opacity-0"></div>
                     <div class="absolute inset-0 flex items-center justify-center">
                         <div class="bg-surface/90 backdrop-blur-md p-6 md:p-10 rounded-xl shadow-2xl max-w-lg text-center transform translate-y-4 group-hover:translate-y-0 transition-transform mx-4">
