@@ -175,10 +175,3 @@ Category ──< Book >── BookAuthor >── Author
 2. (Optional) Add Google OAuth credentials under `Authentication:Google:ClientId` and `Authentication:Google:ClientSecret`.
 3. Run EF migrations: `dotnet ef database update --project Library.Web`
 4. Launch the app. Navigate to `/Settings` (as Admin) to seed demo data.
-
-Default seeded admin credentials:
-
-| Field | Value |
-|---|---|
-| Email | `admin@library.com` |
-| Password | `Password@123` |
